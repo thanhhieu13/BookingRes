@@ -14,6 +14,11 @@ app.use(bodyParser.json());
 const jwt = require("jsonwebtoken");
 
 const User = require("./models/user");
+const Restaurant = require("./models/restaurant");
+
+app.listen(port, () => {
+    console.log("Server is running on port 8000");
+});
 
 const sendVerificationEmail = async (email, verificationToken) => {
   // Create a Nodemailer transporter
@@ -55,9 +60,7 @@ mongoose
     console.log("Error connecting to MongoDb", err);
   });
 
-app.listen(port, () => {
-    console.log("Server is running on port 8000");
-});
+
 
 app.post("/register", async (req, res) => {
     try {
@@ -153,3 +156,27 @@ app.get("/verify/:token", async (req, res) => {
     }
   });
   
+  app.post("/add-restaurants", async (req, res) => {
+    try {
+      // Create a new restaurant instance using the Restaurant model
+      const newRestaurant = new Restaurant(req.body);
+  
+      // Save the restaurant to the database
+      const savedRestaurant = await newRestaurant.save();
+  
+      res.status(201).json(savedRestaurant);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  // Endpoint để lấy tất cả nhà hàng
+  app.get('/restaurants', async (req, res) => {
+    try {
+      const restaurants = await Restaurant.find();
+      res.status(200).json(restaurants);
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });

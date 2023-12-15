@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import HomeScreen from "../screens/Home";
+import AddRes from "../screens/AddRes";
+import ResList from "../screens/ResList";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -33,10 +35,10 @@ const StackNavigator = () => {
                     }}
                 />
                 <Tab.Screen
-                    name="Near"
-                    component={HomeScreen}
+                    name="AddRes"
+                    component={AddRes}
                     options={{
-                        tabBarLabel: "Home",
+                        tabBarLabel: "AddRes",
                         tabBarLabelStyle: { color: "#008E97" },
                         headerShown: false,
                         tabBarIcon: ({ focused }) =>
@@ -48,8 +50,8 @@ const StackNavigator = () => {
                     }}
                 />
                 <Tab.Screen
-                    name="Account"
-                    component={HomeScreen}
+                    name="ResList"
+                    component={ResList}
                     options={{
                         tabBarLabel: "Home",
                         tabBarLabelStyle: { color: "#008E97" },
@@ -80,10 +82,10 @@ const StackNavigator = () => {
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
-          name="Main"
-          component={BottomTabs}
-          options={{ headerShown: false }}
-        />
+                    name="Main"
+                    component={BottomTabs}
+                    options={{ headerShown: false }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )
