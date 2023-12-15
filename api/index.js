@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 const jwt = require("jsonwebtoken");
 
 const User = require("./models/user");
-const Restaurant = require("./models/restaurant");
+
 
 app.listen(port, () => {
     console.log("Server is running on port 8000");
@@ -156,27 +156,78 @@ app.get("/verify/:token", async (req, res) => {
     }
   });
   
-  app.post("/add-restaurants", async (req, res) => {
+// Assuming you have the Restaurant model defined
+const Category = require("./models/category");
+const Dish = require("./models/dish");
+const Restaurant = require("./models/restaurant");
+const addRestaurant = async (req, res, next) => {
     try {
-      // Create a new restaurant instance using the Restaurant model
-      const newRestaurant = new Restaurant(req.body);
+      const {
+        name,
+        image,
+        description,
+        lat,
+        lng,
+        address,
+        rating,
+        reviews,
+        type,
+        dishes
+      } = req.body;
   
-      // Save the restaurant to the database
+      const newRestaurant = new Restaurant({
+        name,
+        image,
+        description,
+        lat,
+        lng,
+        address,
+        rating,
+        reviews,
+        type,
+        dishes
+      });
+  
       const savedRestaurant = await newRestaurant.save();
   
       res.status(201).json(savedRestaurant);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      next(error); // Pass the error to the global error handler middleware
     }
-  });
-  // Endpoint để lấy tất cả nhà hàng
-  app.get('/restaurants', async (req, res) => {
+  };
+  
+  // Function to handle fetching restaurants
+  const getRestaurants = async (req, res, next) => {
     try {
       const restaurants = await Restaurant.find();
-      res.status(200).json(restaurants);
+  
+      const transformedRestaurants = restaurants.map(restaurant => ({
+        id: restaurant._id,
+        name: restaurant.name,
+        image: restaurant.image,
+        description: restaurant.description,
+        lat: restaurant.lat,
+        lng: restaurant.lng,
+        address: restaurant.address,
+        stars: restaurant.rating,
+        reviews: restaurant.reviews,
+        category: restaurant.type,
+        dishes: restaurant.dishes.map(dish => ({
+          id: dish._id,
+          name: dish.name,
+          description: dish.description,
+          price: dish.price,
+          image: dish.image
+        }))
+      }));
+  
+      res.status(200).json(transformedRestaurants);
     } catch (error) {
-      console.error('Error fetching restaurants:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      next(error); // Pass the error to the global error handler middleware
     }
-  });
+  };
+  
+  // Routes
+  app.post('/add-restaurants', addRestaurant);
+  app.get('/restaurants', getRestaurants);
+  

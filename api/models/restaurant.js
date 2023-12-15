@@ -1,39 +1,47 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const restaurantSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: true
+  },
+  description: {
+    type: String,
+    maxlength: 200
+  },
+  image: {
+    type: String // Assuming you store the image URL
+  },
+  lat: {
+    type: Number
+  },
+  lng: {
+    type: Number
   },
   address: {
     type: String,
-    required: true,
+    required: true
   },
-  phone: {
-    type: String,
+  rating: {
+    type: Number,
     required: true,
+    min: 1,
+    max: 5
+  },
+  reviews: {
+    type: String
   },
   type: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true
   },
-  description: {
-    type: String, // Mô tả chung cho nhà hàng
-    required: true,
-  },
-  openingHours: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String, // Đường dẫn của hình ảnh hoặc có thể sử dụng một loại lưu trữ khác cho hình ảnh
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  dishes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Dish'
+  }]
 });
 
-const Restaurant = mongoose.model("Restaurant", restaurantSchema);
+const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
 module.exports = Restaurant;
