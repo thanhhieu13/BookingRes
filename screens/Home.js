@@ -38,21 +38,20 @@ export default function HomeScreen() {
                 {/* categories */}
                 <Categories />
                 <View className="mt-5">
-        {
-            [featured, featured,featured].map((item,index)=>{
-                return (
-                    <FeaturedRow 
-                    key={index}
-                            title={item.title}
-                            restaurants={item.restaurants}
-                            description={item.description}
-                            />
-                )
-            })
-        }
-        </View>
+                    {
+                        [featured, featured, featured].map((item, index) => {
+                            return (
+                                <FeaturedRow
+                                    key={index}
+                                    title={item.title}
+                                    restaurants={item.restaurants}
+                                    description={item.description}
+                                />
+                            )
+                        })
+                    }
+                </View>
             </ScrollView>
-
         </SafeAreaView>
     )
 }
