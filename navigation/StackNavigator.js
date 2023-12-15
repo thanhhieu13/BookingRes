@@ -7,6 +7,7 @@ import RegisterScreen from "../screens/Register";
 import HomeScreen from "../screens/Home";
 import RestaurantDetail from "../screens/RestaurantDetail";
 import Map from "../screens/Map";
+import Account from "../screens/Account";
 import MapPrepare from "../screens/MapPrepare";
 import AddRes from "../screens/AddRes";
 import ResList from "../screens/ResList";
@@ -69,6 +70,21 @@ const StackNavigator = () => {
                 <Tab.Screen
                     name="ResList"
                     component={ResList}
+                    options={{
+                        tabBarLabel: "Home",
+                        tabBarLabelStyle: { color: "#008E97" },
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) =>
+                            focused ? (
+                                <Entypo name="home" size={24} color="#008E97" />
+                            ) : (
+                                <AntDesign name="home" size={24} color="black" />
+                            ),
+                    }}
+                />
+                <Tab.Screen
+                    name="Account"
+                    component={Account}
                     options={{
                         tabBarLabel: "Home",
                         tabBarLabelStyle: { color: "#008E97" },
