@@ -6,6 +6,9 @@ import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import HomeScreen from "../screens/Home";
 import RestaurantDetail from "../screens/RestaurantDetail";
+import Map from "../screens/Map";
+import Account from "../screens/Account";
+import MapPrepare from "../screens/MapPrepare";
 import AddRes from "../screens/AddRes";
 import ResList from "../screens/ResList";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -24,6 +27,21 @@ const StackNavigator = () => {
                     component={HomeScreen}
                     options={{
                         tabBarLabel: "Home",
+                        tabBarLabelStyle: { color: "#008E97" },
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) =>
+                            focused ? (
+                                <Entypo name="home" size={24} color="#008E97" />
+                            ) : (
+                                <AntDesign name="home" size={24} color="black" />
+                            ),
+                    }}
+                />
+                <Tab.Screen
+                    name="MapPrepare"
+                    component={MapPrepare}
+                    options={{
+                        tabBarLabel: "MapPrepare",
                         tabBarLabelStyle: { color: "#008E97" },
                         headerShown: false,
                         tabBarIcon: ({ focused }) =>
@@ -64,6 +82,21 @@ const StackNavigator = () => {
                             ),
                     }}
                 />
+                <Tab.Screen
+                    name="Account"
+                    component={Account}
+                    options={{
+                        tabBarLabel: "Home",
+                        tabBarLabelStyle: { color: "#008E97" },
+                        headerShown: false,
+                        tabBarIcon: ({ focused }) =>
+                            focused ? (
+                                <Entypo name="home" size={24} color="#008E97" />
+                            ) : (
+                                <AntDesign name="home" size={24} color="black" />
+                            ),
+                    }}
+                />
             </Tab.Navigator>
         )
     }
@@ -89,6 +122,11 @@ const StackNavigator = () => {
                 <Stack.Screen
                     name="Restaurant"
                     component={RestaurantDetail}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Map"
+                    component={Map}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>
