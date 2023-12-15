@@ -1,75 +1,104 @@
-// App.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import axios from 'axios';
 
 const AddRestaurantScreen = () => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [type, setType] = useState('');
-  const [menu, setMenu] = useState('');
-  const [openingHours, setOpeningHours] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    address: '',
+    phone: '',
+    type: '',
+    description: '',
+    openingHours: '',
+    image: '',
+  });
 
-  const addRestaurant = async () => {
-    try {
-      const response = await axios.post('http://localhost:8000/add-restaurants', {
-        name,
-        address,
-        phone,
-        type,
-        menu,
-        openingHours,
+  const handleInputChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const handleAddRestaurant = () => {
+    // Make a POST request to your server with the formData
+    fetch('http://localhost:8000/add-restaurants', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Restaurant added successfully:', data);
+        // Reset the form if needed
+        setFormData({
+          name: '',
+          address: '',
+          phone: '',
+          type: '',
+          description: '',
+          openingHours: '',
+          image: '',
+        });
+      })
+      .catch(error => {
+        console.error('Error adding restaurant:', error);
       });
-
-      console.log('Restaurant added successfully:', response.data);
-      // Handle success (e.g., navigate to another screen)
-    } catch (error) {
-      console.error('Error adding restaurant:', error);
-      // Handle error (e.g., show error message to the user)
-    }
   };
 
   return (
     <View style={styles.container}>
-      <Text>Add Restaurant</Text>
+      <Text style={styles.header}>Add Restaurant</Text>
+
       <TextInput
+        style={styles.input}
         placeholder="Name"
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
+        value={formData.name}
+        onChangeText={text => handleInputChange('name', text)}
       />
+
       <TextInput
+        style={styles.input}
         placeholder="Address"
-        value={address}
-        onChangeText={setAddress}
-        style={styles.input}
+        value={formData.address}
+        onChangeText={text => handleInputChange('address', text)}
       />
+
       <TextInput
+        style={styles.input}
         placeholder="Phone"
-        value={phone}
-        onChangeText={setPhone}
-        style={styles.input}
+        value={formData.phone}
+        onChangeText={text => handleInputChange('phone', text)}
       />
+
       <TextInput
+        style={styles.input}
         placeholder="Type"
-        value={type}
-        onChangeText={setType}
-        style={styles.input}
+        value={formData.type}
+        onChangeText={text => handleInputChange('type', text)}
       />
+
       <TextInput
-        placeholder="Menu"
-        value={menu}
-        onChangeText={setMenu}
         style={styles.input}
+        placeholder="Description"
+        value={formData.description}
+        onChangeText={text => handleInputChange('description', text)}
       />
+
       <TextInput
+        style={styles.input}
         placeholder="Opening Hours"
-        value={openingHours}
-        onChangeText={setOpeningHours}
-        style={styles.input}
+        value={formData.openingHours}
+        onChangeText={text => handleInputChange('openingHours', text)}
       />
-      <Button title="Add Restaurant" onPress={addRestaurant} />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Image URL"
+        value={formData.image}
+        onChangeText={text => handleInputChange('image', text)}
+      />
+
+      <Button title="Add Restaurant" onPress={handleAddRestaurant} />
+
     </View>
   );
 };
@@ -77,16 +106,18 @@ const AddRestaurantScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 16,
+  },
+  header: {
+    fontSize: 24,
+    marginBottom: 16,
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-    width: '80%',
+    marginBottom: 12,
+    padding: 8,
   },
 });
 
