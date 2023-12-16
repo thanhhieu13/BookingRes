@@ -197,28 +197,33 @@ const addRestaurant = async (req, res, next) => {
   };
   
   // Function to handle fetching restaurants
-  const getRestaurants = async (req, res, next) => {
+// Function to handle fetching restaurants with associated dishes
+const getRestaurantsWithDishes = async (req, res, next) => {
     try {
       const restaurants = await Restaurant.find();
   
-      const transformedRestaurants = restaurants.map(restaurant => ({
-        id: restaurant._id,
-        name: restaurant.name,
-        image: restaurant.image,
-        description: restaurant.description,
-        lat: restaurant.lat,
-        lng: restaurant.lng,
-        address: restaurant.address,
-        stars: restaurant.rating,
-        reviews: restaurant.reviews,
-        category: restaurant.type,
-        dishes: restaurant.dishes.map(dish => ({
-          id: dish._id,
-          name: dish.name,
-          description: dish.description,
-          price: dish.price,
-          image: dish.image
-        }))
+      const transformedRestaurants = await Promise.all(restaurants.map(async restaurant => {
+        const dishes = await Dish.find({ _id: { $in: restaurant.dishes } });
+        
+        return {
+          id: restaurant._id,
+          name: restaurant.name,
+          image: restaurant.image,
+          description: restaurant.description,
+          lat: restaurant.lat,
+          lng: restaurant.lng,
+          address: restaurant.address,
+          stars: restaurant.rating,
+          reviews: restaurant.reviews,
+          category: restaurant.type,
+          dishes: dishes.map(dish => ({
+            id: dish._id,
+            name: dish.name,
+            description: dish.description,
+            price: dish.price,
+            image: dish.image
+          }))
+        };
       }));
   
       res.status(200).json(transformedRestaurants);
@@ -228,6 +233,6 @@ const addRestaurant = async (req, res, next) => {
   };
   
   // Routes
+  app.get('/restaurants', getRestaurantsWithDishes);
   app.post('/add-restaurants', addRestaurant);
-  app.get('/restaurants', getRestaurants);
   
