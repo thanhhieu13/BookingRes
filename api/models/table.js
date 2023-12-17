@@ -12,12 +12,11 @@ const tableSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  // Trạng thái bàn (vd: "available", "occupied", "reserved")
   status: {
     type: String,
-    required: true,
+    enum: ["available", "occupied", "reserved"],
+    required: true
   },
-  // ID nhà hàng mà bàn thuộc về
   restaurantId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Restaurant',
