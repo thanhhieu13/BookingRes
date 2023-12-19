@@ -70,21 +70,6 @@ const StackNavigator = () => {
               ),
           }}
         />
-        <Tab.Screen
-          name="Account"
-          component={Account}
-          options={{
-            tabBarLabel: "Home",
-            tabBarLabelStyle: { color: "#008E97" },
-            headerShown: false,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <Entypo name="home" size={24} color="#008E97" />
-              ) : (
-                <AntDesign name="home" size={24} color="black" />
-              ),
-          }}
-        />
       </Tab.Navigator>
     );
   }

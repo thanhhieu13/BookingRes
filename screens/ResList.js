@@ -4,8 +4,10 @@ import {
   View,
   ScrollView,
   Pressable,
-  Image
+  Image,
+  Alert
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useContext, useState, useCallback } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome, Feather } from '@expo/vector-icons';
@@ -19,6 +21,18 @@ const AddAddressScreen = () => {
   const [address, setAddress] = useState([]);
   const { userId, setUserId } = useContext(UserType);
 
+
+  const handleLogout = async () => {
+    try {
+      // Clear the authentication token from AsyncStorage
+      await AsyncStorage.removeItem('authToken');
+      // Navigate to the login screen
+      navigation.replace('Login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      Alert.alert('Logout Error', 'An error occurred while logging out.');
+    }
+  };
   useEffect(() => {
     fetchAddress();
   }, []);
@@ -147,10 +161,23 @@ const AddAddressScreen = () => {
           </View>
         </Pressable>
       </View>
-
+      <Pressable onPress={handleLogout} style={styles.logoutButton}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
+      </Pressable>
     </ScrollView>
   );
 };
 export default AddAddressScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  logoutButton: {
+    backgroundColor: '#FF0000', // Use your desired color
+    padding: 10,
+    borderRadius: 5,
+  },
+  logoutButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+});
