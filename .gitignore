@@ -35,5 +35,4 @@ yarn-error.*
 *.tsbuildinfo
 
 # lock files
-package-lock.json
 yarn.lock
