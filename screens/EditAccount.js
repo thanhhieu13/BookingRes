@@ -14,8 +14,8 @@ import jwt_decode from "jwt-decode";
 import { UserType } from "../UserContext";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-import RNPickerSelect from "react-native-picker-select";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+// import RNPickerSelect from "react-native-picker-select";
+// import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Icon from 'react-native-feather';
 import { themeColors } from '../theme';
 
