@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
-const Register = () => {
+const RegisterScreen = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -225,6 +225,6 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({});
