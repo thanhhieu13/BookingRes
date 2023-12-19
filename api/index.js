@@ -158,89 +158,61 @@ app.get("/verify/:token", async (req, res) => {
   
 // Assuming you have the Restaurant model defined
 const Category = require("./models/category");
-const Dish = require("./models/dish");
 const Restaurant = require("./models/restaurant");
-const addRestaurant = async (req, res, next) => {
+app.post('/restaurants', async (req, res) => {
+  const {
+    name,
+    description,
+    image,
+    lat,
+    lng,
+    address,
+    rating,
+    type, // Loại nhà hàng, giả sử là một ObjectId của Category
+    menu,
+    openingHours,
+  } = req.body;
+
+  try {
+    // Kiểm tra xem loại nhà hàng có tồn tại không
+    // const category = await Category.findById(type);
+    // if (!category) {
+    //   return res.status(400).json({ message: 'Loại nhà hàng không hợp lệ' });
+    // }
+
+    const newRestaurant = new Restaurant({
+      name,
+      description,
+      image,
+      lat,
+      lng,
+      address,
+      rating,
+      type,
+      menu,
+      openingHours,
+    });
+
+    const savedRestaurant = await newRestaurant.save();
+    res.status(201).json(savedRestaurant);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+  
+  app.get('/restaurants', async (req, res) => {
     try {
-      const {
-        name,
-        image,
-        description,
-        lat,
-        lng,
-        address,
-        rating,
-        reviews,
-        type,
-        dishes
-      } = req.body;
-  
-      const newRestaurant = new Restaurant({
-        name,
-        image,
-        description,
-        lat,
-        lng,
-        address,
-        rating,
-        reviews,
-        type,
-        dishes
-      });
-  
-      const savedRestaurant = await newRestaurant.save();
-  
-      res.status(201).json(savedRestaurant);
+      const restaurants = await Restaurant.find().populate('type'); // Sử dụng populate để lấy thông tin từ bảng Category
+      res.json(restaurants);
     } catch (error) {
-      next(error); // Pass the error to the global error handler middleware
+      res.status(500).json({ message: error.message });
     }
-  };
-  
-  // Function to handle fetching restaurants
-// Function to handle fetching restaurants with associated dishes
-const getRestaurantsWithDishes = async (req, res, next) => {
-    try {
-      const restaurants = await Restaurant.find();
-  
-      const transformedRestaurants = await Promise.all(restaurants.map(async restaurant => {
-        const dishes = await Dish.find({ _id: { $in: restaurant.dishes } });
-        
-        return {
-          id: restaurant._id,
-          name: restaurant.name,
-          image: restaurant.image,
-          description: restaurant.description,
-          lat: restaurant.lat,
-          lng: restaurant.lng,
-          address: restaurant.address,
-          stars: restaurant.rating,
-          reviews: restaurant.reviews,
-          category: restaurant.type,
-          dishes: dishes.map(dish => ({
-            id: dish._id,
-            name: dish.name,
-            description: dish.description,
-            price: dish.price,
-            image: dish.image
-          }))
-        };
-      }));
-  
-      res.status(200).json(transformedRestaurants);
-    } catch (error) {
-      next(error); // Pass the error to the global error handler middleware
-    }
-  };
-  
-  // Routes
-  app.get('/restaurants', getRestaurantsWithDishes);
-  app.post('/add-restaurants', addRestaurant);
-  
+  });
 
   app.put("/address/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;
-        const { address } = req.body; // Assuming the request body contains the new address
+        const { name, avatar, mobileNo, street, city,occupation,gender,dateOfBirth } = req.body; // Assuming the request body contains the new street and city
 
         // Find the user by userId
         const user = await User.findById(userId);
@@ -248,13 +220,20 @@ const getRestaurantsWithDishes = async (req, res, next) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Update the user's address
-        user.address = address; // Assuming address is an object
+        // Update the user's address fields
+        user.name = name;
+        user.avatar = avatar;
+        user.street = street;
+        user.city = city;
+        user.mobileNo = mobileNo;
+        user.occupation = occupation;
+        user.gender = gender;
+        user.dateOfBirth = dateOfBirth;
 
         // Save the updated user in the backend
         await user.save();
 
-        res.status(200).json({ address });
+        res.status(200).json({ name, avatar, mobileNo, street, city,occupation,gender,dateOfBirth });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error updating address" });
@@ -271,12 +250,21 @@ const getRestaurantsWithDishes = async (req, res, next) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Retrieve all addresses associated with the user
-        const addresses = user.address; // Assuming addresses is an array of address objects
+        // Retrieve user details
+        const userDetails = {
+            name: user.name,
+            avatar: user.avatar,
+            street: user.street,
+            city: user.city,
+            mobileNo: user.mobileNo,
+            occupation: user.occupation,
+            gender: user.gender,
+            dateOfBirth: user.dateOfBirth,
+        };
 
-        res.status(200).json({ addresses });
+        res.status(200).json({ userDetails });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error retrieving addresses" });
+        res.status(500).json({ message: "Error retrieving user details" });
     }
-  });
+});

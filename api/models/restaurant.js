@@ -28,18 +28,21 @@ const restaurantSchema = new mongoose.Schema({
     min: 1,
     max: 5
   },
-  reviews: {
-    type: String
-  },
   type: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
     required: true
   },
-  dishes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Dish'
-  }]
+  menu: [
+    {
+      image: {
+        type: String 
+      }
+    }
+  ],
+  openingHours: {
+    type: String 
+  }
 });
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);

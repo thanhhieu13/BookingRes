@@ -19,12 +19,30 @@ import OnboardingScreen from "../screens/OnboardingScreen";
 import CityScreen from "../screens/CityScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 
+
+import renderres from "../screens/renderres"
+
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
   function BottomTabs() {
     return (
       <Tab.Navigator>
+        {/* <Tab.Screen
+          name="renderres"
+          component={renderres}
+          options={{
+            tabBarLabel: "Home",
+            tabBarLabelStyle: { color: "#008E97" },
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Entypo name="home" size={24} color="#008E97" />
+              ) : (
+                <AntDesign name="home" size={24} color="black" />
+              ),
+          }}
+        /> */}
         <Tab.Screen
           name="Home"
           component={HomeScreen}
@@ -61,7 +79,6 @@ const StackNavigator = () => {
           options={{
             tabBarLabel: "Home",
             tabBarLabelStyle: { color: "#008E97" },
-            headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
                 <Entypo name="home" size={24} color="#008E97" />
