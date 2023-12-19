@@ -28,7 +28,7 @@ const StackNavigator = () => {
   function BottomTabs() {
     return (
       <Tab.Navigator>
-        {/* <Tab.Screen
+        <Tab.Screen
           name="renderres"
           component={renderres}
           options={{
@@ -42,7 +42,7 @@ const StackNavigator = () => {
                 <AntDesign name="home" size={24} color="black" />
               ),
           }}
-        /> */}
+        />
         <Tab.Screen
           name="Home"
           component={HomeScreen}

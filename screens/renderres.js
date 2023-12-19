@@ -29,7 +29,12 @@ export default function App() {
           <View style={styles.restaurantItem}>
             <Text style={styles.restaurantName}>{item.name}</Text>
             <Text>{item.description}</Text>
-            {/* Hiển thị các thông tin khác về nhà hàng */}
+            <Text>{item.image}</Text>
+            <Text>{item.address}</Text>
+            <Text>{item.rating}</Text>
+            <Text>{item.description}</Text>
+            <Text>{item.description}</Text>
+            <Text>{item.description}</Text>
           </View>
         )}
       />

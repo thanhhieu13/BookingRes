@@ -268,3 +268,29 @@ app.post('/restaurants', async (req, res) => {
         res.status(500).json({ message: "Error retrieving user details" });
     }
 });
+
+const Featured = require("./models/featured");
+app.get('/api/featured', async (req, res) => {
+  try {
+    const featuredData = await Featured.find().populate('restaurants'); // Sử dụng populate để lấy thông tin từ bảng liên quan (restaurants)
+    res.json(featuredData);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/featured', async (req, res) => {
+  const { name, description, restaurants } = req.body;
+
+  try {
+    const newFeatured = await Featured.create({
+      name,
+      description,
+      restaurants,
+    });
+
+    res.status(201).json(newFeatured);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
