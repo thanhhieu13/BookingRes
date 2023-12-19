@@ -13,7 +13,7 @@ import Categories from "../components/Categories";
 import FeaturedRow from "../components/featureRow";
 import * as Icon from "react-native-feather";
 import { themeColors } from "../theme";
-import { featured } from "../constants";
+// import { featured } from "../constants";
 import { Swiper, SwiperItem } from "@nutui/nutui-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
