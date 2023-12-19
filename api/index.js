@@ -236,3 +236,47 @@ const getRestaurantsWithDishes = async (req, res, next) => {
   app.get('/restaurants', getRestaurantsWithDishes);
   app.post('/add-restaurants', addRestaurant);
   
+
+  app.put("/address/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const { address } = req.body; // Assuming the request body contains the new address
+
+        // Find the user by userId
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Update the user's address
+        user.address = address; // Assuming address is an object
+
+        // Save the updated user in the backend
+        await user.save();
+
+        res.status(200).json({ address });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating address" });
+    }
+});
+  //endpoint to get all the addresses of a particular user
+  app.get("/address/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        // Find the user by userId
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Retrieve all addresses associated with the user
+        const addresses = user.address; // Assuming addresses is an array of address objects
+
+        res.status(200).json({ addresses });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving addresses" });
+    }
+  });

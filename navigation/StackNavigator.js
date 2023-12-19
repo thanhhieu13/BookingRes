@@ -9,7 +9,7 @@ import RestaurantDetail from "../screens/RestaurantDetail";
 import Map from "../screens/Map";
 import Account from "../screens/Account";
 import MapPrepare from "../screens/MapPrepare";
-import AddRes from "../screens/AddRes";
+import EditAccount from "../screens/EditAccount";
 import ResList from "../screens/ResList";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
@@ -56,38 +56,8 @@ const StackNavigator = () => {
           }}
         />
         <Tab.Screen
-          name="AddRes"
-          component={AddRes}
-          options={{
-            tabBarLabel: "AddRes",
-            tabBarLabelStyle: { color: "#008E97" },
-            headerShown: false,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <Entypo name="home" size={24} color="#008E97" />
-              ) : (
-                <AntDesign name="home" size={24} color="black" />
-              ),
-          }}
-        />
-        <Tab.Screen
           name="ResList"
           component={ResList}
-          options={{
-            tabBarLabel: "Home",
-            tabBarLabelStyle: { color: "#008E97" },
-            headerShown: false,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <Entypo name="home" size={24} color="#008E97" />
-              ) : (
-                <AntDesign name="home" size={24} color="black" />
-              ),
-          }}
-        />
-        <Tab.Screen
-          name="Account"
-          component={Account}
           options={{
             tabBarLabel: "Home",
             tabBarLabelStyle: { color: "#008E97" },
@@ -121,12 +91,12 @@ const StackNavigator = () => {
           name="City"
           component={CityScreen}
           options={{
-             title: 'Chọn tỉnh/thành' ,
+            title: 'Chọn tỉnh/thành',
             headerStyle: { backgroundColor: 'red' },
-            headerTintColor : '#fff',
+            headerTintColor: '#fff',
             headerTitleStyle: {
               fontWeight: "bold",
-              
+
             },
           }}
         />
@@ -134,13 +104,13 @@ const StackNavigator = () => {
           name="Notification"
           component={NotificationScreen}
           options={{
-             title: 'Ưu đãi' ,
+            title: 'Ưu đãi',
             headerStyle: { backgroundColor: 'red' },
-            headerTintColor : '#fff',
-            headerTitleAlign : 'center',
+            headerTintColor: '#fff',
+            headerTitleAlign: 'center',
             headerTitleStyle: {
               fontWeight: "bold",
-              
+
             },
           }}
         />
@@ -162,6 +132,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Map"
           component={Map}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EditAccount"
+          component={EditAccount}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
