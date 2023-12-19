@@ -64,6 +64,24 @@ const AddressScreen = () => {
     fetchUser();
   }, []);
 
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/address/${userId}`);
+      const userData = response.data; // Adjust this based on your API response structure
+      // Update state with fetched user data
+      setName(userData.name);
+      setAvatar(userData.avatar);
+      setMobileNo(userData.mobileNo);
+      setStreet(userData.street);
+      setCity(userData.city);
+      setOccupation(userData.occupation);
+      setGender(userData.gender);
+      setDateOfBirth(userData.dateOfBirth);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  
   const handleUpdateAddress = () => {
     const updatedAddress = {
       name,
@@ -75,17 +93,11 @@ const AddressScreen = () => {
       gender,
       dateOfBirth,
     };
-
-    // Assuming the API expects the new address in the 'address' property of the request body
-    const requestData = {
-      address: updatedAddress,
-    };
-
     axios
-      .put(`http://localhost:8000/address/${userId}`, requestData)
+      .put(`http://localhost:8000/address/${userId}`, updatedAddress)
       .then((response) => {
         Alert.alert("Success", "Address updated successfully");
-        resetForm(); // Reset the form after successful update
+        fetchUserData();
         setTimeout(() => {
           navigation.goBack();
         }, 500);
@@ -95,15 +107,6 @@ const AddressScreen = () => {
         console.log("error", error);
       });
   };
-
-
-  const resetForm = () => {
-    // Keep the current values for fields that should persist
-    setAvatar(null);
-    setOccupation("");
-    // Other fields are set to their current values
-  };
-
 
   return (
     <ScrollView style={styles.container}>

@@ -37,7 +37,6 @@ export default function HomeScreen({ navigation, route }) {
     <SafeAreaView className="bg-white">
       <StatusBar barStyle="dark-content" />
       <NoticeBar text={text} />
-
       <View className="justify-between p-4 flex-row items-center max-w-full h-14">
         <TouchableOpacity
           onPress={() =>

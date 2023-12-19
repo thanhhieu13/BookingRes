@@ -8,20 +8,22 @@ import {
   Alert
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useContext, useState, useCallback } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { Entypo } from "@expo/vector-icons";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { UserType } from "../UserContext";
+import jwt_decode from "jwt-decode";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AddAddressScreen = () => {
   const navigation = useNavigation();
   const [address, setAddress] = useState([]);
   const { userId, setUserId } = useContext(UserType);
 
-
+  console.log(address);
   const handleLogout = async () => {
     try {
       // Clear the authentication token from AsyncStorage
@@ -33,144 +35,158 @@ const AddAddressScreen = () => {
       Alert.alert('Logout Error', 'An error occurred while logging out.');
     }
   };
-  useEffect(() => {
-    fetchAddress();
-  }, []);
+
+
   const fetchAddress = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/address/${userId}`);
-      setAddress(response.address); // Adjust according to your API response structure
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+
+      // Call fetchAddressData after setUserId completes
+      await fetchAddressData(userId);
     } catch (error) {
-      console.log("error", error);
+      console.log("Error fetching address", error);
     }
   };
-  useFocusEffect(
-    useCallback(() => {
-      fetchAddress();
-    }, [])
-  );
+
+  useEffect(() => {
+    // Fetch address data when the component mounts
+    fetchAddress();
+  }, []);
+
+  const fetchAddressData = async (userId) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/address/${userId}`);
+      const addressData = response.data;
+      setAddress(addressData); // Thay đổi tùy thuộc vào cấu trúc phản hồi của API của bạn
+      console.log('Address data:', response.data);
+    } catch (error) {
+      console.log("Error fetching address data", error);
+    }
+  };
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 10 }}>
-      <View style={{ padding: 10 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-          <View style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', marginRight: 10 }}>
-            <Image
-              source={require('../assets/img/Map.png')}
-              style={{ width: '100%', height: '100%', aspectRatio: 1, resizeMode: 'cover' }}
-            />
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <View style={styles.iconContainer}>
+                <Image
+                  source={require('../assets/img/Map.png')}
+                  style={styles.icon}
+                />
+              </View>
+              <Text style={styles.headerText}>{address?.userDetails?.name}</Text>
+            </View>
+            <Feather name="bell" size={24} color="black" />
           </View>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{address?.name}</Text>
-          </View>
-          <Feather name="bell" size={24} color="black" />
-        </View>
-        <Pressable
-          onPress={() => navigation.navigate("EditAccount")}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 20,
-            borderColor: "#D0D0D0",
-            borderWidth: 1,
-            borderLeftWidth: 0,
-            borderRightWidth: 0,
-            paddingVertical: 8,
-            paddingHorizontal: 5,
-          }}
-        >
-           <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-          <Feather name="user" size={24} color="black" />
-          <Text style={{marginLeft: 10}}>Chỉnh sửa thông tin cá nhân</Text>
-          </View>
-          <FontAwesome name="edit" size={24} color="black" />
-        </Pressable>
-
-        <Pressable
-          style={{
-            borderWidth: 1,
-            borderColor: "#D0D0D0",
-            padding: 10,
-            flexDirection: "column",
-            gap: 5,
-            marginVertical: 10,
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-              {address?.name}
-            </Text>
-            <Entypo name="location-pin" size={24} color="red" />
-          </View>
-
-          <Text style={{ fontSize: 15, color: "#181818" }}>{address?.street}</Text>
-
-          <Text style={{ fontSize: 15, color: "#181818" }}>
-            phone No : {address?.mobileNo}
-          </Text>
-          <Text style={{ fontSize: 15, color: "#181818" }}>
-            pin code : {address?.gender}
-          </Text>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 10,
-              marginTop: 7,
-            }}
+          <Pressable
+            onPress={() => navigation.navigate("EditAccount")}
+            style={styles.editProfileContainer}
           >
-            <Pressable
-              style={{
-                backgroundColor: "#F5F5F5",
-                paddingHorizontal: 10,
-                paddingVertical: 6,
-                borderRadius: 5,
-                borderWidth: 0.9,
-                borderColor: "#D0D0D0",
-              }}
-            >
-              <Text>Edit</Text>
-            </Pressable>
+            <View style={styles.editProfileContent}>
+              <Feather name="user" size={24} color="black" />
+              <Text style={styles.editProfileText}>Chỉnh sửa thông tin cá nhân</Text>
+            </View>
+            <FontAwesome name="edit" size={24} color="black" />
+          </Pressable>
 
-            <Pressable
-              style={{
-                backgroundColor: "#F5F5F5",
-                paddingHorizontal: 10,
-                paddingVertical: 6,
-                borderRadius: 5,
-                borderWidth: 0.9,
-                borderColor: "#D0D0D0",
-              }}
-            >
-              <Text>Remove</Text>
-            </Pressable>
+          <Pressable style={styles.addressContainer}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
 
-            <Pressable
-              style={{
-                backgroundColor: "#F5F5F5",
-                paddingHorizontal: 10,
-                paddingVertical: 6,
-                borderRadius: 5,
-                borderWidth: 0.9,
-                borderColor: "#D0D0D0",
-              }}
-            >
-              <Text>Set as Default</Text>
-            </Pressable>
-          </View>
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                địa chỉ nhà: {address?.userDetails?.street}
+              </Text>
+              <Entypo name="location-pin" size={24} color="red" />
+            </View>
+
+            <Text style={{ fontSize: 15, color: "#181818" }}>thành phố{address?.userDetails?.city}</Text>
+
+            <Text style={{ fontSize: 15, color: "#181818" }}>
+              phone No : {address?.userDetails?.mobileNo}
+            </Text>
+            <Text style={{ fontSize: 15, color: "#181818" }}>
+              giứoi tính : {address?.userDetails?.gender}
+            </Text>
+            <Text style={{ fontSize: 15, color: "#181818" }}>
+              Nghề nghiệp : {address?.userDetails?.occupation}
+            </Text>
+            <Text style={{ fontSize: 15, color: "#181818" }}>
+              Ngày sinh: {address?.userDetails?.dateOfBirth}
+            </Text>
+          </Pressable>
+        </View>
+        <Pressable onPress={handleLogout} style={styles.logoutButton}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
         </Pressable>
-      </View>
-      <Pressable onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </Pressable>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 export default AddAddressScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    overflow: 'hidden',
+    marginRight: 15,
+  },
+  icon: {
+    width: '100%',
+    height: '100%',
+    aspectRatio: 1,
+    resizeMode: 'cover',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  editProfileContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 25,
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    paddingVertical: 15,
+    paddingHorizontal: 7,
+  },
+  editProfileContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  editProfileText: {
+    fontSize: 18,
+    marginLeft: 20,
+  },
+  addressContainer: {
+    borderWidth: 1,
+    borderColor: '#D0D0D0',
+    padding: 10,
+    flexDirection: 'column',
+    gap: 5,
+    marginVertical: 10,
+  },
   logoutButton: {
+    width: 170,
     backgroundColor: '#FF0000', // Use your desired color
     padding: 10,
     borderRadius: 5,
