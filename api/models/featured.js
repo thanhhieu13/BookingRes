@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 
-const nameEnum = ['Mới nhất', 'Được yêu thích nhất', 'Nhà hàng sang trọng', 'Nhà hàng chất lượng quốc tế'];
 const featuredSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    enum: nameEnum,
   },
   description: {
     type: String,
