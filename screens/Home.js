@@ -18,21 +18,31 @@ import { Swiper, SwiperItem } from "@nutui/nutui-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
-import { NoticeBar } from '@nutui/nutui-react-native';
+import { NoticeBar } from "@nutui/nutui-react-native";
 
-export default function HomeScreen({ navigation }) {
-    const text = 'NutUI 是京东风格的移动端组件库，使用 Vue 语言来编写可以在 H5，小程序平台上的应用，帮助研发人员提升开发效率，改善开发体验。'
-    const [selectedCity, setSelectedCity] = useState("TPHCM");
-    const hello = () => {
-        // console.log('hello world')
-    }
+export default function HomeScreen({ navigation, route }) {
+  const text =
+    "NutUI 是京东风格的移动端组件库，使用 Vue 语言来编写可以在 H5，小程序平台上的应用，帮助研发人员提升开发效率，改善开发体验。";
+  // const [selectedCity, setSelectedCity] = useState(
+  //   route.params?.selectedCity || "TPHCM"
+  // );
+  const [selectedCity, setSelectedCity] = useState(
+    route.params?.selectedCity || "TPHCM"
+  );
+  const hello = () => {
+    // console.log('hello world')
+  };
 
   return (
     <SafeAreaView className="bg-white">
       <StatusBar barStyle="dark-content" />
       <NoticeBar text={text} />
       <View className="justify-between p-4 flex-row items-center max-w-full h-14">
-        <TouchableOpacity onPress={() => navigation.navigate("City", { selectedCity, setSelectedCity })}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("City", { selectedCity, setSelectedCity })
+          }
+        >
           <View className="flex-row">
             <Ionicons name="location-sharp" size={24} color="red" />
             <Text
@@ -49,12 +59,9 @@ export default function HomeScreen({ navigation }) {
             <MaterialIcons name="keyboard-arrow-down" size={24} color="gray" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-        onPress={() => navigation.navigate('Notification')}>
-        <EvilIcons name="bell" size={30} color="black" />
-
+        <TouchableOpacity onPress={() => navigation.navigate("Notification")}>
+          <EvilIcons name="bell" size={30} color="black" />
         </TouchableOpacity>
-        
       </View>
       {/* search bar */}
       <View className="flex-row items-center space-x-2 px-4 pb-2 ">
@@ -92,7 +99,6 @@ export default function HomeScreen({ navigation }) {
       >
         {/* categories */}
         <Categories />
-
 
         <Swiper
           style={{ marginTop: 35 }}
