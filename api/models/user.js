@@ -19,18 +19,16 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
     verificationToken: String,
-    addresses: [
-        {
-            name: String,
-            mobileNo: String,
-            houseNo: String,
-            street: String,
-            city: String,
-            occupation: String,
-            gender: String,
-            dateOfBirth: Date,
-        },
-    ],
+    address: {
+      name: String,
+      avatar: String,
+      mobileNo: String,
+      street: String,
+      city: String,
+      occupation: String,
+      gender: String,
+      dateOfBirth: Date,
+  },
 });
 
 const User = mongoose.model("User",userSchema);
