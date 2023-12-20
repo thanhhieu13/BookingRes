@@ -171,7 +171,7 @@ const AddressScreen = () => {
           />
         </View>
 
-        <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
           <Text style={styles.label}>Gender</Text>
           <RNPickerSelect
             onValueChange={(itemValue) => setGender(itemValue)}
@@ -204,7 +204,7 @@ const AddressScreen = () => {
             onConfirm={handleConfirmDate}
             onCancel={hideDatePicker}
           />
-        </View>
+        </View> */}
 
         <Pressable
           onPress={handleUpdateAddress}
