@@ -6,26 +6,36 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function RestaurantCard({ item }) {
   const navigation = useNavigation();
-  // console.log(urlFor(imgUrl).url());
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength - 3) + '...';
+    }
+    return text;
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => navigation.navigate('Restaurant', { ...item })}>
       <View style={{ shadowColor: themeColors.bgColor(0.2), shadowRadius: 7 }} className="mr-6 bg-white rounded-3xl shadow-lg">
-        <Image className="h-36 w-64 rounded-t-3xl" source={{uri: item.image}}/>
+        <Image className="h-36 w-64 rounded-t-3xl" source={{ uri: item.image }} />
         <View className="px-3 pb-4 space-y-2">
-          <Text className="text-lg font-bold pt-2">{item.name}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" className="text-lg font-bold pt-2">
+            {truncateText(item.name, 28)}
+          </Text>
           <View className="flex-row items-center space-x-1">
             <Image source={require('../assets/img/star.png')} className="h-4 w-4" />
             <Text className="text-xs">
               <Text className="text-green-700">{item.rating}</Text>
-              <Text className="text-gray-700"> ({item.reviews} review)</Text> · <Text className="font-semibold text-gray-700">{item.category} {"\n"} </Text>
+              <Text className="text-gray-700"> đánh giá </Text>
             </Text>
           </View>
           <View className="flex-row items-center space-x-1">
             <Icon.MapPin color="gray" width={15} height={15} />
-            <Text className="text-gray-700 text-xs"> Nearby · {item.address}</Text>
+            <Text numberOfLines={1} ellipsizeMode="tail" className="text-gray-700 text-xs">
+              Địa chỉ · {truncateText(item.address, 30)} 
+            </Text>
           </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 }
