@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { featured } from "../constants";
 
 const SearchScreen = () => {
   const [keyword, setKeyword] = useState("");

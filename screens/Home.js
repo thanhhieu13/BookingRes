@@ -20,6 +20,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { NoticeBar } from "@nutui/nutui-react-native";
 
+
+
 export default function HomeScreen({ navigation, route }) {
   const text =
     "Chào mừng bạn đến với ứng dụng đặt bàn nhà hàng Eat Eat. Ở đây có mọi thứ mà bạn mong muốn";
@@ -35,7 +37,7 @@ export default function HomeScreen({ navigation, route }) {
     // Fetch featured data from your backend API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/featured');
+        const response = await fetch('http://192.168.1.4:8000/api/featured');
         const data = await response.json();
         setFeaturedData(data);
       } catch (error) {

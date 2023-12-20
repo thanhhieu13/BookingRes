@@ -11,7 +11,7 @@
   "dependencies": {
     "@nutui/nutui-react-native": "*",
     "@react-native-async-storage/async-storage": "^1.21.0",
-    "@react-native-community/datetimepicker": "^7.6.2",
+    "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-community/geolocation": "^3.1.0",
     "@react-native-picker/picker": "^2.6.1",
     "@react-navigation/bottom-tabs": "^6.5.11",
@@ -25,6 +25,7 @@
     "expo-status-bar": "~1.6.0",
     "jwt-decode": "^3.1.2",
     "lottie-react-native": "5.1.4",
+    "moment-timezone": "^0.5.43",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.72.6",
