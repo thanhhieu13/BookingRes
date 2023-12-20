@@ -109,10 +109,10 @@ const StackNavigator = () => {
           })}
         />
         <Tab.Screen
-          name="MapPrepare"
-          component={MapPrepare}
+          name="Map"
+          component={Map}
           options={{
-            tabBarLabel: "MapPrepare",
+            tabBarLabel: "Map",
             tabBarLabelStyle: { color: "#008E97" },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
