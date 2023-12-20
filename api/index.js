@@ -294,3 +294,56 @@ app.post('/api/featured', async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+
+app.post('/categories', async (req, res) => {
+  try {
+      // Assuming that the request body contains 'name' and 'image'
+      const { name, image } = req.body;
+
+      // Create a new category instance
+      const newCategory = new Category({
+          name,
+          image,
+      });
+
+      // Save the new category to the database
+      const savedCategory = await newCategory.save();
+
+      // Respond with the saved category
+      res.status(201).json(savedCategory);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+app.get('/categories', async (req, res) => {
+  try {
+    // Fetch all categories from the database
+    const categories = await Category.find();
+
+    // Respond with the list of categories
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+app.get('/restaurants/search/:keyword', async (req, res) => {
+  const { keyword } = req.params;
+
+  try {
+    const restaurants = await Restaurant.find({
+      name: { $regex: new RegExp(keyword, 'i') }
+    }).populate('type');
+
+    res.json(restaurants);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});

@@ -1,95 +1,101 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from "react-native";
-import React from "react";
-import * as Icon from "react-native-feather";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 const SearchScreen = () => {
+  const [keyword, setKeyword] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [location, setLocation] = useState("TPHCM"); // Added state for location
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const handleSearch = async (searchKeyword) => {
+      try {
+        // Only perform the search if the keyword is not empty
+        if (searchKeyword.trim() !== "") {
+          const response = await fetch(
+            `http://localhost:8000/restaurants/search/${searchKeyword}`
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+
+            // Check if the component is still mounted before updating the state
+            if (isMounted) {
+              setSearchResults(data);
+            }
+          } else {
+            console.error("Error fetching search results");
+          }
+        } else {
+          // If keyword is empty, clear the search results
+          setSearchResults([]);
+        }
+      } catch (error) {
+        console.error("Error fetching search results", error);
+      }
+    };
+
+    // Trigger the search when the keyword changes
+    handleSearch(keyword);
+
+    return () => {
+      // Set isMounted to false when the component is unmounted
+      isMounted = false;
+    };
+  }, [keyword]);
+
   return (
-    <View className="">
-      <View className="items-center mt-4">
-        <TouchableOpacity className="w-11/12 h-12 rounded-full flex-row items-center border-solid border border-red-500">
-          <Ionicons
-            style={{ padding: 10 }}
-            name="location-sharp"
-            size={24}
-            color="gray"
-          />
-          <Text className="text-base">Khu vực tìm kiếm: </Text>
-          <Text className="ml-4 text-xl font-bold">TPHCM</Text>
+    <View>
+      <View style={{ alignItems: "center", marginTop: 20 }}>
+        <TouchableOpacity
+          style={{
+            width: "90%",
+            height: 40,
+            borderRadius: 20,
+            flexDirection: "row",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "red",
+          }}
+        >
+          <Ionicons name="location-sharp" size={24} color="gray" style={{ padding: 10 }} />
+          <Text style={{ fontSize: 16 }}>Khu vực tìm kiếm: </Text>
+          <Text style={{ marginLeft: 10, fontSize: 20, fontWeight: "bold" }}>{location}</Text>
         </TouchableOpacity>
       </View>
-      <Text className="uppercase mt-8 ml-2 text-xl font-medium">Từ khóa</Text>
+      {/* Input for keyword search */}
+      <TextInput
+        style={{
+          height: 40,
+          borderColor: "gray",
+          borderWidth: 1,
+          margin: 10,
+          padding: 10,
+        }}
+        placeholder="Enter keyword"
+        value={keyword}
+        onChangeText={(text) => setKeyword(text)}
+      />
+      <Text style={{ textTransform: "uppercase", marginLeft: 10, fontSize: 20, fontWeight: "bold" }}>Từ khóa</Text>
+      
+      <ScrollView>
       <View className="flex-row justify-between items-center w-10/12 mt-4">
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            Bò lế rồ trần khánh dư khu đô thị vạn phúc
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            lẩu bò vi vu Bò lê văn sỹ
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View className="flex-row justify-between items-center w-10/12 mt-4">
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            Bò lế rồ trần khánh dư
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            lẩu bò vi vu Bò lê văn sỹ
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View className="flex-row justify-between items-center w-10/12 mt-4">
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            Bò lế rồ trần khánh dư
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            lẩu bò vi vu Bò lê văn sỹ
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View className="flex-row justify-between items-center w-10/12 mt-4">
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            Bò lế rồ trần khánh dư
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-around items-center">
-          <FontAwesome5 name="search" size={17} color="gray" />
-          <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            lẩu bò vi vu Bò lê văn sỹ
-          </Text>
-        </TouchableOpacity>
-      </View>
+        {searchResults.map((restaurant) => (
+          <TouchableOpacity key={restaurant._id} style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: "gray", width: "80%", margin: 10 }}>
+            <FontAwesome5 name="search" size={17} color="gray" />
+            <Text className="w-5/6 max-h-20 border-b border-b-gray-200 p-2">{restaurant.name}</Text>
+          </TouchableOpacity>
+        ))}
+        </View>
+      </ScrollView>
       <View>
         <Text className="uppercase text-xl font-bold mt-6">Được đề xuất</Text>
       </View>
-      <View>
-        
       </View>
-    </View>
+    
   );
 };
 

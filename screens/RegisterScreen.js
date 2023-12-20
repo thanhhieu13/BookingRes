@@ -34,8 +34,8 @@ const RegisterScreen = () => {
             .then((response) => {
                 console.log(response);
                 Alert.alert(
-                    "Registration successful",
-                    "You have been registered Successfully"
+                    "Thành công",
+                    "Chúc mừng bạn đã đăng ký thành công"
                 );
                 setName("");
                 setEmail("");
@@ -43,8 +43,8 @@ const RegisterScreen = () => {
             })
             .catch((error) => {
                 Alert.alert(
-                    "Registration Error",
-                    "An error occurred while registering"
+                    "Thất bại",
+                    "Bạn hãy nhập lại đầy đủ và chính xác thông tin nhé"
                 );
                 console.log("registration failed", error);
             });

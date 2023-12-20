@@ -24,7 +24,7 @@ import { NoticeBar } from "@nutui/nutui-react-native";
 
 export default function HomeScreen({ navigation, route }) {
   const text =
-    "NutUI 是京东风格的移动端组件库，使用 Vue 语言来编写可以在 H5，小程序平台上的应用，帮助研发人员提升开发效率，改善开发体验。";
+    "Chào mừng bạn đến với ứng dụng đặt bàn nhà hàng Eat Eat. Ở đây có mọi thứ mà bạn mong muốn";
   // const [selectedCity, setSelectedCity] = useState(
   //   route.params?.selectedCity || "TPHCM"
   // );
@@ -79,20 +79,33 @@ export default function HomeScreen({ navigation, route }) {
         </TouchableOpacity>
       </View>
       {/* search bar */}
-      <View className="flex-row items-center space-x-2 px-4 pb-2 ">
-        <View className="flex-row flex-1 items-center p-3 rounded-full border border-gray-300">
-          <Icon.Search height="25" width="25" stroke="gray" />
-          <TextInput
-            placeholder="Resturants"
-            className="ml-2 flex-1"
-            keyboardType="default"
-          />
-          <View className="flex-row items-center space-x-1 border-0 border-l-2 pl-2 border-l-gray-300">
-            <Icon.MapPin height="20" width="20" stroke="gray" />
-            <Text className="text-gray-600">New York, NYC</Text>
-          </View>
+      <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+        <View className="flex-row items-center space-x-2 px-4 pb-2">
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              padding: 3,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: 'gray',
+            }}
+            onPress={() => navigation.navigate("Search")}
+          >
+            <Icon.Search height="25" width="25" stroke="gray" />
+            <Text style={{ marginLeft: 5, flex: 1 }}>Tìm nhà hàng</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View className="flex-row items-center space-x-1 border-0 border-l-2 pl-2 border-l-gray-300">
+              <Icon.MapPin height="20" width="20" stroke="gray" />
+              <Text className="text-gray-600">Lê văn chí</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-        <View
+      </TouchableOpacity>
+
+      {/* <View
           style={{ backgroundColor: themeColors.bgColor(1) }}
           className="p-3 rounded-full"
         >
@@ -102,8 +115,7 @@ export default function HomeScreen({ navigation, route }) {
             strokeWidth="2.5"
             stroke="white"
           />
-        </View>
-      </View>
+        </View> */}
 
       {/* main */}
       <ScrollView

@@ -11,6 +11,7 @@ import LottieView from "lottie-react-native";
 import { Audio } from "expo-av";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OnboardingScreen = ({ navigation }) => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -104,12 +105,18 @@ const OnboardingScreen = ({ navigation }) => {
       /> */}
       <TouchableOpacity
         style={styles.beginButton}
-        onPress={() => {
+        onPress={async () => { 
           setIsPlaying(false);
           if (sound) {
             sound.unloadAsync();
           }
-          navigation.navigate("Login");
+          const token = await AsyncStorage.getItem("authToken");
+          if(token == null){
+            navigation.navigate("Login");
+          }
+          else {
+            navigation.navigate("Main");
+          }
         }}
       >
         <Text style={styles.beginButtonText}>Let's Begin</Text>

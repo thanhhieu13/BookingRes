@@ -65,15 +65,16 @@ export default function RestaurantDetail() {
         <View className="pb-36 bg-white">
           <Text className="px-4 py-4 text-2xl font-bold">Menu</Text>
           {/* dishes */}
-          {/* {item.dishes.map((dish, index) => (
-            <DishRow item={{ ...dish }} key={index} />
-          ))} */}
         </View>
       </ScrollView>
 
       <View style={styles.popupContainer}>
-        <TouchableOpacity style={styles.applyButton}
-        onPress={()=> {navigation.navigate('Order')}}>
+        <TouchableOpacity
+          style={styles.applyButton}
+          onPress={() => {
+            navigation.navigate("Order");
+          }}
+        >
           <Text style={styles.applyButtonText}>Đặt chỗ</Text>
         </TouchableOpacity>
       </View>
@@ -91,21 +92,20 @@ const styles = StyleSheet.create({
   applyButton: {
     backgroundColor: "red",
     width: "90%",
-    marginTop : 20,
-    padding : 17,
+    marginTop: 20,
+    padding: 17,
     borderRadius: 5,
-
   },
   applyButtonText: {
     textAlign: "center",
-    color : "#fff",
-    fontSize : 17,
-    fontWeight : "bold",
+    color: "#fff",
+    fontSize: 17,
+    fontWeight: "bold",
   },
   popupContainer: {
     backgroundColor: "white",
     borderTopColor: "#ccc",
-    borderTopWidth : 1,
+    borderTopWidth: 1,
     width: "95%",
     height: 120,
     justifyContent: "center",
