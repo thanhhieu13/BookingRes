@@ -50,7 +50,7 @@ const AddAddressScreen = () => {
       console.log("Error fetching address", error);
     }
   };
-
+  console.log("Error fetching address", address?.userDetails?.name);
   useEffect(() => {
     // Fetch address data when the component mounts
     fetchAddress();
