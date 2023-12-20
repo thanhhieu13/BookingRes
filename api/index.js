@@ -347,3 +347,34 @@ app.get('/restaurants/search/:keyword', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
+const Order = require('../models/order');
+app.post('/orders', async (req, res) => {
+  try {
+    const {
+      user,
+      restaurant,
+      numberOfAdults,
+      numberOfChildren,
+      reservationDate,
+      reservationTime,
+      note
+    } = req.body;
+
+    const newOrder = new Order({
+      user,
+      restaurant,
+      numberOfAdults,
+      numberOfChildren,
+      reservationDate,
+      reservationTime,
+      note
+    });
+
+    const savedOrder = await newOrder.save();
+    res.json(savedOrder);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
