@@ -69,7 +69,7 @@ const AccountScreen = () => {
   const fetchAddressData = async (userId) => {
     try {
       const response = await axios.get(
-        `http://192.168.1.4:8000/address/${userId}`
+        `http://localhost:8000/address/${userId}`
       );
       const addressData = response.data;
       setAddress(addressData); // Thay đổi tùy thuộc vào cấu trúc phản hồi của API của bạn
@@ -86,7 +86,7 @@ const AccountScreen = () => {
           <View
             style={{
               backgroundColor: COLORS.offwhite,
-              height: SIZES.height - 80,
+              height: SIZES.height - 170,
               // borderBottomEndRadius: 30,
               // borderBottomStartRadius: 30,
             }}
@@ -103,7 +103,7 @@ const AccountScreen = () => {
                   height={100}
                   radius={99}
                 />
-                <View style={{ marginLeft: 10, marginTop: 3 }}>
+                <View style={{ marginLeft: 10, marginTop: 30 }}>
                   <Text style={styles.text}>
                     {user === null ? "Nguyen Hoang Khoa" : user.username}
                   </Text>
@@ -115,6 +115,7 @@ const AccountScreen = () => {
 
               <TouchableOpacity>
                 <MaterialIcons
+                onPress={() => navigation.navigate("EditAccount")}
                   name="arrow-forward-ios"
                   size={24}
                   color="black"
@@ -124,7 +125,7 @@ const AccountScreen = () => {
 
             <View
               style={{
-                height: 240,
+                height: 210,
                 backgroundColor: COLORS.lightWhite,
                 // margin: 10,
                 borderRadius: 12,
@@ -143,7 +144,6 @@ const AccountScreen = () => {
               style={{
                 flexDirection: "row",
                 marginHorizontal: 20,
-
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
@@ -158,7 +158,7 @@ const AccountScreen = () => {
             </View>
             <View
               style={{
-                height: 120,
+                height: 100,
                 backgroundColor: COLORS.lightWhite,
                 margin: 10,
                 borderRadius: 12,
@@ -188,7 +188,7 @@ const AccountScreen = () => {
 
             <View
               style={{
-                height: 140,
+                height: 100,
                 backgroundColor: COLORS.lightWhite,
                 margin: 10,
                 borderRadius: 12,
@@ -198,7 +198,7 @@ const AccountScreen = () => {
               <ProfileTile title={"Mời bạn bè"} icon={"adduser"} />
             </View>
             <View style={styles.container}>
-              <TouchableOpacity style={styles.logoutButton}>
+              <TouchableOpacity  onPress={handleLogout} style={styles.logoutButton}>
                 <Text style={styles.logoutButtonText}>Đăng xuất</Text>
               </TouchableOpacity>
               <Text style={{color:"#6C6C6C", marginTop:20}}>Copyright 2023 by NHK & NTH</Text>
@@ -225,8 +225,8 @@ const styles = StyleSheet.create({
   logoutButton: {
     backgroundColor: "#FEF2F2", // Use your desired color
     padding: 10,
-    borderRadius: 5,
-    width: "90%",
+    borderRadius: 8,
+    width: "60%",
   },
   logoutButtonText: {
     color: "#D02B39",
