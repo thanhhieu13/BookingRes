@@ -1,230 +1,213 @@
 import {
-    StyleSheet,
-    Text,
-    View,
-    SafeAreaView,
-    Pressable,
-    Image,
-    KeyboardAvoidingView,
-    TextInput,
-    Alert,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Pressable,
+  Image,
+  KeyboardAvoidingView,
+  TextInput,
+  Alert,
+  TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { COLORS, SIZES } from "../constants/theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import styles from "./login.style";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import LottieView from "lottie-react-native";
+import BackBtn from "../components/BackBtn";
+import Button from "../components/Button";
 
 const RegisterScreen = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
-    const navigation = useNavigation();
-    const handleRegister = () => {
-        const user = {
-            name: name,
-            email: email,
-            password: password,
-        };
-
-        // send a POST  request to the backend API to register the user
-        axios
-            .post("http://localhost:8000/register", user)
-            .then((response) => {
-                console.log(response);
-                Alert.alert(
-                    "Thành công",
-                    "Chúc mừng bạn đã đăng ký thành công"
-                );
-                setName("");
-                setEmail("");
-                setPassword("");
-            })
-            .catch((error) => {
-                Alert.alert(
-                    "Thất bại",
-                    "Bạn hãy nhập lại đầy đủ và chính xác thông tin nhé"
-                );
-                console.log("registration failed", error);
-            });
+  const animation = useRef(null);
+  const [loader, setLoader] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const navigation = useNavigation();
+  const [obsecureText, setObsecureText] = useState(false);
+  const handleRegister = () => {
+    const user = {
+      name: name,
+      email: email,
+      password: password,
     };
-    return (
-        <SafeAreaView
-            style={{ flex: 1, backgroundColor: "white", alignItems: "center", marginTop: 50 }}
-        >
-            <View>
-                <Image
-                    style={{ width: 150, height: 100 }}
-                    source={{
-                        uri: "https://assets.stickpng.com/thumbs/6160562276000b00045a7d97.png",
-                    }}
+
+    // send a POST  request to the backend API to register the user
+    axios
+      .post("http://localhost:8000/register", user)
+      .then((response) => {
+        console.log(response);
+        Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");
+        setName("");
+        setEmail("");
+        setPassword("");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Thất bại",
+          "Bạn hãy nhập lại đầy đủ và chính xác thông tin nhé"
+        );
+        console.log("registration failed", error);
+      });
+  };
+  return (
+    <SafeAreaView
+      style={{
+        // flex: 1,
+        backgroundColor: "white",
+        // alignItems: "center",
+        // marginTop: 50,
+      }}
+    >
+      <View style={{ marginHorizontal: 20, marginTop: 50 }}>
+        <LottieView
+          autoPlay
+          ref={animation}
+          style={{ width: "100%", height: SIZES.height / 3.2 }}
+          source={require("../assets/lottie/login.json")}
+        />
+         <BackBtn onPress={() => navigation.goBack()} />
+
+        <Text style={styles.titleLogin}>Booking Res</Text>
+
+        <KeyboardAvoidingView>
+          <View>
+            <View style={styles.wrapper}>
+              <Text style={styles.label}>Username</Text>
+              <View
+                style={styles.inputWrapper(
+                  COLORS.offwhite
+                  // touched.username ? COLORS.secondary : COLORS.offwhite
+                )}
+              >
+                <MaterialCommunityIcons
+                  name="face-man-profile"
+                  size={20}
+                  color={COLORS.gray}
+                  style={styles.iconStyle}
                 />
+
+                <TextInput
+                  placeholder="Username"
+                  // onFocus={() => {
+                  //   setFieldTouched("username");
+                  // }}
+                  // onBlur={() => {
+                  //   setFieldTouched("username", "");
+                  // }}
+                  // value={values.username}
+                  // onChangeText={handleChange("username")}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  style={{ flex: 1 }}
+                />
+              </View>
+              {/* {touched.username && errors.username && (
+              <Text style={styles.errorMessage}>{errors.username}</Text>
+            )} */}
             </View>
 
-            <KeyboardAvoidingView>
-                <View style={{ alignItems: "center" }}>
-                    <Text
-                        style={{
-                            fontSize: 17,
-                            fontWeight: "bold",
-                            marginTop: 12,
-                            color: "#041E42",
-                        }}
-                    >
-                        Register to your Account
-                    </Text>
-                </View>
+            <View style={styles.wrapper}>
+              <Text style={styles.label}>Email</Text>
+              <View
+                style={styles.inputWrapper(COLORS.offwhite)}
+                // style={styles.inputWrapper(
+                //   touched.email ? COLORS.secondary : COLORS.offwhite
+                // )}
+              >
+                <MaterialCommunityIcons
+                  name="email-outline"
+                  size={20}
+                  color={COLORS.gray}
+                  style={styles.iconStyle}
+                />
 
-                <View style={{ marginTop: 70 }}>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 5,
-                            backgroundColor: "#D0D0D0",
-                            paddingVertical: 5,
-                            borderRadius: 5,
-                            marginTop: 30,
-                        }}
-                    >
-                        <Ionicons
-                            name="ios-person"
-                            size={24}
-                            color="gray"
-                            style={{ marginLeft: 8 }}
-                        />
-                        <TextInput
-                            value={name}
-                            onChangeText={(text) => setName(text)}
-                            style={{
-                                color: "gray",
-                                marginVertical: 10,
-                                width: 300,
-                                fontSize: name ? 16 : 16,
-                            }}
-                            placeholder="enter your name"
-                        />
-                    </View>
+                <TextInput
+                  placeholder="Enter email"
+                  // onFocus={() => {
+                  //   setFieldTouched("email");
+                  // }}
+                  // onBlur={() => {
+                  //   setFieldTouched("email", "");
+                  // }}
+                  // value={values.email}
+                  // onChangeText={handleChange("email")}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  style={{ flex: 1 }}
+                />
+              </View>
+              {/* {touched.email && errors.email && (
+              <Text style={styles.errorMessage}>{errors.email}</Text>
+            )} */}
+            </View>
 
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 5,
-                            backgroundColor: "#D0D0D0",
-                            paddingVertical: 5,
-                            borderRadius: 5,
-                            marginTop: 30,
-                        }}
-                    >
-                        <MaterialIcons
-                            style={{ marginLeft: 8 }}
-                            name="email"
-                            size={24}
-                            color="gray"
-                        />
+            <View style={styles.wrapper}>
+              <Text style={styles.label}>Password</Text>
+              <View
+                style={styles.inputWrapper(
+                  // touched.password ? COLORS.secondary : COLORS.offwhite
+                  COLORS.offwhite
+                )}
+              >
+                <MaterialCommunityIcons
+                  name="lock-outline"
+                  size={20}
+                  color={COLORS.gray}
+                  style={styles.iconStyle}
+                />
 
-                        <TextInput
-                            value={email}
-                            onChangeText={(text) => setEmail(text)}
-                            style={{
-                                color: "gray",
-                                marginVertical: 10,
-                                width: 300,
-                                fontSize: password ? 16 : 16,
-                            }}
-                            placeholder="enter your Email"
-                        />
-                    </View>
-                </View>
+                <TextInput
+                  secureTextEntry={obsecureText}
+                  placeholder="Password"
+                  // onFocus={() => {
+                  //   setFieldTouched("password");
+                  // }}
+                  // onBlur={() => {
+                  //   setFieldTouched("password", "");
+                  // }}
+                  // value={values.password}
+                  // onChangeText={handleChange("password")}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  style={{ flex: 1 }}
+                />
 
-                <View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 5,
-                            backgroundColor: "#D0D0D0",
-                            paddingVertical: 5,
-                            borderRadius: 5,
-                            marginTop: 30,
-                        }}
-                    >
-                        <AntDesign
-                            name="lock1"
-                            size={24}
-                            color="gray"
-                            style={{ marginLeft: 8 }}
-                        />
-
-                        <TextInput
-                            value={password}
-                            onChangeText={(text) => setPassword(text)}
-                            secureTextEntry={true}
-                            style={{
-                                color: "gray",
-                                marginVertical: 10,
-                                width: 300,
-                                fontSize: email ? 16 : 16,
-                            }}
-                            placeholder="enter your Password"
-                        />
-                    </View>
-                </View>
-
-                <View
-                    style={{
-                        marginTop: 12,
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                    }}
+                <TouchableOpacity
+                  onPress={() => {
+                    setObsecureText(!obsecureText);
+                  }}
                 >
-                    <Text>Keep me logged in</Text>
+                  <MaterialCommunityIcons
+                    name={obsecureText ? "eye-outline" : "eye-off-outline"}
+                    size={18}
+                  />
+                </TouchableOpacity>
+              </View>
+              {/* {touched.password && errors.password && (
+              <Text style={styles.errorMessage}>{errors.password}</Text>
+            )} */}
+            </View>
 
-                    <Text style={{ color: "#007FFF", fontWeight: "500" }}>
-                        Forgot Password
-                    </Text>
-                </View>
-
-                <View style={{ marginTop: 80 }} />
-
-                <Pressable
-                    onPress={handleRegister}
-                    style={{
-                        width: 200,
-                        backgroundColor: "#FEBE10",
-                        borderRadius: 6,
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        padding: 15,
-                    }}
-                >
-                    <Text
-                        style={{
-                            textAlign: "center",
-                            color: "white",
-                            fontSize: 16,
-                            fontWeight: "bold",
-                        }}
-                    >
-                        Register
-                    </Text>
-                </Pressable>
-                <Pressable
-                    onPress={() => navigation.goBack()}
-                    style={{ marginTop: 15 }}
-                >
-                    <Text style={{ textAlign: "center", color: "gray", fontSize: 16 }}>
-                        Already have an account? Sign In
-                    </Text>
-                </Pressable>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
-    );
+            <Button
+                title={"S I G N U P"}
+                // onPress={isValid ? handleSubmit : inValidForm}
+                loader={loader}
+                // isValid={isValid}
+              />
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
+  );
 };
 
 export default RegisterScreen;
 
-const styles = StyleSheet.create({});
+// const styles = StyleSheet.create({});
