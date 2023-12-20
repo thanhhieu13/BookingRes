@@ -16,7 +16,7 @@ const SearchScreen = () => {
         // Only perform the search if the keyword is not empty
         if (searchKeyword.trim() !== "") {
           const response = await fetch(
-            `http://localhost:8000/restaurants/search/${searchKeyword}`
+            `http://192.168.1.4:8000/restaurants/search/${searchKeyword}`
           );
 
           if (response.ok) {
