@@ -91,14 +91,14 @@ const OrderScreen = () => {
           <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
             <FontAwesome5 name="user" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
-              <Text className="ml-2">Số người lớn :</Text>
-              <InputNumber modelValue={inputState.val1} />
+              <Text className="ml-0">Số người lớn :</Text>
+              <InputNumber  modelValue={inputState.val1} />
             </View>
           </View>
           <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
             <MaterialIcons name="child-care" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
-              <Text className="">Số trẻ em :</Text>
+              <Text className="mr-4">Số trẻ em :</Text>
               <InputNumber modelValue={inputState.val1} />
             </View>
           </View>
@@ -150,14 +150,14 @@ const OrderScreen = () => {
         {/* THONG TIN KHACH HANG  */}
         <View style={{ margin: 15 }}>
           <Text className="font-medium text-lg py-2">Thông tin khách hàng</Text>
-          <View className="flex-row py-4  items-center">
+          <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">
               <FontAwesome5 name="user-circle" size={24} color="black" />
               <Text className="ml-4">Tên liên lạc</Text>
             </View>
             <Text className="w-2/4">Nguyễn Hoàng Khoa</Text>
           </View>
-          <View className="flex-row py-4  items-center">
+          <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">
               <Feather name="phone" size={24} color="black" />
 
@@ -165,7 +165,7 @@ const OrderScreen = () => {
             </View>
             <Text className="w-2/4">0123456789</Text>
           </View>
-          <View className="flex-row py-4  items-center">
+          <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">
               <FontAwesome name="envelope" size={24} color="black" />
               <Text className="ml-4">Email</Text>
@@ -179,15 +179,15 @@ const OrderScreen = () => {
 
         {/* GHI CHU  */}
         <View style={{ margin: 15, height: 80 }}>
-          <View className="flex-row py-4  items-center">
+          <View className="flex-row p-5  items-center">
             <View className="flex-row w-2/5 h-14 justify-around items-center ">
               <Foundation name="clipboard-notes" size={24} color="black" />
               <Text className="mr-14">Ghi chú</Text>
             </View>
-            <View className=" w-3/5 h-14">
+            <View className="w-3/5 h-14">
               <TextInput
                 placeholder="nhập ghi chú"
-                className="ml-2 flex-1 rounded-xl border border-slate-200"
+                className="ml-2 p-2 flex-1 rounded-xl border border-slate-200"
                 keyboardType="default"
               />
             </View>
