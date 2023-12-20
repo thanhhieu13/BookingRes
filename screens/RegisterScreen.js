@@ -9,6 +9,8 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  Platform,
+  ScrollView,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { COLORS, SIZES } from "../constants/theme";
@@ -40,13 +42,14 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://localhost:8000/register", user)
+      .post("http://192.168.1.4:8000/register", user)
       .then((response) => {
         console.log(response);
         Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");
         setName("");
         setEmail("");
         setPassword("");
+        navigation.navigate("Login")
       })
       .catch((error) => {
         Alert.alert(
@@ -57,7 +60,7 @@ const RegisterScreen = () => {
       });
   };
   return (
-    <SafeAreaView
+    <ScrollView
       style={{
         // flex: 1,
         backgroundColor: "white",
@@ -72,7 +75,7 @@ const RegisterScreen = () => {
           style={{ width: "100%", height: SIZES.height / 3.2 }}
           source={require("../assets/lottie/login.json")}
         />
-         <BackBtn onPress={() => navigation.goBack()} />
+        <BackBtn onPress={() => navigation.goBack()} />
 
         <Text style={styles.titleLogin}>Booking Res</Text>
 
@@ -103,6 +106,7 @@ const RegisterScreen = () => {
                   // }}
                   // value={values.username}
                   // onChangeText={handleChange("username")}
+                  onChangeText={(text) => setName(text)}
                   autoCapitalize="none"
                   autoCorrect={false}
                   style={{ flex: 1 }}
@@ -130,6 +134,8 @@ const RegisterScreen = () => {
 
                 <TextInput
                   placeholder="Enter email"
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
                   // onFocus={() => {
                   //   setFieldTouched("email");
                   // }}
@@ -166,6 +172,8 @@ const RegisterScreen = () => {
                 <TextInput
                   secureTextEntry={obsecureText}
                   placeholder="Password"
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
                   // onFocus={() => {
                   //   setFieldTouched("password");
                   // }}
@@ -196,15 +204,16 @@ const RegisterScreen = () => {
             </View>
 
             <Button
-                title={"S I G N U P"}
-                // onPress={isValid ? handleSubmit : inValidForm}
-                loader={loader}
-                // isValid={isValid}
-              />
+              title={"S I G N U P"}
+              onPress={handleRegister}
+              // onPress={isValid ? handleSubmit : inValidForm}
+              loader={loader}
+              // isValid={isValid}
+            />
           </View>
         </KeyboardAvoidingView>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
