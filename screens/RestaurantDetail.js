@@ -48,7 +48,7 @@ export default function RestaurantDetail() {
                     <Text className="px-4 py-4 text-2xl font-bold">Menu</Text>
                     {/* dishes */}
                     {
-                        item.dishes.map((dish, index) => <DishRow item={{ ...dish }} key={index} />)
+                        // item.dishes.map((dish, index) => <DishRow item={{ ...dish }} key={index} />)
                     }
                 </View>
 
