@@ -49,7 +49,7 @@ const LoginScreen = () => {
         navigation.replace("Main");
       })
       .catch((error) => {
-        Alert.alert("Login Error", "Invalid Email");
+        Alert.alert("Lỗi đăng nhập", "Tài khoản và mật khẩu không hợp lệ");
         console.log(error);
       });
   };
