@@ -13,7 +13,7 @@ import Categories from "../components/Categories";
 import FeaturedRow from "../components/featureRow";
 import * as Icon from "react-native-feather";
 import { themeColors } from "../theme";
-import { featured } from "../constants";
+// import { featured } from "../constants";
 import { Swiper, SwiperItem } from "@nutui/nutui-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -29,15 +29,27 @@ export default function HomeScreen({ navigation, route }) {
   const [selectedCity, setSelectedCity] = useState(
     route.params?.selectedCity || "TPHCM"
   );
-  const hello = () => {
-    // console.log('hello world')
-  };
+  const [featuredData, setFeaturedData] = useState([]);
+
+  useEffect(() => {
+    // Fetch featured data from your backend API
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/featured');
+        const data = await response.json();
+        setFeaturedData(data);
+      } catch (error) {
+        console.error('Error fetching featured data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <SafeAreaView className="bg-white">
       <StatusBar barStyle="dark-content" />
       <NoticeBar text={text} />
-
       <View className="justify-between p-4 flex-row items-center max-w-full h-14">
         <TouchableOpacity
           onPress={() =>
@@ -157,6 +169,18 @@ export default function HomeScreen({ navigation, route }) {
           </SwiperItem>
         </Swiper>
         <View className="mt-5">
+          {featuredData.map((item, index) => {
+            return (
+              <FeaturedRow
+                key={index}
+                title={item.name}  // Chú ý thay đổi tên trường nếu cần
+                restaurants={item.restaurants}
+                description={item.description}
+              />
+            );
+          })}
+        </View>
+        {/* <View className="mt-5">
           {[featured, featured, featured].map((item, index) => {
             return (
               <FeaturedRow
@@ -167,7 +191,7 @@ export default function HomeScreen({ navigation, route }) {
               />
             );
           })}
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
