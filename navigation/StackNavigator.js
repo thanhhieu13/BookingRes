@@ -26,6 +26,8 @@ import CityScreen from "../screens/CityScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import SearchScreen from "../screens/SearchScreen";
 import * as Icon from "react-native-feather";
+import OrderScreen from "../screens/OrderScreen";
+import AccountScreen from "../screens/Account";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -125,7 +127,7 @@ const StackNavigator = () => {
         />
         <Tab.Screen
           name="ResList"
-          component={ResList}
+          component={AccountScreen}
           options={{
             title: "Tài khoản",
             headerStyle: { backgroundColor: "red" },
@@ -177,6 +179,19 @@ const StackNavigator = () => {
           component={NotificationScreen}
           options={{
             title: "Ưu đãi",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Order"
+          component={OrderScreen}
+          options={{
+            title: "Thông tin giao dịch",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
             headerTitleAlign: "center",

@@ -10,7 +10,6 @@ import React from "react";
 import * as Icon from "react-native-feather";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { featured } from "../constants";
 
 const SearchScreen = () => {
   return (
@@ -32,7 +31,7 @@ const SearchScreen = () => {
         <TouchableOpacity className="flex-row justify-around items-center">
           <FontAwesome5 name="search" size={17} color="gray" />
           <Text className="w-3/6 max-h-20 border-b border-b-gray-300 p-2">
-            Bò lế rồ trần khánh dư
+            Bò lế rồ trần khánh dư khu đô thị vạn phúc
           </Text>
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-around items-center">

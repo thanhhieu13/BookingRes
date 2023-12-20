@@ -20,6 +20,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { NoticeBar } from "@nutui/nutui-react-native";
 
+
+
 export default function HomeScreen({ navigation, route }) {
   const text =
     "NutUI 是京东风格的移动端组件库，使用 Vue 语言来编写可以在 H5，小程序平台上的应用，帮助研发人员提升开发效率，改善开发体验。";
@@ -35,7 +37,7 @@ export default function HomeScreen({ navigation, route }) {
     // Fetch featured data from your backend API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/featured');
+        const response = await fetch('http://192.168.1.4:8000/api/featured');
         const data = await response.json();
         setFeaturedData(data);
       } catch (error) {
