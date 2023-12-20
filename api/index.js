@@ -349,7 +349,7 @@ app.get('/restaurants/search/:keyword', async (req, res) => {
 });
 
 
-const Order = require('../models/order');
+const Order = require('./models/order');
 app.post('/orders', async (req, res) => {
   try {
     const {

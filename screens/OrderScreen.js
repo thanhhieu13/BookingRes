@@ -19,7 +19,7 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 
-const OrderScreen = () => {
+const OrderScreen = ({ navigation }) => {
   const [inputState, setInputState] = useState({
     val1: 1,
   });
@@ -27,6 +27,10 @@ const OrderScreen = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentTime, setCurrentTime] = useState("");
+
+  // State to hold user and restaurant data
+  const [userData, setUserData] = useState({});
+  const [restaurantData, setRestaurantData] = useState({});
 
   useEffect(() => {
     // Function to update the current time in Vietnam timezone
@@ -48,6 +52,73 @@ const OrderScreen = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Function to fetch user data
+  const fetchUserData = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/address/${userId}`);
+      const data = await response.json();
+      setUserData(data.userDetails);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  // Function to fetch restaurant data
+  const fetchRestaurantData = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/restaurants");
+      const data = await response.json();
+      // For now, let's assume you want the first restaurant in the list
+      setRestaurantData(data[0]);
+    } catch (error) {
+      console.error("Error fetching restaurant data:", error);
+    }
+  };
+
+  // Function to handle order submission
+  const submitOrder = async () => {
+    try {
+      // Prepare order data
+      const orderData = {
+        user: userData, // Assuming you want to include user details in the order
+        restaurant: restaurantData,
+        numberOfAdults: inputState.val1,
+        numberOfChildren: inputState.val1,
+        reservationDate: selectedDate,
+        reservationTime: currentTime,
+        note: "Your order note here", // You can get the note from TextInput
+      };
+
+      // Make a POST request to submit the order
+      const response = await fetch("http://localhost:8000/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        // Order submitted successfully
+        const responseData = await response.json();
+        console.log("Order submitted successfully:", responseData);
+        // Navigate to the next screen or perform other actions
+        navigation.navigate("NextScreen");
+      } else {
+        console.error("Failed to submit order");
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch user data when the component mounts
+    fetchUserData("userId"); // Replace "userId" with the actual user ID
+    // Fetch restaurant data when the component mounts
+    fetchRestaurantData();
+  }, []);
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -57,7 +128,6 @@ const OrderScreen = () => {
   };
 
   const handleConfirm = (date) => {
-    // console.warn("A date has been picked: ", date);
     setSelectedDate(date);
     hideDatePicker();
   };
@@ -70,9 +140,7 @@ const OrderScreen = () => {
           <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
           <View className="border p-2 flex-row justify-between rounded-xl">
             <Image
-              source={{
-                uri: "https://pastaxi-manager.onepas.vn/Photo/ShowPhotoBannerVsSlide?Id=7F14089A-CF08-4FA4-B04F-9FAA31B9CE02&2023-12-18%2016:12:30",
-              }}
+              source={{ uri: restaurantData.image }}
               style={{
                 width: 100,
                 height: 100,
@@ -80,10 +148,10 @@ const OrderScreen = () => {
             />
             <View className="w-2/3">
               <Text className="text-lg text-gray-950">
-                Galbi House - Mega Market Hiệp Phú
+                {restaurantData.name}
               </Text>
               <Text className="text-gray-500">
-                Đường Lê Văn Khương, QL1A, P.Hiệp Phú, Q.12
+              {restaurantData.address}
               </Text>
             </View>
           </View>
