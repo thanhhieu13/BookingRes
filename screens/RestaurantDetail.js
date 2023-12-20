@@ -9,10 +9,8 @@ import {
 } from "react-native";
 import React, { useEffect, useLayoutEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import DishRow from "../components/dishRow";
 import * as Icon from "react-native-feather";
 import { themeColors } from "../theme";
-import { Shadow } from "react-native-shadow-2";
 
 export default function RestaurantDetail() {
   const { params } = useRoute();
@@ -22,7 +20,7 @@ export default function RestaurantDetail() {
     <View style={styles.container}>
       <ScrollView>
         <View className="relative">
-          <Image className="w-full h-72" source={item.image} />
+          <Image className="w-full h-72" source={{ uri: item.image }} />
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             className="absolute top-14 left-4 bg-gray-50 p-2 rounded-full shadow"
@@ -45,9 +43,9 @@ export default function RestaurantDetail() {
                 />
                 <Text className="text-xs">
                   <Text className="text-green-700">{item.rating}</Text>
-                  <Text className="text-gray-700"> (4.6k review)</Text> ·{" "}
+                  <Text className="text-gray-700"> (4.6k review){" "}</Text> 
                   <Text className="font-semibold text-gray-700">
-                    {item.category}
+                    {item.address}
                   </Text>
                 </Text>
               </View>
