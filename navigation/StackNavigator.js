@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -18,6 +24,8 @@ import { Ionicons } from "@expo/vector-icons";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import CityScreen from "../screens/CityScreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import SearchScreen from "../screens/SearchScreen";
+import * as Icon from "react-native-feather";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -40,6 +48,66 @@ const StackNavigator = () => {
               ),
           }}
         />
+        <Stack.Screen
+          name="Search"
+          component={SearchScreen}
+          options={({ navigation }) => ({
+           
+            headerStyle: { backgroundColor: "red" },
+            title: "Tìm kiếm",
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Entypo name="home" size={24} color="#008E97" />
+              ) : (
+                <AntDesign name="home" size={24} color="black" />
+              ),
+            headerTitleAlign: "center",
+            headerTitle: () => (
+              <View style={{}}>
+                <View
+                  style={{
+                    borderRadius: 100,
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: 10,
+                    flexDirection: "row",
+                    // flex: 1,
+                  }}
+                >
+
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={30} color="white" />
+                  </TouchableOpacity>
+                  <Icon.Search
+                    style={{
+                      position: "absolute",
+                      left: 60,
+                      zIndex: 2,
+                    }}
+                    height="20"
+                    width="20"
+                    stroke="gray"
+                  />
+                  <TextInput
+                    placeholder="Tìm kiếm"
+                    style={{
+                      zIndex: 1,
+                      position: "relative",
+                      borderRadius: 100,
+                      backgroundColor: "white",
+                      width: 320,
+                      height: 35,
+                      paddingLeft: 40,
+                      marginLeft: 30,
+                    }}
+                    // className="text-red-500"
+                    keyboardType="default"
+                  />
+                </View>
+              </View>
+            ),
+          })}
+        />
         <Tab.Screen
           name="MapPrepare"
           component={MapPrepare}
@@ -59,8 +127,14 @@ const StackNavigator = () => {
           name="ResList"
           component={ResList}
           options={{
-            tabBarLabel: "Home",
+            title: "Tài khoản",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+        
+            tabBarLabel: "Tài khoản",
             tabBarLabelStyle: { color: "#008E97" },
+            headerShown: true,
             tabBarIcon: ({ focused }) =>
               focused ? (
                 <Entypo name="home" size={24} color="#008E97" />
@@ -90,12 +164,11 @@ const StackNavigator = () => {
           name="City"
           component={CityScreen}
           options={{
-            title: 'Chọn tỉnh/thành',
-            headerStyle: { backgroundColor: 'red' },
-            headerTintColor: '#fff',
+            title: "Chọn tỉnh/thành",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
             headerTitleStyle: {
               fontWeight: "bold",
-
             },
           }}
         />
@@ -103,13 +176,12 @@ const StackNavigator = () => {
           name="Notification"
           component={NotificationScreen}
           options={{
-            title: 'Ưu đãi',
-            headerStyle: { backgroundColor: 'red' },
-            headerTintColor: '#fff',
-            headerTitleAlign: 'center',
+            title: "Ưu đãi",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
             headerTitleStyle: {
               fontWeight: "bold",
-
             },
           }}
         />
