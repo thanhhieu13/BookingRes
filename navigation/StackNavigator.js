@@ -28,6 +28,8 @@ import SearchScreen from "../screens/SearchScreen";
 import * as Icon from "react-native-feather";
 import OrderScreen from "../screens/OrderScreen";
 import AccountScreen from "../screens/Account";
+import { FontAwesome } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -59,9 +61,9 @@ const StackNavigator = () => {
             title: "Tìm kiếm",
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Entypo name="home" size={24} color="#008E97" />
+                <FontAwesome name="search" size={24} color="#008E97" />
               ) : (
-                <AntDesign name="home" size={24} color="black" />
+                <FontAwesome name="search" size={24} color="black" />
               ),
             headerTitleAlign: "center",
             headerTitle: () => (
@@ -119,9 +121,9 @@ const StackNavigator = () => {
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Entypo name="home" size={24} color="#008E97" />
+                <Entypo name="map" size={24} color="#008E97" />
               ) : (
-                <AntDesign name="home" size={24} color="black" />
+                <Entypo name="map" size={24} color="black" />
               ),
           }}
         />
@@ -139,9 +141,9 @@ const StackNavigator = () => {
             headerShown: true,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Entypo name="home" size={24} color="#008E97" />
+                <MaterialCommunityIcons name="account" size={24} color="#008E97" />
               ) : (
-                <AntDesign name="home" size={24} color="black" />
+                <MaterialCommunityIcons name="account" size={24} color="black" />
               ),
           }}
         />
