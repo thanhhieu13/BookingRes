@@ -34,7 +34,7 @@ const LoginPage = ({ navigation }) => {
   const [password, setPassword] = useState(""); // Add this line
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);
-  const [obsecureText, setObsecureText] = useState(false);
+  const [obsecureText, setObsecureText] = useState(true);
   // const { login, setLogin } = useContext(LoginContext);
 
   const inValidForm = () => {
@@ -61,7 +61,7 @@ const LoginPage = ({ navigation }) => {
         password: values.password,
       };
 
-      const response = await axios.post("http://192.168.1.4:8000/login", user);
+      const response = await axios.post("http://localhost:8000/login", user);
 
       if (response.status === 200) {
         setLoader(false);
