@@ -12,7 +12,7 @@ export default function Map() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/restaurants');
+        const response = await axios.get('http://10.45.22.167:8000/restaurants');
         setRestaurants(response.data);
       } catch (error) {
         console.error('Error fetching restaurants:', error);

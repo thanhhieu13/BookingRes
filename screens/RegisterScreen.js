@@ -42,7 +42,7 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://localhost:8000/register", user)
+      .post("http://10.45.22.167:8000/register", user)
       .then((response) => {
         console.log(response);
         Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");

@@ -61,7 +61,7 @@ const LoginPage = ({ navigation }) => {
         password: values.password,
       };
 
-      const response = await axios.post("http://localhost:8000/login", user);
+      const response = await axios.post("http://10.45.22.167:8000/login", user);
 
       if (response.status === 200) {
         setLoader(false);
