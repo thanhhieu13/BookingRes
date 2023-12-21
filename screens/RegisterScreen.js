@@ -32,7 +32,7 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const navigation = useNavigation();
-  const [obsecureText, setObsecureText] = useState(false);
+  const [obsecureText, setObsecureText] = useState(true);
   const handleRegister = () => {
     const user = {
       name: name,
@@ -42,7 +42,7 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://192.168.1.4:8000/register", user)
+      .post("http://localhost:8000/register", user)
       .then((response) => {
         console.log(response);
         Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");
