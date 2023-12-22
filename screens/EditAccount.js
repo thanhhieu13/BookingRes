@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 // import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Icon from 'react-native-feather';
 import { themeColors } from '../theme';
+import { API_URL } from "@env";
 
 const AddressScreen = () => {
   const navigation = useNavigation();
@@ -66,7 +67,7 @@ const AddressScreen = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/address/${userId}`);
+      const response = await axios.get(`${API_URL}/address/${userId}`);
       const userData = response.data; // Adjust this based on your API response structure
       // Update state with fetched user data
       setName(userData.name);
