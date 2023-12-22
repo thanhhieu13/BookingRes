@@ -19,6 +19,7 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
+import { API_URL } from "@env";
 
 const OrderScreen = ({ navigation }) => {
   const { params } = useRoute();
@@ -56,7 +57,7 @@ const OrderScreen = ({ navigation }) => {
   // Function to fetch user data
   const fetchUserData = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8000/address/${userId}`);
+      const response = await fetch(`${API_URL}/address/${userId}`);
       const data = await response.json();
       setUserData(data.userDetails);
     } catch (error) {
@@ -79,7 +80,7 @@ const OrderScreen = ({ navigation }) => {
       };
 
       // Make a POST request to submit the order
-      const response = await fetch("http://localhost:8000/orders", {
+      const response = await fetch("${API_URL}/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -17,6 +17,7 @@ import axios from "axios";
 import { UserType } from "../UserContext";
 import jwt_decode from "jwt-decode";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { API_URL } from "@env";
 
 const AddAddressScreen = () => {
   const navigation = useNavigation();
@@ -58,7 +59,7 @@ const AddAddressScreen = () => {
 
   const fetchAddressData = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:8000/address/${userId}`);
+      const response = await axios.get(`${API_URL}/address/${userId}`);
       const addressData = response.data;
       setAddress(addressData); // Thay đổi tùy thuộc vào cấu trúc phản hồi của API của bạn
       console.log('Address data:', response.data);

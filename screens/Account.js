@@ -19,7 +19,7 @@ import { COLORS, SIZES } from "../constants/theme";
 import NetworkImage from "../components/NetworkImage";
 import ProfileTile from "../components/ProfileTile";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import { API_URL } from "@env";
 import * as ImagePicker from "expo-image-picker";
 
 
@@ -93,7 +93,7 @@ const AccountScreen = () => {
   const fetchAddressData = async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/address/${userId}`
+        `${API_URL}/address/${userId}`
       );
       const addressData = response.data;
       setAddress(addressData);

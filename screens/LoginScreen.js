@@ -18,6 +18,7 @@ import styles from "./login.style";
 import LottieView from "lottie-react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "@env";
 //   import { LoginContext } from "../context/LoginContext";
 
 const validationSchema = Yup.object().shape({
@@ -61,7 +62,7 @@ const LoginPage = ({ navigation }) => {
         password: values.password,
       };
 
-      const response = await axios.post("http://192.168.1.180:8000/login", user);
+      const response = await axios.post("${API_URL}/login", user);
 
       if (response.status === 200) {
         setLoader(false);
