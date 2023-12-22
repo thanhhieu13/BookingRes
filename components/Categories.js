@@ -42,10 +42,6 @@ export default function Categories() {
           return (
             <View key={index} className="flex justify-center items-center mr-6">
               <TouchableOpacity
-                // onPress={() => {
-                //   setActiveCategory(category.id);
-                //   navigation.navigate('Result');
-                // }}
                 onPress={() => {
                   setActiveCategory(category._id);
                   console.log("Selected Category ID:", category._id); // Thêm console log ở đây

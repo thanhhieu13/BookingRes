@@ -1,35 +1,37 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
   restaurant: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
-    required: true
+    ref: "Restaurant",
+    required: true,
   },
-  numberOfAdults: {
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  adults: {
     type: Number,
-    default: 1
+    required: true,
   },
-  numberOfChildren: {
+  children: {
     type: Number,
-    default: 1
+    required: true,
   },
-  reservationDate: {
+  date: {
     type: Date,
+    required: true,
   },
-  reservationTime: {
-    type: String, 
+  selectedHour: {
+    type: String,
+    required: true,
   },
   note: {
-    type: String
+    type: String,
   },
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 
 module.exports = Order;

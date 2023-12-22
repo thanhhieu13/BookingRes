@@ -42,7 +42,11 @@ const restaurantSchema = new mongoose.Schema({
   ],
   openingHours: {
     type: String 
-  }
+  },
+  bookingHours: [{
+    type: String,
+    required: true,
+  }],
 });
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
