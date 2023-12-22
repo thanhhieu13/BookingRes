@@ -46,6 +46,7 @@ export default function HomeScreen({ navigation, route }) {
 
     fetchData();
   }, []);
+  console.log(featuredData)
 
   return (
     <SafeAreaView className="bg-white">

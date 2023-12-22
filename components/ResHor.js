@@ -73,7 +73,7 @@ const ResHor = ({ navigation, route }) => {
             <Text className="ml-2">4.2 Km</Text>
           </View>
         </View>
-        <Text className="text-gray-500 mt-2">Buffet nướng lẩu hàn quốc</Text>
+        <Text className="text-gray-500 mt-2">{restaurantData?.type}</Text>
         <View className=" mt-2">
           <TouchableOpacity onPress={() => navigation.navigate("City")}>
             <Text className="w-1/3 text-center p-1 border-[#A2A2A2] border rounded-sm">
