@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios'; // Import axios
+import { useNavigation } from "@react-navigation/native";
 
 export default function Categories() {
+  const navigation = useNavigation();
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -11,7 +13,7 @@ export default function Categories() {
     const fetchCategories = async () => {
       try {
         // Replace 'http://your-api-url' with your actual API endpoint
-        const response = await axios.get('http://10.45.22.167:8000/categories');
+        const response = await axios.get('http://192.168.1.180:8000/categories');
         const fetchedCategories = response.data;
         setCategories(fetchedCategories);
       } catch (error) {
@@ -39,7 +41,10 @@ export default function Categories() {
           return (
             <View key={index} className="flex justify-center items-center mr-6">
               <TouchableOpacity
-                onPress={() => setActiveCategory(category.id)}
+                onPress={() => {
+                  setActiveCategory(category.id);
+                  navigation.navigate('Result');
+                }}
                 className={"p-1 rounded-full shadow bg-gray-400" + btnClass}
               >
                 <Image style={{ width: 45, height: 45 }} source={{ uri: category.image }} />

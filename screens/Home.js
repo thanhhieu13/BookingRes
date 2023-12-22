@@ -37,7 +37,7 @@ export default function HomeScreen({ navigation, route }) {
     // Fetch featured data from your backend API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://10.45.22.167:8000/api/featured');
+        const response = await fetch('http://192.168.1.180:8000/api/featured');
         const data = await response.json();
         setFeaturedData(data);
       } catch (error) {

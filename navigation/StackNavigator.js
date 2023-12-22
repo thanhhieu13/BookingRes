@@ -30,6 +30,7 @@ import OrderScreen from "../screens/OrderScreen";
 import AccountScreen from "../screens/Account";
 import { FontAwesome } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ResultScreen from "../screens/ResultScreen";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -71,6 +72,7 @@ const StackNavigator = () => {
                 <View
                   style={{
                     borderRadius: 100,
+                    color: "#008E97",
                     alignItems: "center",
                     justifyContent: "space-around",
                     padding: 10,
@@ -181,6 +183,19 @@ const StackNavigator = () => {
           component={NotificationScreen}
           options={{
             title: "Ưu đãi",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Result"
+          component={ResultScreen}
+          options={{
+            title: "Kết quả: Nướng(338)",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
