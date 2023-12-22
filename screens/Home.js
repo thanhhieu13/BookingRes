@@ -33,7 +33,6 @@ export default function HomeScreen({ navigation, route }) {
   const [featuredData, setFeaturedData] = useState([]);
 
   useEffect(() => {
-    // Fetch featured data from your backend API
     const fetchData = async () => {
       try {
         const response = await fetch(`${API_URL}/api/featured`);
@@ -46,7 +45,6 @@ export default function HomeScreen({ navigation, route }) {
 
     fetchData();
   }, []);
-  console.log(featuredData)
 
   return (
     <SafeAreaView className="bg-white">
@@ -104,18 +102,6 @@ export default function HomeScreen({ navigation, route }) {
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
-
-      {/* <View
-          style={{ backgroundColor: themeColors.bgColor(1) }}
-          className="p-3 rounded-full"
-        >
-          <Icon.Sliders
-            height={20}
-            width={20}
-            strokeWidth="2.5"
-            stroke="white"
-          />
-        </View> */}
 
       {/* main */}
       <ScrollView
@@ -187,25 +173,13 @@ export default function HomeScreen({ navigation, route }) {
             return (
               <FeaturedRow
                 key={index}
-                title={item.name} // Chú ý thay đổi tên trường nếu cần
+                title={item.name} 
                 restaurants={item.restaurants}
                 description={item.description}
               />
             );
           })}
         </View>
-        {/* <View className="mt-5">
-          {[featured, featured, featured].map((item, index) => {
-            return (
-              <FeaturedRow
-                key={index}
-                title={item.title}
-                restaurants={item.restaurants}
-                description={item.description}
-              />
-            );
-          })}
-        </View> */}
       </ScrollView>
     </SafeAreaView>
   );

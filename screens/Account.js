@@ -1,38 +1,22 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useContext, useState } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  Alert,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, Pressable, StyleSheet, Alert, TouchableOpacity, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { UserType } from "../UserContext";
 import jwt_decode from "jwt-decode";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../constants/theme";
+import { MaterialIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import NetworkImage from "../components/NetworkImage";
 import ProfileTile from "../components/ProfileTile";
-import { MaterialIcons } from "@expo/vector-icons";
 import { API_URL } from "@env";
-import * as ImagePicker from "expo-image-picker";
-
 
 const AccountScreen = () => {
   const [user, setUser] = useState(null);
   const navigation = useNavigation();
-  const profile =
-    "https://d326fntlu7tb1e.cloudfront.net/uploads/b5065bb8-4c6b-4eac-a0ce-86ab0f597b1e-vinci_04.jpg";
-  const bkImg =
-    "https://d326fntlu7tb1e.cloudfront.net/uploads/ab6356de-429c-45a1-b403-d16f7c20a0bc-bkImg-min.png";
-
-  const [address, setAddress] = useState([]);
   const { userId, setUserId } = useContext(UserType);
+  const [address, setAddress] = useState([]);
 
   const handleAvatarPress = async () => {
     try {
@@ -61,9 +45,7 @@ const AccountScreen = () => {
 
   const handleLogout = async () => {
     try {
-      // Clear the authentication token from AsyncStorage
       await AsyncStorage.removeItem("authToken");
-      // Navigate to the login screen
       navigation.replace("Login");
     } catch (error) {
       console.error("Error logging out:", error);
@@ -77,8 +59,6 @@ const AccountScreen = () => {
       const decodedToken = jwt_decode(token);
       const userId = decodedToken.userId;
       setUserId(userId);
-
-      // Call fetchAddressData after setUserId completes
       await fetchAddressData(userId);
     } catch (error) {
       console.log("Error fetching address", error);
@@ -86,17 +66,15 @@ const AccountScreen = () => {
   };
 
   useEffect(() => {
-    // Fetch address data when the component mounts
     fetchAddress();
   }, []);
 
   const fetchAddressData = async (userId) => {
     try {
-      const response = await axios.get(
-        `${API_URL}/address/${userId}`
-      );
+      const response = await axios.get(`${API_URL}/address/${userId}`);
       const addressData = response.data;
       setAddress(addressData);
+      console.log(response.data);
     } catch (error) {
       console.log("Error fetching address data", error);
     }
@@ -120,7 +98,7 @@ const AccountScreen = () => {
               >
                  <TouchableOpacity onPress={handleAvatarPress}>
                   <NetworkImage
-                    source={address.avatar} // Provide a default image source
+                    source={address?.avatar} // Provide a default image source
                     width={100}
                     height={100}
                     radius={99}
@@ -128,10 +106,10 @@ const AccountScreen = () => {
                 </TouchableOpacity>
                 <View style={{ marginLeft: 10, marginTop: 30 }}>
                   <Text style={styles.text}>
-                    {address.name}
+                    {address?.name}
                   </Text>
                   <Text style={styles.email}>
-                    {address.email}
+                    {address?.email}
                   </Text>
                 </View>
               </View>
