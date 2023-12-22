@@ -119,7 +119,7 @@ const OnboardingScreen = ({ navigation }) => {
           }
         }}
       >
-        <Text style={styles.beginButtonText}>Let's Begin</Text>
+        <Text style={styles.beginButtonText}>Bắt đầu</Text>
         <MaterialIcons name="arrow-forward-ios" size={22} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>

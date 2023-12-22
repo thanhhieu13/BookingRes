@@ -16,13 +16,13 @@ import { UserType } from "../UserContext";
 import jwt_decode from "jwt-decode";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../constants/theme";
-import { AntDesign } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-
 import NetworkImage from "../components/NetworkImage";
 import ProfileTile from "../components/ProfileTile";
-import RegistrationTile from "../components/RegistrationTile";
 import { MaterialIcons } from "@expo/vector-icons";
+
+import * as ImagePicker from "expo-image-picker";
+
+
 const AccountScreen = () => {
   const [user, setUser] = useState(null);
   const navigation = useNavigation();
@@ -34,7 +34,31 @@ const AccountScreen = () => {
   const [address, setAddress] = useState([]);
   const { userId, setUserId } = useContext(UserType);
 
-  console.log(address);
+  const handleAvatarPress = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (!permissionResult.granted) {
+        Alert.alert("Permission Denied", "Please allow access to the media library.");
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.cancelled) {
+        console.log(result.uri);
+        setUser({ ...user, profile: result.uri });
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       // Clear the authentication token from AsyncStorage
@@ -72,8 +96,7 @@ const AccountScreen = () => {
         `http://localhost:8000/address/${userId}`
       );
       const addressData = response.data;
-      setAddress(addressData); // Thay đổi tùy thuộc vào cấu trúc phản hồi của API của bạn
-      console.log("Address data:", response.data);
+      setAddress(addressData);
     } catch (error) {
       console.log("Error fetching address data", error);
     }
@@ -87,8 +110,6 @@ const AccountScreen = () => {
             style={{
               backgroundColor: COLORS.offwhite,
               height: SIZES.height - 170,
-              // borderBottomEndRadius: 30,
-              // borderBottomStartRadius: 30,
             }}
           >
             <View style={styles.profile}>
@@ -97,18 +118,20 @@ const AccountScreen = () => {
                   flexDirection: "row",
                 }}
               >
-                <NetworkImage
-                  source={user === null ? profile : user.profile}
-                  width={100}
-                  height={100}
-                  radius={99}
-                />
+                 <TouchableOpacity onPress={handleAvatarPress}>
+                  <NetworkImage
+                    source={address.avatar} // Provide a default image source
+                    width={100}
+                    height={100}
+                    radius={99}
+                  />
+                </TouchableOpacity>
                 <View style={{ marginLeft: 10, marginTop: 30 }}>
                   <Text style={styles.text}>
-                    {user === null ? "Nguyen Hoang Khoa" : user.username}
+                    {address.name}
                   </Text>
                   <Text style={styles.email}>
-                    {user === null ? "email" : user.email}
+                    {address.email}
                   </Text>
                 </View>
               </View>
