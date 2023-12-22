@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { NoticeBar } from "@nutui/nutui-react-native";
+import {API_URL} from "@env"
 
 
 
@@ -37,7 +38,7 @@ export default function HomeScreen({ navigation, route }) {
     // Fetch featured data from your backend API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://192.168.1.180:8000/api/featured');
+        const response = await fetch(`${API_URL}/api/featured`);
         const data = await response.json();
         setFeaturedData(data);
       } catch (error) {

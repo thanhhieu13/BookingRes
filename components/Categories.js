@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios'; // Import axios
 import { useNavigation } from "@react-navigation/native";
+import { API_URL } from "@env";
 
 export default function Categories() {
   const navigation = useNavigation();
@@ -13,7 +14,7 @@ export default function Categories() {
     const fetchCategories = async () => {
       try {
         // Replace 'http://your-api-url' with your actual API endpoint
-        const response = await axios.get('http://192.168.1.180:8000/categories');
+        const response = await axios.get(`${API_URL}/categories`);
         const fetchedCategories = response.data;
         setCategories(fetchedCategories);
       } catch (error) {
