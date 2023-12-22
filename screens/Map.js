@@ -4,6 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { themeColors } from '../theme';
 import MapPrepare from './MapPrepare';
+import {API_URL} from "@env"
 
 export default function Map() {
   const [restaurants, setRestaurants] = useState([]);
@@ -12,7 +13,7 @@ export default function Map() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/restaurants');
+        const response = await axios.get(`${API_URL}/restaurants`);
         setRestaurants(response.data);
       } catch (error) {
         console.error('Error fetching restaurants:', error);
