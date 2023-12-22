@@ -19,9 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { NoticeBar } from "@nutui/nutui-react-native";
-import {API_URL} from "@env"
-
-
+import { API_URL } from "@env";
 
 export default function HomeScreen({ navigation, route }) {
   const text =
@@ -42,7 +40,7 @@ export default function HomeScreen({ navigation, route }) {
         const data = await response.json();
         setFeaturedData(data);
       } catch (error) {
-        console.error('Error fetching featured data:', error);
+        console.error("Error fetching featured data:", error);
       }
     };
 
@@ -85,12 +83,12 @@ export default function HomeScreen({ navigation, route }) {
           <TouchableOpacity
             style={{
               flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
+              flexDirection: "row",
+              alignItems: "center",
               padding: 3,
               borderRadius: 20,
               borderWidth: 1,
-              borderColor: 'gray',
+              borderColor: "gray",
             }}
             onPress={() => navigation.navigate("Search")}
           >
@@ -188,7 +186,7 @@ export default function HomeScreen({ navigation, route }) {
             return (
               <FeaturedRow
                 key={index}
-                title={item.name}  // Chú ý thay đổi tên trường nếu cần
+                title={item.name} // Chú ý thay đổi tên trường nếu cần
                 restaurants={item.restaurants}
                 description={item.description}
               />
