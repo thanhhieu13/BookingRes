@@ -80,7 +80,7 @@ const OrderScreen = ({ navigation }) => {
       };
 
       // Make a POST request to submit the order
-      const response = await fetch("${API_URL}/orders", {
+      const response = await fetch('${API_URL}/orders', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -211,7 +211,7 @@ const OrderScreen = ({ navigation }) => {
               <FontAwesome5 name="user-circle" size={24} color="black" />
               <Text className="ml-4">Tên liên lạc</Text>
             </View>
-            <Text className="w-2/4">{userData.name}</Text>
+            <Text className="w-2/4">name</Text>
           </View>
           <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">
