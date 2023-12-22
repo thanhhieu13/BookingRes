@@ -1,12 +1,14 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import React from "react";
+import ResHor from "../components/ResHor";
 
-const ResultScreen = () => {
+
+const ResultScreen = ({navigation,route}) => {
   return (
     <View>
-      <Text>ResultScreen</Text>
+       <ResHor route={route} />
     </View>
-  )
-}
+  );
+};
 
-export default ResultScreen
+export default ResultScreen;

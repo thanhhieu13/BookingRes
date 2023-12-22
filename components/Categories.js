@@ -25,7 +25,7 @@ export default function Categories() {
     // Call the function to fetch categories when the component mounts
     fetchCategories();
   }, []); // Empty dependency array to ensure the effect runs only once when the component mounts
-
+// console.log(categories)
   return (
     <View className="mt-4">
       <ScrollView
@@ -42,9 +42,14 @@ export default function Categories() {
           return (
             <View key={index} className="flex justify-center items-center mr-6">
               <TouchableOpacity
+                // onPress={() => {
+                //   setActiveCategory(category.id);
+                //   navigation.navigate('Result');
+                // }}
                 onPress={() => {
-                  setActiveCategory(category.id);
-                  navigation.navigate('Result');
+                  setActiveCategory(category._id);
+                  console.log("Selected Category ID:", category._id); // Thêm console log ở đây
+                  navigation.navigate('Result', { selectedCategory: category._id });
                 }}
                 className={"p-1 rounded-full shadow bg-gray-400" + btnClass}
               >
