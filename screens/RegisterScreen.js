@@ -24,7 +24,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import BackBtn from "../components/BackBtn";
 import Button from "../components/Button";
-
+import { API_URL } from "@env";
 const RegisterScreen = () => {
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);
@@ -42,7 +42,7 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://10.45.22.167:8000/register", user)
+      .post(`${API_URL}/register`, user)
       .then((response) => {
         console.log(response);
         Alert.alert("Thành công", "Chúc mừng bạn đã đăng ký thành công");

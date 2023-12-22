@@ -364,31 +364,61 @@ app.get("/restaurants/search/:keyword", async (req, res) => {
 });
 
 const Order = require("./models/order");
-app.post("/orders", async (req, res) => {
-  try {
-    const {
-      user,
-      restaurant,
-      numberOfAdults,
-      numberOfChildren,
-      reservationDate,
-      reservationTime,
-      note,
-    } = req.body;
+// app.post("/orders", async (req, res) => {
+//   try {
+//     const {
+//       user,
+//       restaurant,
+//       numberOfAdults,
+//       numberOfChildren,
+//       reservationDate,
+//       reservationTime,
+//       note,
+//     } = req.body;
 
-    const newOrder = new Order({
-      user,
-      restaurant,
-      numberOfAdults,
-      numberOfChildren,
-      reservationDate,
-      reservationTime,
+//     const newOrder = new Order({
+//       user,
+//       restaurant,
+//       numberOfAdults,
+//       numberOfChildren,
+//       reservationDate,
+//       reservationTime,
+//       note,
+//     });
+
+//     const savedOrder = await newOrder.save();
+//     res.json(savedOrder);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
+
+app.post('/api/orders', async (req, res) => {
+  try {
+    const { restaurantId, userId, adults, children, date, selectedHour, note } = req.body;
+
+    const restaurant = await Restaurant.findById(restaurantId);
+    const user = await User.findById(userId);
+
+    if (!restaurant || !user) {
+      return res.status(404).json({ message: 'Restaurant or user not found' });
+    }
+
+    const order = new Order({
+      restaurant: restaurantId,
+      user: userId,
+      adults,
+      children,
+      date,
+      selectedHour,
       note,
     });
+    
+    await order.save();
 
-    const savedOrder = await newOrder.save();
-    res.json(savedOrder);
+    res.status(201).json({ message: 'Order placed successfully', order });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error placing order:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
