@@ -70,7 +70,8 @@ export default function RestaurantDetail() {
         <TouchableOpacity
           style={styles.applyButton}
           onPress={() => {
-            navigation.navigate("Order");
+            // Truyền dữ liệu của nhà hàng (restaurant) qua trang Order
+            navigation.navigate('Order', { restaurant: item });
           }}
         >
           <Text style={styles.applyButtonText}>Đặt chỗ</Text>

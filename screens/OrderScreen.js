@@ -18,8 +18,11 @@ import moment from "moment-timezone";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 
 const OrderScreen = ({ navigation }) => {
+  const { params } = useRoute();
+  const { restaurant } = params;
   const [inputState, setInputState] = useState({
     val1: 1,
   });
@@ -28,15 +31,13 @@ const OrderScreen = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentTime, setCurrentTime] = useState("");
 
-  // State to hold user and restaurant data
+  // State to hold user 
   const [userData, setUserData] = useState({});
-  const [restaurantData, setRestaurantData] = useState({});
 
   useEffect(() => {
-    // Function to update the current time in Vietnam timezone
     const updateCurrentTime = () => {
       const now = moment().tz("Asia/Ho_Chi_Minh");
-      const futureTime = now.add(5, "minutes"); // Add 5 minutes to the current time
+      const futureTime = now.add(5, "minutes");
       const formattedTime = futureTime.format("HH:mm");
 
       setCurrentTime(formattedTime);
@@ -63,25 +64,13 @@ const OrderScreen = ({ navigation }) => {
     }
   };
 
-  // Function to fetch restaurant data
-  const fetchRestaurantData = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/restaurants");
-      const data = await response.json();
-      // For now, let's assume you want the first restaurant in the list
-      setRestaurantData(data[0]);
-    } catch (error) {
-      console.error("Error fetching restaurant data:", error);
-    }
-  };
-
   // Function to handle order submission
   const submitOrder = async () => {
     try {
       // Prepare order data
       const orderData = {
         user: userData, // Assuming you want to include user details in the order
-        restaurant: restaurantData,
+        restaurant: restaurant,
         numberOfAdults: inputState.val1,
         numberOfChildren: inputState.val1,
         reservationDate: selectedDate,
@@ -114,9 +103,7 @@ const OrderScreen = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch user data when the component mounts
-    fetchUserData("userId"); // Replace "userId" with the actual user ID
-    // Fetch restaurant data when the component mounts
-    fetchRestaurantData();
+    fetchUserData("userId");
   }, []);
 
   const showDatePicker = () => {
@@ -140,7 +127,7 @@ const OrderScreen = ({ navigation }) => {
           <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
           <View className="border p-2 flex-row justify-between rounded-xl">
             <Image
-              source={{ uri: restaurantData.image }}
+              source={{ uri: restaurant.image }}
               style={{
                 width: 100,
                 height: 100,
@@ -148,10 +135,10 @@ const OrderScreen = ({ navigation }) => {
             />
             <View className="w-2/3">
               <Text className="text-lg text-gray-950">
-                {restaurantData.name}
+                {restaurant.name}
               </Text>
               <Text className="text-gray-500">
-              {restaurantData.address}
+              {restaurant.address}
               </Text>
             </View>
           </View>
@@ -223,7 +210,7 @@ const OrderScreen = ({ navigation }) => {
               <FontAwesome5 name="user-circle" size={24} color="black" />
               <Text className="ml-4">Tên liên lạc</Text>
             </View>
-            <Text className="w-2/4">Nguyễn Hoàng Khoa</Text>
+            <Text className="w-2/4">{userData.name}</Text>
           </View>
           <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">

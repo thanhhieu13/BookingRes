@@ -250,24 +250,13 @@ app.post('/restaurants', async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Retrieve user details
-        const userDetails = {
-            name: user.name,
-            avatar: user.avatar,
-            street: user.street,
-            city: user.city,
-            mobileNo: user.mobileNo,
-            occupation: user.occupation,
-            gender: user.gender,
-            dateOfBirth: user.dateOfBirth,
-        };
-
-        res.status(200).json({ userDetails });
+        res.status(200).json(user);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error retrieving user details" });
     }
 });
+
 
 const Featured = require("./models/featured");
 app.get('/api/featured', async (req, res) => {
