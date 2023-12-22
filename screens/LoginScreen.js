@@ -62,7 +62,7 @@ const LoginPage = ({ navigation }) => {
         password: values.password,
       };
 
-      const response = await axios.post("${API_URL}/login", user);
+      const response = await axios.post(`${API_URL}/login`, user);
 
       if (response.status === 200) {
         setLoader(false);
