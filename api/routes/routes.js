@@ -7,6 +7,10 @@ const OrderController = require("../controllers/orderController");
 const FeatureController = require("../controllers/featureController");
 const CategoryController = require("../controllers/categoryController");
 
+
+// routes.js admin
+const AdminController = require("../controllers/adminController");
+
 // User Routes
 router.post("/register", UserController.register);
 router.get("/verify/:token", UserController.verifyEmail);
@@ -30,5 +34,10 @@ router.post("/api/featured", FeatureController.createFeatured);
 // Category Routes
 router.post("/categories", CategoryController.createCategory);
 router.get("/categories", CategoryController.getAllCategories);
+
+
+// admin routes
+router.get("/admin", AdminController.getAllUsers);
+router.delete("/admin/:userId", AdminController.deleteUser);
 
 module.exports = router;

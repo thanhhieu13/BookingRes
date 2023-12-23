@@ -8,18 +8,17 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useRef, useContext } from "react";
-import BackBtn from "../components/BackBtn";
 import Button from "../components/Button";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants/theme";
-import styles from "./login.style";
+import styles from "../constants/loginStyle";
 import LottieView from "lottie-react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
-//   import { LoginContext } from "../context/LoginContext";
+import { decode as base64Decode } from 'base-64';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -31,31 +30,28 @@ const validationSchema = Yup.object().shape({
 });
 
 const LoginPage = ({ navigation }) => {
-  const [email, setEmail] = useState(""); // Add this line
-  const [password, setPassword] = useState(""); // Add this line
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);
   const [obsecureText, setObsecureText] = useState(true);
   // const { login, setLogin } = useContext(LoginContext);
 
   const inValidForm = () => {
-    Alert.alert("Invalid Form", "Please provide all required fields", [
+    Alert.alert("Không hợp lệ", "Hãy nhập vào đầy đủ các trường", [
       {
         text: "Cancel",
-        onPress: () => {},
+        onPress: () => { },
       },
       {
         text: "Continue",
-        onPress: () => {},
+        onPress: () => { },
       },
       { defaultIndex: 1 },
     ]);
   };
 
-
-
   const handleLogin = async (values) => {
     setLoader(true);
+
     try {
       const user = {
         email: values.email,
@@ -65,163 +61,35 @@ const LoginPage = ({ navigation }) => {
       const response = await axios.post(`${API_URL}/login`, user);
 
       if (response.status === 200) {
-        setLoader(false);
-        // setLogin(true);
+        const token = response.data.token;
 
-        console.log(response.data);
+        // Decode Payload từ token sử dụng base-64
+        const payloadBase64 = token.split('.')[1];
+        const payload = JSON.parse(base64Decode(payloadBase64));
+        const isAdmin = payload.admin;
 
         await AsyncStorage.setItem("authToken", response.data.token);
-        navigation.replace("Main");
-      } else {
-        // setLogin(false);
 
-        Alert.alert("Error Logging in", "Please provide valid credentials", [
-          {
-            text: "Cancel",
-            onPress: () => {},
-          },
-          {
-            text: "Continue",
-            onPress: () => {},
-          },
-          { defaultIndex: 1 },
-        ]);
+        if (isAdmin) {
+          // If admin, navigate to the admin screen
+          navigation.replace("Admin");
+        } else {
+          // If not admin, navigate to the main screen
+          navigation.replace("Main");
+        }
+      } else {
+        // Handle other status codes if needed
+        Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
       }
     } catch (error) {
-      setLogin(false);
-      Alert.alert(
-        "Error",
-        "Oops, Error logging in. Try again with correct credentials",
-        [
-          {
-            text: "Cancel",
-            onPress: () => {},
-          },
-          {
-            text: "Continue",
-            onPress: () => {},
-          },
-          { defaultIndex: 1 },
-        ]
-      );
+      console.error("Error during login:", error);
+      Alert.alert("Lỗi", "Hãy kiểm tra lại thông tin");
     } finally {
       setLoader(false);
     }
   };
 
-  // hàm cũ
-  //   const handleLogin = () => {
-  //     const user = {
-  //       email: email,
-  //       password: password,
-  //     };
 
-  //     axios
-  //     .post("http://192.168.1.4:8000/login", user)
-  //       .then((response) => {
-  //         console.log(response);
-  //         const token = response.data.token;
-  //         AsyncStorage.setItem("authToken", token);
-  //         navigation.replace("Main");
-  //       })
-  //       .catch((error) => {
-  //         Alert.alert("Lỗi đăng nhập", "Tài khoản và mật khẩu không hợp lệ");
-  //         console.log(error);
-  //       });
-  //   };
-
-  //   const login = async (values) => {
-  //     setLoader(true);
-  //     try {
-  //       await firebase
-  //         .auth()
-  //         .signInWithEmailAndPassword(values.email, values.password).then(() => navigation.navigate('home')).catch((error) => {
-  //           Alert.alert("Error Login", error.message, [
-  //             {
-  //               text: "Back",
-  //               onPress: () => {
-  //                 setLoader(false);
-  //               },
-  //             },
-  //             {
-  //               text: "Continue",
-  //               onPress: () => {},
-  //             },
-  //             { defaultIndex: 1 },
-  //           ]);
-  //         });
-  //     } catch (error) {
-  //       Alert.alert("Error Login", error.message, [
-  //         {
-  //           text: "Back",
-  //           onPress: () => {
-  //             setLoader(false);
-  //           },
-  //         },
-  //         {
-  //           text: "Continue",
-  //           onPress: () => {},
-  //         },
-  //         { defaultIndex: 1 },
-  //       ]);
-  //     }
-  //   };
-
-  //   const loginFunc = async (values) => {
-  //     setLoader(true);
-
-  //     try {
-  //       const endpoint = "http://localhost:6002/login";
-  //       const data = values;
-
-  //       console.log(data);
-
-  //       const response = await axios.post(endpoint, data);
-  //       if (response.status === 200) {
-  //         setLoader(false);
-  //         setLogin(true);
-
-  //         console.log(response.data);
-
-  //         await AsyncStorage.setItem("id", JSON.stringify(response.data._id));
-  //         await AsyncStorage.setItem("token", JSON.stringify(response.data.userToken));
-
-  //       } else {
-  //         setLogin(false);
-
-  //         Alert.alert("Error Logging in ", "Please provide valid credentials ", [
-  //           {
-  //             text: "Cancel",
-  //             onPress: () => {},
-  //           },
-  //           {
-  //             text: "Continue",
-  //             onPress: () => {},
-  //           },
-  //           { defaultIndex: 1 },
-  //         ]);
-  //       }
-  //     } catch (error) {
-  //       setLogin(false);
-  //       Alert.alert(
-  //         "Error ",
-  //         "Oops, Error logging in try again with correct credentials",
-  //         [
-  //           {
-  //             text: "Cancel",
-  //             onPress: () => {},
-  //           },
-  //           {
-  //             text: "Continue",
-  //             onPress: () => {},
-  //           },
-  //           { defaultIndex: 1 },
-  //         ]
-  //       );
-  //     } finally {
-  //       setLoader(false);
-  //     }
-  //   };
   return (
     <ScrollView style={{ backgroundColor: COLORS.white }}>
       <View style={{ marginHorizontal: 20, marginTop: 50 }}>
@@ -273,10 +141,8 @@ const LoginPage = ({ navigation }) => {
                     onBlur={() => {
                       setFieldTouched("email", "");
                     }}
-                      value={values.email}
-                      onChangeText={handleChange("email")}
-                    // value={email}
-                    // onChangeText={(text) => setEmail(text)}
+                    value={values.email}
+                    onChangeText={handleChange("email")}
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={{ flex: 1 }}
@@ -312,8 +178,6 @@ const LoginPage = ({ navigation }) => {
                     }}
                     value={values.password}
                     onChangeText={handleChange("password")}
-                    // value={password}
-                    // onChangeText={(text) => setPassword(text)}
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={{ flex: 1 }}
@@ -341,19 +205,6 @@ const LoginPage = ({ navigation }) => {
                 onPress={isValid ? handleSubmit : inValidForm}
                 isValid={isValid}
               />
-
-              {/* <Button
-                loader={loader}
-                title={"L O G I N"}
-                onPress={() => {
-                  if (isValid) {
-                    handleSubmit();
-                  } else {
-                    inValidForm(isValid);
-                  }
-                }}
-                isValid={isValid}
-              /> */}
 
               <Text
                 style={styles.registration}

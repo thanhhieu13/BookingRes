@@ -47,6 +47,12 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
+
+  // chia role
+  admin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
