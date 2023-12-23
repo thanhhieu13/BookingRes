@@ -97,10 +97,13 @@ module.exports = {
                 return res.status(401).json({ message: "Invalid password" });
             }
 
-            //generate a token
-            const token = jwt.sign({ userId: user._id }, secretKey);
+            const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
 
             res.status(200).json({ token });
+            // Generate a token with role information
+            // const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
+
+            // res.status(200).json({ token, admin });
         } catch (error) {
             res.status(500).json({ message: "Login Failed" });
         }
@@ -118,55 +121,51 @@ module.exports = {
                 occupation,
                 gender,
                 dateOfBirth,
-            } = req.body; 
-            const user = await User.findById(userId);
+            } = req.body;
+
+            // Tìm và cập nhật thông tin của người dùng
+            const user = await User.findByIdAndUpdate(
+                userId,
+                {
+                    $set: {
+                        name,
+                        avatar,
+                        mobileNo,
+                        street,
+                        city,
+                        occupation,
+                        gender,
+                        dateOfBirth,
+                    },
+                },
+                { new: true } // Trả về người dùng đã được cập nhật
+            );
+
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            user.name = name;
-            user.avatar = avatar;
-            user.street = street;
-            user.city = city;
-            user.mobileNo = mobileNo;
-            user.occupation = occupation;
-            user.gender = gender;
-            user.dateOfBirth = dateOfBirth;
 
-            // Save the updated user in the backend
-            await user.save();
-
-            res
-                .status(200)
-                .json({
-                    name,
-                    avatar,
-                    mobileNo,
-                    street,
-                    city,
-                    occupation,
-                    gender,
-                    dateOfBirth,
-                });
+            res.status(200).json(user);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Error updating address" });
+            res.status(500).json({ message: "Error updating user" });
         }
     },
 
     getUserAddress: async (req, res) => {
         try {
             const userId = req.params.userId;
-        
+
             // Find the user by userId
             const user = await User.findById(userId);
             if (!user) {
-              return res.status(404).json({ message: "User not found" });
+                return res.status(404).json({ message: "User not found" });
             }
-        
+
             res.status(200).json(user);
-          } catch (error) {
+        } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Error retrieving user details" });
-          }
+        }
     },
 };

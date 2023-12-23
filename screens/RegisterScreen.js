@@ -14,12 +14,9 @@ import {
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { COLORS, SIZES } from "../constants/theme";
-import { MaterialIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import styles from "./login.style";
+import styles from "../constants/loginStyle";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import BackBtn from "../components/BackBtn";
