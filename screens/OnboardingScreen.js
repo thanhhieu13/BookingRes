@@ -12,6 +12,7 @@ import { Audio } from "expo-av";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { decode as base64Decode } from 'base-64';
 
 const OnboardingScreen = ({ navigation }) => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -49,7 +50,31 @@ const OnboardingScreen = ({ navigation }) => {
     };
   }, [isPlaying]);
   // Không thêm isPlaying vào dependencies để tránh gọi useEffect khi isPlaying thay đổi
+  const handleButtonPress = async () => {
+    setIsPlaying(false);
+    if (sound) {
+      await sound.unloadAsync();
+    }
 
+    const token = await AsyncStorage.getItem("authToken");
+
+    // Check if the token exists
+    if (!token) {
+      navigation.navigate("Login");
+      return;
+    }
+
+    // Decode the payload from the token
+    const payloadBase64 = token.split('.')[1];
+    const payload = JSON.parse(base64Decode(payloadBase64));
+
+    // Check if the user is an admin
+    if (payload.admin) {
+      navigation.navigate("Admin");
+    } else {
+      navigation.navigate("Main");
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.lottieContainer}>
@@ -105,19 +130,7 @@ const OnboardingScreen = ({ navigation }) => {
       /> */}
       <TouchableOpacity
         style={styles.beginButton}
-        onPress={async () => { 
-          setIsPlaying(false);
-          if (sound) {
-            sound.unloadAsync();
-          }
-          const token = await AsyncStorage.getItem("authToken");
-          if(token == null){
-            navigation.navigate("Login");
-          }
-          else {
-            navigation.navigate("Main");
-          }
-        }}
+        onPress={handleButtonPress}
       >
         <Text style={styles.beginButtonText}>Bắt đầu</Text>
         <MaterialIcons name="arrow-forward-ios" size={22} color="#fff" />

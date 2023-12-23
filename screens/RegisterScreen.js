@@ -166,7 +166,7 @@ const RegisterScreen = () => {
                         </View>
 
                         <Button
-                            title={"Đăng ký"}
+                            title={"ĐĂNG KÝ"}
                             onPress={handleRegister}
                             loader={loader}
                         />

@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import React from "react";
 import HomeScreen from "../screens/Home";
-import Map from "../screens/Map";
+import Statistical from "../screens/admin/Statistical";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -24,6 +24,21 @@ const AdminTabNavigator = () => {
             <Tab.Screen
                 name="Home"
                 component={HomeScreen}
+                options={{
+                    tabBarLabel: "Home",
+                    tabBarLabelStyle: { color: "#008E97" },
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) =>
+                        focused ? (
+                            <Entypo name="home" size={24} color="#008E97" />
+                        ) : (
+                            <AntDesign name="home" size={24} color="black" />
+                        ),
+                }}
+            />
+            <Tab.Screen
+                name="Statistical"
+                component={Statistical}
                 options={{
                     tabBarLabel: "Home",
                     tabBarLabelStyle: { color: "#008E97" },
