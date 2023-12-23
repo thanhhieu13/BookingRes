@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import {API_URL} from "@env"
+import { API_URL } from "@env"
+import RestaurantCard from '../components/restaurantCard';
 
 const SearchScreen = () => {
   const [keyword, setKeyword] = useState("");
@@ -130,6 +131,26 @@ const SearchScreen = () => {
       </ScrollView>
       <View>
         <Text className="uppercase text-xl font-bold mt-6">Được đề xuất</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingHorizontal: 15,
+          }}
+          className="overflow-visible py-5"
+        >
+          {
+            searchResults.map((restaurant, index) => {
+              return (
+                <RestaurantCard
+                  item={restaurant}
+                  key={index}
+
+                />
+              )
+            })
+          }
+        </ScrollView>
       </View>
     </View>
   );

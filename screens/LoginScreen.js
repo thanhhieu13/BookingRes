@@ -22,11 +22,11 @@ import { decode as base64Decode } from 'base-64';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, "Password must be at least 8 character")
-    .required("Required"),
+    .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+    .required("Yêu cầu"),
   email: Yup.string()
-    .email("Provide a valid email address")
-    .required("Required"),
+    .email("Vui lòng nhập địa chỉ email hợp lệ")
+    .required("Yêu cầu"),
 });
 
 const LoginPage = ({ navigation }) => {
@@ -36,7 +36,7 @@ const LoginPage = ({ navigation }) => {
   // const { login, setLogin } = useContext(LoginContext);
 
   const inValidForm = () => {
-    Alert.alert("Không hợp lệ", "Hãy nhập vào đầy đủ các trường", [
+    Alert.alert("Không hợp lệ", "Hãy nhập vào đầy đủ các trường dữ liệu", [
       {
         text: "Cancel",
         onPress: () => { },
@@ -94,14 +94,15 @@ const LoginPage = ({ navigation }) => {
     <ScrollView style={{ backgroundColor: COLORS.white }}>
       <View style={{ marginHorizontal: 20, marginTop: 50 }}>
         {/* <BackBtn onPress={() => navigation.goBack()} /> */}
-        <LottieView
-          autoPlay
-          ref={animation}
-          style={{ width: "100%", height: SIZES.height / 3.2 }}
-          source={require("../assets/lottie/login.json")}
-        />
-
-        <Text style={styles.titleLogin}>Booking Res</Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <LottieView
+            autoPlay
+            ref={animation}
+            style={{ width: "100%", height: SIZES.height / 3.2 }}
+            source={require("../assets/lottie/login.json")}
+          />
+        </View>
+        <Text style={styles.titleLogin}>Đặt nhà hàng</Text>
 
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -134,7 +135,7 @@ const LoginPage = ({ navigation }) => {
                   />
 
                   <TextInput
-                    placeholder="Enter email"
+                    placeholder="Nhập email"
                     onFocus={() => {
                       setFieldTouched("email");
                     }}
@@ -154,7 +155,7 @@ const LoginPage = ({ navigation }) => {
               </View>
 
               <View style={styles.wrapper}>
-                <Text style={styles.label}>Password</Text>
+                <Text style={styles.label}>Mật khẩu</Text>
                 <View
                   style={styles.inputWrapper(
                     touched.password ? COLORS.secondary : COLORS.offwhite
@@ -169,7 +170,7 @@ const LoginPage = ({ navigation }) => {
 
                   <TextInput
                     secureTextEntry={obsecureText}
-                    placeholder="Password"
+                    placeholder="Nhập mật khẩu"
                     onFocus={() => {
                       setFieldTouched("password");
                     }}
@@ -201,17 +202,17 @@ const LoginPage = ({ navigation }) => {
 
               <Button
                 loader={loader}
-                title={"L O G I N"}
+                title={"ĐĂNG NHẬP"}
                 onPress={isValid ? handleSubmit : inValidForm}
                 isValid={isValid}
               />
-
+              <Text style={styles.label}>chưa có mật khẩu</Text>
               <Text
                 style={styles.registration}
                 onPress={() => navigation.navigate("Register")}
               >
                 {" "}
-                Register{" "}
+                Đăng ký{" "}
               </Text>
             </View>
           )}

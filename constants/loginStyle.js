@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
       fontFamily: "bold",
       fontSize: 35,
       color: COLORS.primary,
+      textAlign: "center"
    },
 
    wrapper: {
