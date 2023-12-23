@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useContext, useState } from "react";
-import { View, Text, Pressable, StyleSheet, Alert, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, Pressable, StyleSheet, Alert, TouchableOpacity, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { UserType } from "../UserContext";
@@ -34,12 +34,32 @@ const AccountScreen = () => {
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        console.log(result.uri);
-        setUser({ ...user, profile: result.uri });
+      if (result.assets.length > 0) {
+        const selectedImage = result.assets[0];
+        const imageUri = selectedImage.uri;
+
+        // Lưu đường dẫn ảnh vào state và gọi hàm fetchAddressData
+        setAddress({ ...address, avatar: imageUri });
+        await updateAddressData({ ...address, avatar: imageUri });
       }
     } catch (error) {
       console.error("Error picking image:", error);
+    }
+  };
+
+  const updateAddressData = async (updatedData) => {
+    try {
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+
+      // Gọi API để cập nhật dữ liệu địa chỉ với đường dẫn ảnh mới
+      await axios.put(`${API_URL}/address/${userId}`, updatedData);
+
+      // Gọi lại fetchAddressData để cập nhật state với dữ liệu mới
+      await fetchAddressData(userId);
+    } catch (error) {
+      console.log("Error updating address data", error);
     }
   };
 
@@ -83,7 +103,7 @@ const AccountScreen = () => {
   return (
     <View>
       <ScrollView>
-        <View style={{backgroundColor: COLORS.offwhite, height: SIZES.height}}>
+        <View style={{ backgroundColor: COLORS.offwhite, height: SIZES.height }}>
           <View
             style={{
               backgroundColor: COLORS.offwhite,
@@ -96,13 +116,24 @@ const AccountScreen = () => {
                   flexDirection: "row",
                 }}
               >
-                 <TouchableOpacity onPress={handleAvatarPress}>
-                  <NetworkImage
-                    source={address?.avatar} // Provide a default image source
-                    width={100}
-                    height={100}
-                    radius={99}
-                  />
+                <TouchableOpacity onPress={handleAvatarPress}>
+                  {address?.avatar ? (
+                    <NetworkImage
+                      source={address?.avatar}
+                      width={100}
+                      height={100}
+                      radius={99}
+                    />
+                  ) : (
+                    <Image
+                      source={require("../assets/img/default-profile.png")}
+                      style={{
+                        width: 100,
+                        height: 100,
+                        borderRadius: 99,
+                      }}
+                    />
+                  )}
                 </TouchableOpacity>
                 <View style={{ marginLeft: 10, marginTop: 30 }}>
                   <Text style={styles.text}>
@@ -116,7 +147,7 @@ const AccountScreen = () => {
 
               <TouchableOpacity>
                 <MaterialIcons
-                onPress={() => navigation.navigate("EditAccount")}
+                  onPress={() => navigation.navigate("EditAccount")}
                   name="arrow-forward-ios"
                   size={24}
                   color="black"
@@ -199,10 +230,10 @@ const AccountScreen = () => {
               <ProfileTile title={"Mời bạn bè"} icon={"adduser"} />
             </View>
             <View style={styles.container}>
-              <TouchableOpacity  onPress={handleLogout} style={styles.logoutButton}>
+              <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
                 <Text style={styles.logoutButtonText}>Đăng xuất</Text>
               </TouchableOpacity>
-              <Text style={{color:"#6C6C6C", marginTop:20}}>Copyright 2023 by NHK & NTH</Text>
+              <Text style={{ color: "#6C6C6C", marginTop: 20 }}>Copyright 2023 by NHK & NTH</Text>
             </View>
           </View>
         </View>
