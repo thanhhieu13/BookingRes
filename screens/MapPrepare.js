@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Image, StyleSheet, Animated, Easing } from 'react-native';
+import { View, Image, StyleSheet, Animated, Easing, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function MapPrepare() {
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.mapContainer}>
         <Image source={require('../assets/img/mapload.gif')} style={styles.mapImage} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -39,5 +39,6 @@ router.get("/categories", CategoryController.getAllCategories);
 // admin routes
 router.get("/admin", AdminController.getAllUsers);
 router.delete("/admin/:userId", AdminController.deleteUser);
+router.put("/users/:userId", AdminController.editUser);
 
 module.exports = router;

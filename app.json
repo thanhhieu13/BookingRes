@@ -15,7 +15,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier":"com.resbooking",
+      "config":{
+        "googleMapsApiKey" :"AIzaSyCdCiy-BR7B3TqBdn7plEgl1YrTWqVyoW0"
+      }
     },
     "android": {
       "adaptiveIcon": {

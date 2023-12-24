@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, SafeAreaView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { themeColors } from '../theme';
@@ -34,13 +34,7 @@ export default function Map() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <Image
-        source={require('../assets/img/mapload.gif')}
-        style={{ flex: 1, position: 'absolute', width: '100%', height: '100%' }}
-        resizeMode="cover"
-      />
-
+    <SafeAreaView style={{ flex: 1 }}>
       <MapView
         style={{ flex: 1 }}
         initialRegion={{
@@ -83,6 +77,6 @@ export default function Map() {
           </Marker>
         ))}
       </MapView>
-    </View>
+    </SafeAreaView>
   );
 }
