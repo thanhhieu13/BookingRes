@@ -96,6 +96,7 @@ const AccountScreen = () => {
       setAddress(addressData);
       console.log(response.data);
     } catch (error) {
+      console.log(`${API_URL} /address/${userId}`);
       console.log("Error fetching address data", error);
     }
   };

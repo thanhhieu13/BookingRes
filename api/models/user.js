@@ -53,6 +53,16 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  location: {
+    type: {
+      type: String,
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number],
+      index: '2dsphere'
+    }
+  },
 });
 
 const User = mongoose.model("User", userSchema);

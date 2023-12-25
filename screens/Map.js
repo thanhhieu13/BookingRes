@@ -4,7 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { themeColors } from '../theme';
 import MapPrepare from './MapPrepare';
-import {API_URL} from "@env"
+import { API_URL } from "@env";
 
 export default function Map() {
   const [restaurants, setRestaurants] = useState([]);
@@ -16,6 +16,7 @@ export default function Map() {
         const response = await axios.get(`${API_URL}/restaurants`);
         setRestaurants(response.data);
       } catch (error) {
+        console.log(`${API_URL} /restaurants`);
         console.error('Error fetching restaurants:', error);
       }
     };
@@ -54,18 +55,18 @@ export default function Map() {
           pinColor={themeColors.bgColor(1)}
         >
           <Image
-            source={require('../assets/img/tracking.png')} 
-            style={{ width: 40, height: 40 }} 
+            source={require('../assets/img/tracking.png')}
+            style={{ width: 40, height: 40 }}
             resizeMode="cover"
           />
         </Marker>
 
-        {restaurants.map(restaurant => (
+        {restaurants.map((restaurant) => (
           <Marker
             key={restaurant._id}
             coordinate={{
-              latitude: restaurant.lat,
-              longitude: restaurant.lng,
+              latitude: restaurant.location.coordinates[1],
+              longitude: restaurant.location.coordinates[0],
             }}
             title={restaurant.name}
           >

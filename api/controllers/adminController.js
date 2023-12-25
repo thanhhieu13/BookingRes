@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const Restaurant = require("../models/restaurant");
+const Category = require("../models/category");
 
 const adminController = {
     getAllUsers: async (req, res) => {
@@ -56,8 +58,25 @@ const adminController = {
         } catch (err) {
             res.status(500).json(err);
         }
-    }
+    },
 
+
+
+    // Restaurants
+    deleteRestaurant: async (req, res) => {
+        const restaurantId = req.params.restaurantId;
+        try {
+            const restaurant = await Restaurant.findById(restaurantId);
+            // const user = await User.findByIdAndDelete(req.params.userId);
+            if (!restaurant) {
+                return res.status(404).json({ message: "Không tìm thấy nhà hàng" });
+            }
+
+            res.status(200).json({ message: "Xoá nhà hàng thành công", deletedRestaurant: restaurant });
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
 };
 
 
