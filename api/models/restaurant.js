@@ -12,11 +12,18 @@ const restaurantSchema = new mongoose.Schema({
   image: {
     type: String // Assuming you store the image URL
   },
-  lat: {
-    type: Number
-  },
-  lng: {
-    type: Number
+
+  // longitude: kinh độ, latitude: vĩ độ
+  //  "coordinates": [106.7184612, 10.8275828]
+  location: {
+    type: {
+      type: String,
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number],
+      index: '2dsphere'
+    }
   },
   address: {
     type: String,
@@ -52,3 +59,30 @@ const restaurantSchema = new mongoose.Schema({
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
 module.exports = Restaurant;
+
+// post: http://localhost:8000/restaurants
+
+// Test postman
+
+// {
+//   "name": "Sample Restaurant",
+//   "description": "A wonderful place to enjoy delicious food.",
+//   "image": "https://example.com/sample-restaurant-image.jpg",
+//   "location": {
+//     "type": "Point",
+//     "coordinates": [106.7184612, 10.8275828]
+//   },
+//   "address": "123 Main Street, Cityville",
+//   "rating": 4.5,
+//   "type": "65824e7b55ac0795434e8c8d", // Replace with the actual ObjectId of the category
+//   "menu": [
+//     {
+//       "image": "https://example.com/menu-item1.jpg"
+//     },
+//     {
+//       "image": "https://example.com/menu-item2.jpg"
+//     }
+//   ],
+//   "openingHours": "9:00 AM - 10:00 PM",
+//   "bookingHours": ["12:00 PM", "1:00 PM", "7:00 PM"]
+// }

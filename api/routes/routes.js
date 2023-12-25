@@ -6,7 +6,7 @@ const RestaurantController = require("../controllers/restaurantController");
 const OrderController = require("../controllers/orderController");
 const FeatureController = require("../controllers/featureController");
 const CategoryController = require("../controllers/categoryController");
-
+const GeospatialController = require("../controllers/geospatialController");
 
 // routes.js admin
 const AdminController = require("../controllers/adminController");
@@ -35,9 +35,15 @@ router.post("/api/featured", FeatureController.createFeatured);
 router.post("/categories", CategoryController.createCategory);
 router.get("/categories", CategoryController.getAllCategories);
 
+// Map 
+router.post("/map", GeospatialController.getNearbyRestaurants);
+
 
 // admin routes
 router.get("/admin", AdminController.getAllUsers);
 router.delete("/admin/:userId", AdminController.deleteUser);
+router.put("/users/:userId", AdminController.editUser);
+
+router.delete("admin/restaurants/:restaurantId", AdminController.deleteRestaurant);
 
 module.exports = router;

@@ -121,8 +121,10 @@ module.exports = {
                 occupation,
                 gender,
                 dateOfBirth,
+                latitude,
+                longitude,
             } = req.body;
-
+    
             // Tìm và cập nhật thông tin của người dùng
             const user = await User.findByIdAndUpdate(
                 userId,
@@ -136,15 +138,19 @@ module.exports = {
                         occupation,
                         gender,
                         dateOfBirth,
+                        location: {
+                            type: "Point",
+                            coordinates: [longitude, latitude],
+                        },
                     },
                 },
                 { new: true } // Trả về người dùng đã được cập nhật
             );
-
+    
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-
+    
             res.status(200).json(user);
         } catch (error) {
             console.error(error);
@@ -169,3 +175,23 @@ module.exports = {
         }
     },
 };
+
+
+
+
+// test update post man
+
+
+// {
+//     "name": "Updated User",
+//     "avatar": "",
+//     "mobileNo": "9876543210",
+//     "street": "456 Updated Street",
+//     "city": "Updated City",
+//     "occupation": "Updated Occupation",
+//     "gender": "Female",
+//     "dateOfBirth": "1995-05-05",
+//     "latitude": 12.971598,
+//     "longitude": 77.594562
+//   }
+  
