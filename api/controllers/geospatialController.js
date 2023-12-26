@@ -1,38 +1,36 @@
 const User = require("../models/user");
 const Restaurant = require("../models/restaurant");
 
+Restaurant.collection.createIndex({ location: '2dsphere' });
 module.exports = {
     getNearbyRestaurants: async (req, res) => {
-        const userId = req.params.userId; // Giả sử bạn truyền userId qua params
-
         try {
-            // Lấy thông tin của người dùng, bao gồm độ dài và độ rộng
+            const userId = req.params.userId;
             const user = await User.findById(userId);
-            const userCoordinates = user.geometry.coordinates;
 
-            // Sử dụng tính năng địa lý của MongoDB để tìm những nhà hàng gần người dùng
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            const userLocation = user.location.coordinates;
+
+            // Tìm những nhà hàng gần user, sắp xếp theo khoảng cách tăng dần
             const nearbyRestaurants = await Restaurant.find({
-                geometry: {
+                location: {
                     $near: {
                         $geometry: {
                             type: 'Point',
-                            coordinates: userCoordinates,
+                            coordinates: userLocation,
                         },
-                        $maxDistance: 5000, // Khoảng cách tối đa là 5km (có thể điều chỉnh theo nhu cầu)
+                        $maxDistance: 10000, // Đơn vị tính là mét, bạn có thể điều chỉnh theo nhu cầu
                     },
                 },
-            });
+            }).exec();
 
-            res.status(200).json({
-                success: true,
-                data: nearbyRestaurants,
-            });
+            res.json(nearbyRestaurants);
         } catch (error) {
             console.error(error);
-            res.status(500).json({
-                success: false,
-                error: 'Internal Server Error',
-            });
+            res.status(500).json({ message: 'Internal Server Error' });
         }
     }
 };

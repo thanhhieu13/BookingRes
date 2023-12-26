@@ -36,7 +36,7 @@ router.post("/categories", CategoryController.createCategory);
 router.get("/categories", CategoryController.getAllCategories);
 
 // Map 
-router.post("/map", GeospatialController.getNearbyRestaurants);
+router.get("/nearby-restaurants/:userId", GeospatialController.getNearbyRestaurants);
 
 
 // admin routes
