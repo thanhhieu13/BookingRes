@@ -4,16 +4,15 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { themeColors } from '../theme';
 import MapPrepare from './MapPrepare';
-import { API_URL } from "@env";
+import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
 import * as Location from 'expo-location';
 
 export default function Map() {
   const [restaurants, setRestaurants] = useState([]);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
-  const [searchLocation, setSearchLocation] = useState({ latitude: 0, longitude: 0 });
+  const [searchAddress, setSearchAddress] = useState('');
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +20,6 @@ export default function Map() {
         const response = await axios.get(`${API_URL}/restaurants`);
         setRestaurants(response.data);
       } catch (error) {
-        console.log(`${API_URL} /restaurants`);
         console.error('Error fetching restaurants:', error);
       }
     };
@@ -40,7 +38,6 @@ export default function Map() {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           });
-          console.log(location.coords.latitude, location.coords.longitude);
         } else {
           console.log('Permission to access location was denied');
         }
@@ -54,11 +51,27 @@ export default function Map() {
     getUserLocation();
   }, []);
 
-  const handleSearch = () => {
-    setUserLocation({
-      latitude: searchLocation.latitude,
-      longitude: searchLocation.longitude,
-    });
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          searchAddress
+        )}&key=${GOOGLE_MAPS_API_KEY}`
+      );
+      console.log('Geocoding API Response:', response.data);
+
+      if (response.data.results.length > 0) {
+        const location = response.data.results[0].geometry.location;
+        setUserLocation({
+          latitude: location.lat,
+          longitude: location.lng,
+        });
+      } else {
+        console.log('No results found for the provided address');
+      }
+    } catch (error) {
+      console.error('Error searching address:', error);
+    }
   };
 
   if (!imageLoaded || !userLocation) {
@@ -70,15 +83,8 @@ export default function Map() {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
         <TextInput
           style={{ flex: 1, marginRight: 10, borderBottomWidth: 1 }}
-          placeholder="Enter Latitude"
-          keyboardType="numeric"
-          onChangeText={(text) => setSearchLocation({ ...searchLocation, latitude: parseFloat(text) || 0 })}
-        />
-        <TextInput
-          style={{ flex: 1, marginRight: 10, borderBottomWidth: 1 }}
-          placeholder="Enter Longitude"
-          keyboardType="numeric"
-          onChangeText={(text) => setSearchLocation({ ...searchLocation, longitude: parseFloat(text) || 0 })}
+          placeholder="Enter Address"
+          onChangeText={(text) => setSearchAddress(text)}
         />
         <Button title="Search" onPress={handleSearch} />
       </View>
@@ -92,6 +98,7 @@ export default function Map() {
         }}
         mapType="standard"
       >
+        {/* Your existing markers */}
         <Marker
           coordinate={userLocation}
           title="Your Location"
@@ -120,16 +127,15 @@ export default function Map() {
               resizeMode="cover"
             />
           </Marker>
-          
         ))}
       </MapView>
       {selectedRestaurant && (
-    <View style={{ padding: 10, backgroundColor: 'white' }}>
-      <Text style={{ fontWeight: 'bold' }}>{selectedRestaurant.name}</Text>
-      <Text>{/* Hiển thị các thông tin khác về nhà hàng */}</Text>
-      {/* Bạn có thể thêm các thành phần UI khác để hiển thị thông tin đặt hàng */}
-    </View>
-  )}
+        <View style={{ padding: 10, backgroundColor: 'white' }}>
+          <Text style={{ fontWeight: 'bold' }}>{selectedRestaurant.name}</Text>
+          <Text>{/* Display other restaurant information */}</Text>
+          {/* You can add other UI components to display ordering information */}
+        </View>
+      )}
     </SafeAreaView>
   );
 }
