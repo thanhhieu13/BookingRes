@@ -32,6 +32,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ResultScreen from "../screens/ResultScreen";
 import BottomTabNavigator from './bottomTabNavigator';
 import AdminTabNavigator from './adminTabNavigator';
+import BookingHours from "../screens/BookingHours";
+import Success from "../screens/Success";
 
 
 const StackNavigator = () => {
@@ -103,6 +105,34 @@ const StackNavigator = () => {
           }}
         />
         <Stack.Screen
+          name="BookingHours"
+          component={BookingHours}
+          options={{
+            title: "Thông tin giao dịch",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="OrderSuccess"
+          component={Success}
+          options={{
+            title: "order tình trạng",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="Register"
           component={RegisterScreen}
           options={{ headerShown: false }}
@@ -120,7 +150,16 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Restaurant"
           component={RestaurantDetail}
-          options={{ headerShown: false }}
+          options={{ 
+          
+            headerShown: true, 
+            headerTitleAlign : 'center',
+            headerTintColor: "white",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerTransparent: true,
+          }}
         />
         <Stack.Screen
           name="Map"

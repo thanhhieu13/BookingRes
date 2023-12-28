@@ -34,6 +34,8 @@ const LoginPage = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
   const [obsecureText, setObsecureText] = useState(true);
   // const { login, setLogin } = useContext(LoginContext);
+  console.log(API_URL)
+
 
   const inValidForm = () => {
     Alert.alert("Không hợp lệ", "Hãy nhập vào đầy đủ các trường dữ liệu", [
@@ -59,6 +61,7 @@ const LoginPage = ({ navigation }) => {
       };
 
       const response = await axios.post(`${API_URL}/login`, user);
+      // const response = await axios.post("http://192.168.1.2:8000/login", user);
 
       if (response.status === 200) {
         const token = response.data.token;

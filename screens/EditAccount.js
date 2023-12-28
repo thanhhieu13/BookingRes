@@ -95,7 +95,8 @@ const AddressScreen = () => {
       dateOfBirth,
     };
     axios
-      .put(`http://localhost:8000/address/${userId}`, updatedAddress)
+      .put(`${API_URL}/address/${userId}`, updatedAddress)
+      // .put("http://192.168.1.2:8000/address/${userId}", updatedAddress)
       .then((response) => {
         Alert.alert("Success", "Address updated successfully");
         fetchUserData();

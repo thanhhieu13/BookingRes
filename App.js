@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import StackNavigator from "./navigation/StackNavigator";
-import { UserContext } from "./UserContext";
+// import { UserContext } from "./UserContext";
 import { useFonts } from 'expo-font';
+import { UserProvider } from './UserContext';
+
 
 
 export default function App() {
@@ -27,9 +29,9 @@ export default function App() {
   }
   return (
     <>
-      <UserContext>
+      <UserProvider>
         <StackNavigator />
-      </UserContext>
+        </UserProvider>
     </>
   );
 }

@@ -21,6 +21,7 @@ const CityScreen = ({ navigation, route }) => {
 
 
   const cities = ["Hà Nội", "TPHCM", "Đà Nẵng", "Khánh Hòa"];
+  
   // const isButtonVisible = selectedCity !== initialSelectedCity && selectedCity !== null;
 
   const isButtonVisible =
