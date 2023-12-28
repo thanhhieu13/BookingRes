@@ -77,5 +77,22 @@ module.exports = {
       res.status(500).json({ message: error.message });
     }
   },
+  getRestaurantsById: async (req, res) => {
+    try {
+      const restaurantId = req.params.restaurantId;
+      const restaurant = await Restaurant.findById(restaurantId);
+
+      if (!restaurant) {
+        return res.status(404).json({ message: "Khong tim thay nha hang" });
+      }
+
+      res
+        .status(200)
+        .json({ message: "thanh cong", restaurant });
+    } catch (error) {
+      console.error("loi khong lay duoc data nha hang", error);
+      res.status(500).json({ message: "loi server" });
+    }
+  },
  
 };
