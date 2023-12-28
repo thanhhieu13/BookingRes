@@ -54,7 +54,7 @@ export default function HomeScreen({ navigation, route }) {
   return (
     <SafeAreaView className="bg-white">
       <StatusBar barStyle="dark-content" />
-      <NoticeBar text={text} />
+      {/* <NoticeBar text={text} /> */}
       <View className="justify-between p-4 flex-row items-center max-w-full h-14">
         <TouchableOpacity
           onPress={() =>
@@ -90,7 +90,7 @@ export default function HomeScreen({ navigation, route }) {
               flexDirection: "row",
               alignItems: "center",
               padding: 3,
-              borderRadius: 20,
+              borderRadius: 5,
               borderWidth: 1,
               borderColor: "gray",
             }}
@@ -99,12 +99,7 @@ export default function HomeScreen({ navigation, route }) {
             <Icon.Search height="25" width="25" stroke="gray" />
             <Text style={{ marginLeft: 5, flex: 1 }}>Tìm nhà hàng</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <View className="flex-row items-center space-x-1 border-0 border-l-2 pl-2 border-l-gray-300">
-              <Icon.MapPin height="20" width="20" stroke="gray" />
-              <Text className="text-gray-600">Lê văn chí</Text>
-            </View>
-          </TouchableOpacity>
+
         </View>
       </TouchableOpacity>
 
@@ -116,6 +111,7 @@ export default function HomeScreen({ navigation, route }) {
         }}
       >
         {/* categories */}
+        <Text className="font-bold text-xl pl-4 mt-2">Danh mục</Text>
         <Categories />
 
         <Swiper

@@ -35,6 +35,7 @@ import AdminTabNavigator from './adminTabNavigator';
 import BookingHours from "../screens/BookingHours";
 import Success from "../screens/Success";
 import Privacy from "../screens/Privacy";
+import HistoryOrder from "../screens/HistoryOrder";
 
 
 const StackNavigator = () => {
@@ -58,6 +59,11 @@ const StackNavigator = () => {
           name="Privacy"
           component={Privacy}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="HistoryOrder"
+          component={HistoryOrder}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="City"
