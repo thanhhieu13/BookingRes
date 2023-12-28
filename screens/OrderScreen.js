@@ -8,7 +8,7 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { InputNumber } from "@nutui/nutui-react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,6 +20,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { API_URL } from "@env";
+import { UserType } from '../UserContext';
 
 const OrderScreen = ({ navigation }) => {
   const { params } = useRoute();
@@ -28,84 +29,58 @@ const OrderScreen = ({ navigation }) => {
     val1: 1,
   });
 
+  console.log(restaurant.bookingHours)
+
+  const [selectedTime, setSelectedTime] = useState("");
+
+  const handleTimeChange = (newTime) => {
+    setSelectedTime(newTime);
+  };
+
+  const currentTime = new Date();
+  const currentHours = currentTime.getHours();
+  const currentMinutes = currentTime.getMinutes();
+  const currentTotalMinutes = currentHours * 60 + currentMinutes;
+  
+
+  const bookingHours = restaurant.bookingHours;
+  
+
+  let closestTime = null;
+  let closestTimeDiff = Infinity;
+  
+  bookingHours.forEach(bookingTime => {
+
+    const [hour, minute] = bookingTime.split(':');
+    const bookingTotalMinutes = parseInt(hour) * 60 + parseInt(minute);
+  
+
+    if (bookingTotalMinutes > currentTotalMinutes) {
+  
+      const timeDiff = bookingTotalMinutes - currentTotalMinutes;
+ 
+      if (timeDiff < closestTimeDiff) {
+        closestTimeDiff = timeDiff;
+        closestTime = bookingTime;
+      }
+    }
+  });
+  
+  console.log("Giờ gần nhất là:", closestTime);
+  
+
+  const { user } = useContext(UserType);
+
+  // console.log(user);
+  console.log("fe");
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [currentTime, setCurrentTime] = useState("");
 
-  // State to hold user 
-  const [userData, setUserData] = useState({});
+  const [nearestTime, setNearestTime] = useState("");
 
-  useEffect(() => {
-    const updateCurrentTime = () => {
-      const now = moment().tz("Asia/Ho_Chi_Minh");
-      const futureTime = now.add(5, "minutes");
-      const formattedTime = futureTime.format("HH:mm");
-
-      setCurrentTime(formattedTime);
-    };
-
-    // Call the function to initially set the current time
-    updateCurrentTime();
-
-    // Update the current time every minute
-    const intervalId = setInterval(updateCurrentTime, 60000);
-
-    // Cleanup the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []);
-
-  // Function to fetch user data
-  const fetchUserData = async (userId) => {
-    try {
-      const response = await fetch(`${API_URL}/address/${userId}`);
-      const data = await response.json();
-      setUserData(data.userDetails);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
-  // Function to handle order submission
-  const submitOrder = async () => {
-    try {
-      // Prepare order data
-      const orderData = {
-        user: userData, // Assuming you want to include user details in the order
-        restaurant: restaurant,
-        numberOfAdults: inputState.val1,
-        numberOfChildren: inputState.val1,
-        reservationDate: selectedDate,
-        reservationTime: currentTime,
-        note: "Your order note here", // You can get the note from TextInput
-      };
-
-      // Make a POST request to submit the order
-      const response = await fetch('${API_URL}/orders', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      if (response.ok) {
-        // Order submitted successfully
-        const responseData = await response.json();
-        console.log("Order submitted successfully:", responseData);
-        // Navigate to the next screen or perform other actions
-        navigation.navigate("NextScreen");
-      } else {
-        console.error("Failed to submit order");
-      }
-    } catch (error) {
-      console.error("Error submitting order:", error);
-    }
-  };
-
-  useEffect(() => {
-    // Fetch user data when the component mounts
-    fetchUserData("userId");
-  }, []);
+  console.log("User:", user);
+console.log("Restaurant:", restaurant);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -120,12 +95,67 @@ const OrderScreen = ({ navigation }) => {
     hideDatePicker();
   };
 
+  const submitOrder = async () => {
+    try {
+
+      if (!selectedDate) {
+        console.error("Selected date is null");
+        return;
+      }
+
+      if (!user || !restaurant) {
+        console.error("User or restaurant not found");
+        return;
+      }
+  
+
+      const orderData = {
+        userId: user._id, 
+        restaurantId: restaurant._id,
+        adults: inputState.val1,
+        children: inputState.val1,
+        date: selectedDate.toISOString(), 
+        selectedHour: selectedTime || closestTime,
+        note: "Your order note here", 
+      };
+
+      const response = await fetch(`${API_URL}/api/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (response.ok) {
+        // Order submitted successfully
+        const responseData = await response.json();
+        console.log("Order submitted successfully:", responseData);
+        // Navigate to the next screen or perform other actions
+        navigation.navigate("OrderSuccess");
+      } else {
+        // Log detailed error information
+        console.error("Failed to submit order. Status code:", response.status);
+        const errorResponse = await response.json(); // Attempt to parse error response
+        console.error("Error response:", errorResponse);
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+    }
+  };
+  
+  
+  
+
+
   return (
     <>
       <ScrollView style={styles.container}>
         {/* THONG TIN DON HANG  */}
         <View style={{ margin: 15 }}>
           <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
+          <Text>{user?.name}</Text>
+         
           <View className="border p-2 flex-row justify-between rounded-xl">
             <Image
               source={{ uri: restaurant.image }}
@@ -135,12 +165,8 @@ const OrderScreen = ({ navigation }) => {
               }}
             />
             <View className="w-2/3">
-              <Text className="text-lg text-gray-950">
-                {restaurant.name}
-              </Text>
-              <Text className="text-gray-500">
-              {restaurant.address}
-              </Text>
+              <Text className="text-lg text-gray-950">{restaurant.name}</Text>
+              <Text className="text-gray-500">{restaurant.address}</Text>
             </View>
           </View>
           <Text className="py-4 text-lg font-medium">Thông tin đơn hàng</Text>
@@ -148,7 +174,7 @@ const OrderScreen = ({ navigation }) => {
             <FontAwesome5 name="user" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
               <Text className="ml-0">Số người lớn :</Text>
-              <InputNumber  modelValue={inputState.val1} />
+              <InputNumber modelValue={inputState.val1} />
             </View>
           </View>
           <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
@@ -188,8 +214,12 @@ const OrderScreen = ({ navigation }) => {
             <AntDesign name="clockcircleo" size={24} color="black" />
             <View className="flex-row justify-around  items-center w-9/12">
               <Text className="mr-14">Giờ đến :</Text>
-              <TouchableOpacity className="flex-row items-center ">
-                <Text className="relative">{currentTime}</Text>
+              <TouchableOpacity className="flex-row items-center"
+              onPress={() => {
+                // Truyền dữ liệu của nhà hàng (restaurant) qua trang Order
+                navigation.navigate("BookingHours", {restaurant, selectedDate, bookingHours, closestTime, onTimeChange: handleTimeChange,});
+              }}>
+                <Text className="relative">{selectedTime || closestTime}</Text>
                 <MaterialIcons
                   style={{ position: "absolute", right: -100 }}
                   name="keyboard-arrow-down"
@@ -211,7 +241,7 @@ const OrderScreen = ({ navigation }) => {
               <FontAwesome5 name="user-circle" size={24} color="black" />
               <Text className="ml-4">Tên liên lạc</Text>
             </View>
-            <Text className="w-2/4">name</Text>
+            <Text className="w-2/4">{user?.name}</Text>
           </View>
           <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">
@@ -219,14 +249,14 @@ const OrderScreen = ({ navigation }) => {
 
               <Text className="ml-4">Số điện thoại</Text>
             </View>
-            <Text className="w-2/4">0123456789</Text>
+            <Text className="w-2/4">{user?.mobileNo}</Text>
           </View>
           <View className="flex-row p-5  items-center">
             <View className="flex-row items-center w-2/4 justify-start">
               <FontAwesome name="envelope" size={24} color="black" />
               <Text className="ml-4">Email</Text>
             </View>
-            <Text className="w-2/4">khoahoang151@gmail.com</Text>
+            <Text className="w-2/4">{user?.email}</Text>
           </View>
         </View>
         <View
@@ -260,9 +290,9 @@ const OrderScreen = ({ navigation }) => {
       <View style={styles.popupContainer}>
         <TouchableOpacity
           style={styles.applyButton}
-          onPress={() => {
-            navigation.navigate("Order");
-          }}
+
+          onPress={submitOrder} 
+         
         >
           <Text style={styles.applyButtonText}>Tiếp tục</Text>
         </TouchableOpacity>

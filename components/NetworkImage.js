@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         borderRadius: radius,
-        resizeMode: "cover"
+        resizeMode: "cover",
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+        position : "relative",
     })
 })

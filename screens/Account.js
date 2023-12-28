@@ -13,10 +13,12 @@ import ProfileTile from "../components/ProfileTile";
 import { API_URL } from "@env";
 
 const AccountScreen = () => {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const navigation = useNavigation();
-  const { userId, setUserId } = useContext(UserType);
+  // const { userId, setUserId } = useContext(UserType);
+  const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
+
 
   const handleAvatarPress = async () => {
     try {
@@ -92,9 +94,13 @@ const AccountScreen = () => {
   const fetchAddressData = async (userId) => {
     try {
       const response = await axios.get(`${API_URL}/address/${userId}`);
+      // const response = await axios.get("http://192.168.1.2:8000/address/${userId}");
       const addressData = response.data;
-      setAddress(addressData);
-      console.log(response.data);
+      // setAddress(addressData);
+      updateUser(addressData);
+
+      // console.log(response.data, "done");
+      console.log(addressData, "user fetch")
     } catch (error) {
       console.log(`${API_URL} /address/${userId}`);
       console.log("Error fetching address data", error);
@@ -118,9 +124,9 @@ const AccountScreen = () => {
                 }}
               >
                 <TouchableOpacity onPress={handleAvatarPress}>
-                  {address?.avatar ? (
+                  {user?.avatar ? (
                     <NetworkImage
-                      source={address?.avatar}
+                      source={user?.avatar}
                       width={100}
                       height={100}
                       radius={99}
@@ -138,10 +144,10 @@ const AccountScreen = () => {
                 </TouchableOpacity>
                 <View style={{ marginLeft: 10, marginTop: 30 }}>
                   <Text style={styles.text}>
-                    {address?.name}
+                    {user?.name}
                   </Text>
                   <Text style={styles.email}>
-                    {address?.email}
+                    {user?.email}
                   </Text>
                 </View>
               </View>
