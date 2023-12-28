@@ -15,7 +15,7 @@ const SearchScreen = () => {
   const [keyword, setKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [location, setLocation] = useState("TPHCM"); // Added state for location
-
+console.log(API_URL)
   useEffect(() => {
     let isMounted = true;
 

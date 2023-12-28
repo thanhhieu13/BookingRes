@@ -15,7 +15,7 @@ export default function Map() {
   const [userLocation, setUserLocation] = useState(null);
   const [searchAddress, setSearchAddress] = useState('');
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-
+  console.log(API_URL)
   useEffect(() => {
     const fetchData = async () => {
       try {

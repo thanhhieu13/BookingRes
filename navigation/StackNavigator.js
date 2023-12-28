@@ -34,6 +34,7 @@ import BottomTabNavigator from './bottomTabNavigator';
 import AdminTabNavigator from './adminTabNavigator';
 import BookingHours from "../screens/BookingHours";
 import Success from "../screens/Success";
+import Privacy from "../screens/Privacy";
 
 
 const StackNavigator = () => {
@@ -51,6 +52,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Privacy"
+          component={Privacy}
           options={{ headerShown: false }}
         />
         <Stack.Screen
