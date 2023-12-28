@@ -199,7 +199,7 @@ const AccountScreen = () => {
               style={{
                 height: 100,
                 backgroundColor: COLORS.lightWhite,
-                margin: 10,
+                margin: 2,
                 borderRadius: 12,
               }}
             >
@@ -229,14 +229,15 @@ const AccountScreen = () => {
               style={{
                 height: 100,
                 backgroundColor: COLORS.lightWhite,
-                margin: 10,
+                margin: 2,
                 borderRadius: 12,
               }}
             >
               <ProfileTile title={"Chat"} icon={"chatbox-outline"} font={1} />
               <ProfileTile title={"Mời bạn bè"} icon={"adduser"} />
+              <ProfileTile title={"Setting"} icon={"settings-outline"} font={1} onPress={()=>{navigation.navigate("Privacy")}} />
             </View>
-            <View style={styles.container}>
+            <View className="items-center mt-20" >
               <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
                 <Text style={styles.logoutButtonText}>Đăng xuất</Text>
               </TouchableOpacity>
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: "#FEF2F2", // Use your desired color
-    padding: 10,
+    padding: 15,
     borderRadius: 8,
     width: "60%",
   },
