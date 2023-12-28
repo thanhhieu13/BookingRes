@@ -41,7 +41,7 @@ console.log(categories)
         {categories?.map((category, index) => {
           let isActive = category.id == activeCategory;
           let btnClass = isActive ? ' bg-gray-600' : ' bg-gray-200';
-          let textClass = isActive ? ' font-semibold text-gray-800' : ' text-gray-500';
+          let textClass = isActive ? ' font-semibold text-gray-800 mt-2' : ' text-gray-500';
           return (
             <View key={index} className="flex justify-center items-center mr-6">
               <TouchableOpacity

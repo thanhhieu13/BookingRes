@@ -177,6 +177,7 @@ const AccountScreen = () => {
                 title={"Lịch sử giao dịch"}
                 icon={"sticker-text-outline"}
                 font={4}
+                onPress={()=>{navigation.navigate("HistoryOrder")}}
               />
             </View>
             <View
