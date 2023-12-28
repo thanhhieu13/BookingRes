@@ -21,6 +21,7 @@ router.get("/address/:userId", UserController.getUserAddress);
 // Restaurant Routes
 router.post("/restaurants", RestaurantController.createRestaurant);
 router.get("/restaurants", RestaurantController.getAllRestaurants);
+router.get("/restaurants/:restaurantId", RestaurantController.getRestaurantsById);
 router.get("/restaurants/:categoryId", RestaurantController.getRestaurantsByCategory);
 router.get("/restaurants/search/:keyword", RestaurantController.searchRestaurants);
 
