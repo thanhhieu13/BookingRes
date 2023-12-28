@@ -20,7 +20,7 @@ const ResHor = ({ route }) => {
   
         if (selectedCategory) {
           const response = await fetch(
-            `${API_URL}/restaurants/${selectedCategory}`
+            `${API_URL}/restaurants/categories/${selectedCategory}`
           );
           const data = await response.json();
   
