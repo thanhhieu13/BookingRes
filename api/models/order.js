@@ -30,6 +30,16 @@ const orderSchema = new mongoose.Schema({
   note: {
     type: String,
   },
+  status: {
+    type: String,
+    enum: ["Chờ xác nhận", "Đã tiếp nhận", "Hoàn thành", "Đã hủy"],
+    default: "Chờ xác nhận",
+  },
+  services: {
+    type: String,
+    enum: ["Đặt chỗ", "Giao hàng", "Tự đến lấy"],
+    default: "Đặt chỗ",
+  },
 });
 
 const Order = mongoose.model("Order", orderSchema);

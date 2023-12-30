@@ -23,6 +23,8 @@ module.exports = {
                 date,
                 selectedHour,
                 note,
+                status: "Chờ xác nhận", 
+                services: "Đặt chỗ", 
             });
 
             await order.save();
