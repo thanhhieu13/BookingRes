@@ -26,7 +26,10 @@ const OrderScreen = ({ navigation }) => {
   const { params } = useRoute();
   const { restaurant } = params;
   const [inputState, setInputState] = useState({
-    val1: 1,
+    val1: 0,
+  });
+  const [inputState1, setInputState1] = useState({
+    val2: 0,
   });
 
   console.log(restaurant.bookingHours)
@@ -113,7 +116,7 @@ console.log("Restaurant:", restaurant);
         userId: user._id, 
         restaurantId: restaurant._id,
         adults: inputState.val1,
-        children: inputState.val1,
+        children: inputState1.val2,
         date: selectedDate.toISOString(), 
         selectedHour: selectedTime || closestTime,
         note: "Your order note here", 
@@ -160,8 +163,9 @@ console.log("Restaurant:", restaurant);
             <Image
               source={{ uri: restaurant.image }}
               style={{
-                width: 100,
-                height: 100,
+                width: 90,
+                height: 90,
+                borderRadius: 5,
               }}
             />
             <View className="w-2/3">
@@ -174,14 +178,14 @@ console.log("Restaurant:", restaurant);
             <FontAwesome5 name="user" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
               <Text className="ml-0">Số người lớn :</Text>
-              <InputNumber modelValue={inputState.val1} />
+              <InputNumber modelValue={inputState.val1} min="0" />
             </View>
           </View>
           <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
             <MaterialIcons name="child-care" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
               <Text className="mr-4">Số trẻ em :</Text>
-              <InputNumber modelValue={inputState.val1} />
+              <InputNumber modelValue={inputState1.val2} min="0" />
             </View>
           </View>
           <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
