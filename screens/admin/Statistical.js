@@ -6,6 +6,7 @@ import { API_URL } from "@env";
 const UserListScreen = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    console.log(API_URL);
 
     useEffect(() => {
         // Fetch all users when the component mounts
