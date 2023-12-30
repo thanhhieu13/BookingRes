@@ -24,7 +24,7 @@ router.get("/restaurants", RestaurantController.getAllRestaurants);
 router.get("/restaurants/:restaurantId", RestaurantController.getRestaurantsById);
 router.get("/restaurants/categories/:categoryId", RestaurantController.getRestaurantsByCategory);
 router.get("/restaurants/search/:keyword", RestaurantController.searchRestaurants);
-S
+
 // Order Routes
 router.post("/api/orders", OrderController.placeOrder);
 router.get("/api/orders/:userId", OrderController.getOrdersByUser);
