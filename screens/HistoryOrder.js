@@ -33,7 +33,7 @@ const HistoryOrder = () => {
   const [restaurants, setRestaurants] = useState({});
 
   const { user } = useContext(UserType);
-
+  const [filteredOrders, setFilteredOrders] = useState([]);
 
   const userId = user._id;
   // console.log(userId);
@@ -46,7 +46,7 @@ const HistoryOrder = () => {
 
         if (response.ok) {
           setOrders(data.orders);
-
+          setFilteredOrders(data.orders);
 
           const restaurantIds = Array.from(
             new Set(data.orders.map((order) => order.restaurant))
@@ -97,14 +97,78 @@ const HistoryOrder = () => {
     return new Date(dateString).toLocaleDateString("vi-VN", options);
   };
 
- 
+  // ref
+  const bottomSheetRef = useRef(null);
+
+  // variables
+  const snapPoints = useMemo(() => ["25%", "55%"], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
+
+  const handleSnapPress = useCallback((index) => {
+    bottomSheetRef.current?.snapToIndex(index);
+  }, []);
+  const test = () => {
+    console.log("first");
+  };
+  const status = [
+    "Tất cả",
+    "Chờ xác nhận",
+    " Đã tiếp nhận",
+    "Hoàn thành",
+    "Đã hủy",
+  ];
+
+  const services = [
+    "Tất cả",
+    "Đặt chỗ",
+    "Giao hàng",
+    "Tự đến lấy"
+  ]
+
+  const [selectedContentType, setSelectedContentType] = useState("status");
+
+  const [selectedStatus, setSelectedStatus] = useState("Tất cả");
+
+  const filterOrdersByStatus = (status) => {
+    if (status === "Tất cả") {
+      setFilteredOrders(orders); // Hiển thị tất cả đơn hàng
+    } else {
+      const filtered = orders.filter((order) => order.status === status);
+      setFilteredOrders(filtered);
+    }
+  };
+
+  const handleStatusPress = (status) => {
+    setSelectedStatus(status);
+    // filterOrdersByStatus(status);
+  };
+
+  const handleClosePress = useCallback(() => {
+    bottomSheetRef.current?.close();
+
+    // Update the status when the "Xác nhận" button is pressed
+    if (selectedContentType === "status") {
+      filterOrdersByStatus(selectedStatus);
+    }
+  }, [selectedStatus, selectedContentType]);
+
+
 
   return (
     <View style={styles.container}>
-    
+      <Status 
+        onPress={() => handleSnapPress(1)} 
+        onPress1={() => handleSnapPress(1)} 
+        setSelectedContentType={setSelectedContentType}
+        selectedStatus={selectedStatus}
+      />
 
       <View className="mt-2">
-      {orders.map((order) => (
+      {filteredOrders.map((order) => (
           <View
             key={order._id}
             style={{
@@ -183,6 +247,56 @@ const HistoryOrder = () => {
         ))}
       </View>
 
+      <BottomSheet
+        index={-1}
+        ref={bottomSheetRef}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop {...props} opacity={0.5} />
+        )}
+      >
+        <View className="flex-row">
+          <View className="w-2/3 flex-row items-center justify-between">
+            <View className="p-4">
+              <Feather name="x" size={24} color="black" />
+            </View>
+            <Text className="text-lg">Chọn trạng thái</Text>
+          </View>
+          <View className="w-2/4"></View>
+        </View>
+        <BottomSheetScrollView style={styles.contentContainer}>
+        {selectedContentType === "status" &&
+      status.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={{
+                padding: 16,
+                borderBottomWidth: 1,
+                borderBottomColor: "#ccc",
+                backgroundColor: selectedStatus === item ? "#e0e0e0" : "white",
+              }}
+              onPress={() => handleStatusPress(item)}
+            >
+              <Text>{item}</Text>
+            </TouchableOpacity>
+          ))}
+           {selectedContentType === "services" &&
+      services.map((item, index) => (
+            <View
+              key={index}
+              style={{
+                padding: 16,
+                borderBottomWidth: 1,
+                borderBottomColor: "#ccc",
+              }}
+            >
+              <Text>{item}</Text>
+            </View>
+          ))}
+        </BottomSheetScrollView>
+        <PopUp buttonText="Xác nhận" onPress={handleClosePress} />
+      </BottomSheet>
     </View>
   );
 };

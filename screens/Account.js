@@ -204,7 +204,9 @@ const AccountScreen = () => {
                 borderRadius: 12,
               }}
             >
-              <ProfileTile title={"Yêu thích"} icon={"heart"} font={2} />
+              <ProfileTile title={"Yêu thích"} icon={"heart"} font={2} 
+              onPress={()=>{navigation.navigate("BottomSheet");
+              }}/>
               <ProfileTile title={"Hoạt động gần đây"} icon={"clockcircleo"} />
             </View>
 

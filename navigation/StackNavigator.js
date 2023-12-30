@@ -36,6 +36,8 @@ import BookingHours from "../screens/BookingHours";
 import Success from "../screens/Success";
 import Privacy from "../screens/Privacy";
 import HistoryOrder from "../screens/HistoryOrder";
+import BottomSheetTest from "../screens/BottomSheetTest";
+
 
 
 const StackNavigator = () => {
@@ -63,7 +65,28 @@ const StackNavigator = () => {
         <Stack.Screen
           name="HistoryOrder"
           component={HistoryOrder}
-          options={{ headerShown: true }}
+          options={{
+            title: "Lịch sử giao dịch",
+            headerTitleAlign: "center",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="BottomSheet"
+          component={BottomSheetTest}
+          options={{
+            title: "test bottem sheet",
+            headerTitleAlign: "center",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
         />
         <Stack.Screen
           name="City"
