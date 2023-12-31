@@ -8,7 +8,9 @@ const featuredSchema = new mongoose.Schema({
     type: String,
     maxlength: 200,
   },
-  
+  image: {
+    type: String // Assuming you store the image URL
+  },
   restaurants: [
     {
       type: mongoose.Schema.Types.ObjectId,
