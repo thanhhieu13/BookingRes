@@ -79,13 +79,27 @@ const StackNavigator = () => {
           name="BottomSheet"
           component={BottomSheetTest}
           options={{
-            title: "test bottem sheet",
-            headerTitleAlign: "center",
-            headerStyle: { backgroundColor: "red" },
-            headerTintColor: "#fff",
+            title: "",
+            // headerTitleAlign: "center",
+            // headerStyle: { backgroundColor: "red" },
+            // headerTintColor: "#fff",
+            // headerTitleStyle: {
+            //   fontWeight: "bold",
+            // },
+          }}
+        />
+         <Stack.Screen
+          name="Restaurant"
+          component={RestaurantDetail}
+          options={{ 
+            // title: "",
+            headerShown: true, 
+            headerTitleAlign : 'center',
+            headerTintColor: "white",
             headerTitleStyle: {
               fontWeight: "bold",
             },
+            headerTransparent: true,
           }}
         />
         <Stack.Screen
@@ -182,20 +196,7 @@ const StackNavigator = () => {
           component={AdminTabNavigator}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Restaurant"
-          component={RestaurantDetail}
-          options={{ 
-          
-            headerShown: true, 
-            headerTitleAlign : 'center',
-            headerTintColor: "white",
-            headerTitleStyle: {
-              fontWeight: "bold",
-            },
-            headerTransparent: true,
-          }}
-        />
+       
         <Stack.Screen
           name="Map"
           component={Map}
