@@ -112,36 +112,25 @@ module.exports = {
     updateAddress: async (req, res) => {
         try {
             const userId = req.params.userId;
-            const {
-                name,
-                avatar,
-                mobileNo,
-                street,
-                city,
-                occupation,
-                gender,
-                dateOfBirth,
-                latitude,
-                longitude,
-            } = req.body;
+            const updateFields = req.body;
+    
+            // Check if latitude and longitude are provided before updating location
+            const locationUpdate = updateFields.latitude && updateFields.longitude
+                ? {
+                    location: {
+                        type: "Point",
+                        coordinates: [updateFields.longitude, updateFields.latitude],
+                    },
+                }
+                : {};
     
             // Tìm và cập nhật thông tin của người dùng
             const user = await User.findByIdAndUpdate(
                 userId,
                 {
                     $set: {
-                        name,
-                        avatar,
-                        mobileNo,
-                        street,
-                        city,
-                        occupation,
-                        gender,
-                        dateOfBirth,
-                        location: {
-                            type: "Point",
-                            coordinates: [longitude, latitude],
-                        },
+                        ...updateFields,
+                        ...locationUpdate,
                     },
                 },
                 { new: true } // Trả về người dùng đã được cập nhật
@@ -154,9 +143,59 @@ module.exports = {
             res.status(200).json(user);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Error updating user" });
+            res.status(500).json({ message: "Error updating user", error: error.message });
         }
     },
+    
+
+    // updateAddress: async (req, res) => {
+    //     try {
+    //         const userId = req.params.userId;
+    //         const {
+    //             name,
+    //             avatar,
+    //             mobileNo,
+    //             street,
+    //             city,
+    //             occupation,
+    //             gender,
+    //             dateOfBirth,
+    //             latitude,
+    //             longitude,
+    //         } = req.body;
+    
+    //         // Tìm và cập nhật thông tin của người dùng
+    //         const user = await User.findByIdAndUpdate(
+    //             userId,
+    //             {
+    //                 $set: {
+    //                     name,
+    //                     avatar,
+    //                     mobileNo,
+    //                     street,
+    //                     city,
+    //                     occupation,
+    //                     gender,
+    //                     dateOfBirth,
+    //                     location: {
+    //                         type: "Point",
+    //                         coordinates: [longitude, latitude],
+    //                     },
+    //                 },
+    //             },
+    //             { new: true } // Trả về người dùng đã được cập nhật
+    //         );
+    
+    //         if (!user) {
+    //             return res.status(404).json({ message: "User not found" });
+    //         }
+    
+    //         res.status(200).json(user);
+    //     } catch (error) {
+    //         console.error(error);
+    //         res.status(500).json({ message: "Error updating user" });
+    //     }
+    // },
 
     getUserAddress: async (req, res) => {
         try {
