@@ -60,4 +60,13 @@ module.exports = {
             res.status(500).json({ message: 'Internal server error' });
         }
     },
+    getAllOrders: async (req, res) => {
+        try {
+            const orders = await Order.find();
+            res.status(200).json({ message: 'Lay thanh cong', orders });
+        } catch (error) {
+            console.error('Loi khi lay orders:', error);
+            res.status(500).json({ message: 'loi mang' });
+        }
+    },
 };
