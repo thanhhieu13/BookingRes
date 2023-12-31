@@ -17,6 +17,7 @@ router.get("/verify/:token", UserController.verifyEmail);
 router.post("/login", UserController.login);
 router.put("/address/:userId", UserController.updateAddress);
 router.get("/address/:userId", UserController.getUserAddress);
+router.put("/change-password/:userId", UserController.changePassword);
 
 // Restaurant Routes
 router.post("/restaurants", RestaurantController.createRestaurant);

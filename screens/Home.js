@@ -107,7 +107,7 @@ export default function HomeScreen({ navigation, route }) {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: 50,
+          paddingBottom: 100,
         }}
       >
         {/* categories */}

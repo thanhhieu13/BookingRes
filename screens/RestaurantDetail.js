@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Animated,
+  Dimensions
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useLayoutEffect } from "react";
@@ -19,11 +19,29 @@ import { COLORS, SIZES } from "../constants/theme";
 import PopUp from "../components/PopUp";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import Animated, {
+  SlideInDown,
+  interpolate,
+  useAnimatedRef,
+  useAnimatedStyle,
+  useScrollViewOffset,
+} from 'react-native-reanimated';
+import Colors from '../constants/Colors';
+import { defaultStyles } from '../constants/Styles';
+
+const { width } = Dimensions.get('window');
+const IMG_HEIGHT = 150;
+
 
 export default function RestaurantDetail({ route }) {
-  const { name /* other parameters */ } = route.params;
+  const { name  } = route.params;
+  const { params } = useRoute();
+  const navigation = useNavigation();
+  let item = params;
+  const scrollRef = useAnimatedRef();
+
+
   useEffect(() => {
-    // Set the header title dynamically when the component mounts
     navigation.setOptions({
       headerTitle: () => (
         <Text
@@ -34,73 +52,64 @@ export default function RestaurantDetail({ route }) {
           {name}
         </Text>
       ),
+      headerRight: () => (
+        <View style={styles.bar}>
+          <TouchableOpacity style={styles.roundButton}>
+            <Ionicons name="share-outline" size={22} color={'#000'} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.roundButton}>
+            <Ionicons name="heart-outline" size={22} color={'#000'} />
+          </TouchableOpacity>
+        </View>
+      ),
     });
   }, []);
 
-  const { params } = useRoute();
-  const navigation = useNavigation();
-  let item = params;
-  // console.log(item);
+
+  
+
+  
 
   return (
     <View style={{}}>
-      {/* <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backBtn}
-      >
-        <Text>
-          <Ionicons
-            name="chevron-back-circle"
-            size={30}
-            color={COLORS.primary}
-          />
-        </Text>
-      </TouchableOpacity> */}
-      <TouchableOpacity onPress={() => {}} style={styles.shareBtn}>
-        <Text>
-          <MaterialCommunityIcons
-            name="share-circle"
-            size={30}
-            color={COLORS.primary}
-          />
-        </Text>
-      </TouchableOpacity>
-      <NetworkImage
-        source={item.image}
-        height={SIZES.height / 5.5}
-        width={SIZES.width}
-      />
-      <View style={styles.popupContainer}>
-        <Text className="text-center font-bold text-lg">{item.name}</Text>
-        <Text className="text-center text-gray-500">{item.address}</Text>
-        <View className="flex-column mt-2">
-          <View className="flex-row justify-between">
-            <View className="flex-row items-center">
-              <FontAwesome5 name="door-open" size={24} color="#A0C69D" />
-              <Text className="ml-2">Đang mở cửa</Text>
+      <View style={{backgroundColor:"#ffffff"}}>
+        <NetworkImage
+          source={item.image}
+          height={SIZES.height / 5.5}
+          width={SIZES.width}
+        />
+        <View style={styles.popupContainer}>
+          <Text className="text-center font-bold text-lg">{item.name}</Text>
+          <Text className="text-center text-gray-500">{item.address}</Text>
+          <View className="flex-column mt-2">
+            <View className="flex-row justify-between">
+              <View className="flex-row items-center">
+                <FontAwesome5 name="door-open" size={24} color="#A0C69D" />
+                <Text className="ml-2">Đang mở cửa</Text>
+              </View>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={styles.truncateText}
+              >
+                Gọi món Việt, Buffet nướng hàn quốc
+              </Text>
             </View>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.truncateText}
-            >
-              Gọi món Việt, Buffet nướng hàn quốc
-            </Text>
-          </View>
-          <View className="flex-row justify-between mt-1">
-            <View className="flex-row items-center">
-              <AntDesign name="star" size={24} color="gold" />
-              <Text className="ml-4">{item.rating}</Text>
-            </View>
-            <View className="flex-row mr-16">
-              <Ionicons name="location-sharp" size={24} color="red" />
-              <Text className="">4.5 km</Text>
+            <View className="flex-row justify-between mt-1">
+              <View className="flex-row items-center">
+                <AntDesign name="star" size={24} color="gold" />
+                <Text className="ml-4">{item.rating}</Text>
+              </View>
+              <View className="flex-row mr-16">
+                <Ionicons name="location-sharp" size={24} color="red" />
+                <Text className="">4.5 km</Text>
+              </View>
             </View>
           </View>
         </View>
       </View>
       <View
-        style={{ marginTop: 80, marginHorizontal: 8, marginBottom: 10 }}
+        style={{ backgroundColor:"#ffffff" ,marginTop: 80, marginHorizontal: 8, marginBottom: 10 }}
       ></View>
 
       <View style={{ height: 500 }}>
@@ -130,11 +139,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor:"#ffffff"
   },
   truncateText: {
     maxWidth: 150,
     overflow: "hidden",
+  },
+  roundButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: Colors.primary,
+  },
+  bar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
   applyButton: {
     backgroundColor: "red",
