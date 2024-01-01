@@ -61,25 +61,7 @@ const adminController = {
       res.status(500).json(err);
     }
   },
-
-  // deleteRestaurant: async (req, res) => {
-  //     try {
-  //       const restaurantId = req.params.restaurantId;
-
-  //       const restaurant = await Restaurant.findById(restaurantId);
-  //       if (!restaurant) {
-  //         return res.status(404).json({ message: "Không tìm thấy nhà hàng" });
-  //       }
-
-  //       // Thực hiện xóa nhà hàng
-  //       await Restaurant.findByIdAndDelete(restaurantId);
-
-  //       res.status(200).json({ message: "Xóa nhà hàng thành công" });
-  //     } catch (error) {
-  //       console.error("Lỗi không thể xóa nhà hàng", error);
-  //       res.status(500).json({ message: "Lỗi server" });
-  //     }
-  // },
+  
   deleteRestaurant: async (req, res) => {
     try {
       const restaurantId = req.params.restaurantId;

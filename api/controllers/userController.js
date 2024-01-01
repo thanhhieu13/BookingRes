@@ -4,252 +4,268 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
 const sendVerificationEmail = async (email, verificationToken) => {
-    // Create a Nodemailer transporter
-    const transporter = nodemailer.createTransport({
-        // Configure the email service or SMTP details here
-        service: "gmail",
-        auth: {
-            user: "nguyenhieu9474@gmail.com",
-            pass: "nguyenthanhhieu1342002",
-        },
-    });
-    // Compose the email message
-    const mailOptions = {
-        from: "BookingRestaurant.com",
-        to: email,
-        subject: "Email Verification",
-        text: `Please click the following link to verify your email: http://localhost:8000/verify/${verificationToken}`,
-    };
-    // Send the email
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log("Verification email sent successfully");
-    } catch (error) {
-        console.error("Error sending verification email:", error);
-    }
+  // Create a Nodemailer transporter
+  const transporter = nodemailer.createTransport({
+    // Configure the email service or SMTP details here
+    service: "gmail",
+    auth: {
+      user: "nguyenhieu9474@gmail.com",
+      pass: "nguyenthanhhieu1342002",
+    },
+  });
+  // Compose the email message
+  const mailOptions = {
+    from: "BookingRestaurant.com",
+    to: email,
+    subject: "Email Verification",
+    text: `Please click the following link to verify your email: http://localhost:8000/verify/${verificationToken}`,
+  };
+  // Send the email
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Verification email sent successfully");
+  } catch (error) {
+    console.error("Error sending verification email:", error);
+  }
 };
 const generateSecretKey = () => {
-    const secretKey = crypto.randomBytes(32).toString("hex");
+  const secretKey = crypto.randomBytes(32).toString("hex");
 
-    return secretKey;
+  return secretKey;
 };
 
 const secretKey = generateSecretKey();
 
 module.exports = {
-    register: async (req, res) => {
-        try {
-            const { name, email, password } = req.body;
-            // Check if the email is already registered
-            const existingUser = await User.findOne({ email });
-            if (existingUser) {
-                console.log("Email already registered:", email); // Debugging statement
-                return res.status(400).json({ message: "Email already registered" });
+  register: async (req, res) => {
+    try {
+      const { name, email, password } = req.body;
+      // Check if the email is already registered
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        console.log("Email already registered:", email); // Debugging statement
+        return res.status(400).json({ message: "Email already registered" });
+      }
+      // Create a new user
+      const newUser = new User({ name, email, password });
+      // Generate and store the verification token
+      newUser.verificationToken = crypto.randomBytes(20).toString("hex");
+      await newUser.save();
+      console.log("New User Registered:", newUser);
+      sendVerificationEmail(newUser.email, newUser.verificationToken);
+
+      res.status(201).json({
+        message:
+          "Registration successful. Please check your email for verification.",
+      });
+    } catch (error) {
+      console.log("Error during registration:", error); // Debugging statement
+      res.status(500).json({ message: "Registration failed" });
+    }
+  },
+
+  verifyEmail: async (req, res) => {
+    try {
+      const token = req.params.token;
+      const user = await User.findOne({ verificationToken: token });
+      if (!user) {
+        return res.status(404).json({ message: "Invalid verification token" });
+      }
+      user.verified = true;
+      user.verificationToken = undefined;
+
+      await user.save();
+
+      res.status(200).json({ message: "Email verified successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Email Verificatioion Failed" });
+    }
+  },
+
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      //check if the user exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
+      //check if the password is correct
+      if (user.password !== password) {
+        return res.status(401).json({ message: "Invalid password" });
+      }
+
+      const token = jwt.sign(
+        { userId: user._id, admin: user.admin },
+        secretKey
+      );
+
+      res.status(200).json({ token });
+      // Generate a token with role information
+      // const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
+
+      // res.status(200).json({ token, admin });
+    } catch (error) {
+      res.status(500).json({ message: "Login Failed" });
+    }
+  },
+
+  updateAddress: async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const updateFields = req.body;
+
+      // Check if latitude and longitude are provided before updating location
+      const locationUpdate =
+        updateFields.latitude && updateFields.longitude
+          ? {
+              location: {
+                type: "Point",
+                coordinates: [updateFields.longitude, updateFields.latitude],
+              },
             }
-            // Create a new user
-            const newUser = new User({ name, email, password });
-            // Generate and store the verification token
-            newUser.verificationToken = crypto.randomBytes(20).toString("hex");
-            await newUser.save();
-            console.log("New User Registered:", newUser);
-            sendVerificationEmail(newUser.email, newUser.verificationToken);
+          : {};
 
-            res.status(201).json({
-                message:
-                    "Registration successful. Please check your email for verification.",
-            });
-        } catch (error) {
-            console.log("Error during registration:", error); // Debugging statement
-            res.status(500).json({ message: "Registration failed" });
-        }
-    },
+      // Tìm và cập nhật thông tin của người dùng
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $set: {
+            ...updateFields,
+            ...locationUpdate,
+          },
+        },
+        { new: true } // Trả về người dùng đã được cập nhật
+      );
 
-    verifyEmail: async (req, res) => {
-        try {
-            const token = req.params.token;
-            const user = await User.findOne({ verificationToken: token });
-            if (!user) {
-                return res.status(404).json({ message: "Invalid verification token" });
-            }
-            user.verified = true;
-            user.verificationToken = undefined;
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-            await user.save();
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "Error updating user", error: error.message });
+    }
+  },
 
-            res.status(200).json({ message: "Email verified successfully" });
-        } catch (error) {
-            res.status(500).json({ message: "Email Verificatioion Failed" });
-        }
-    },
+  getUserAddress: async (req, res) => {
+    try {
+      const userId = req.params.userId;
 
-    login: async (req, res) => {
-        try {
-            const { email, password } = req.body;
+      // Find the user by userId
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-            //check if the user exists
-            const user = await User.findOne({ email });
-            if (!user) {
-                return res.status(401).json({ message: "Invalid email or password" });
-            }
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error retrieving user details" });
+    }
+  },
 
-            //check if the password is correct
-            if (user.password !== password) {
-                return res.status(401).json({ message: "Invalid password" });
-            }
+  changePassword: async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const { oldPassword, newPassword, confirmPassword } = req.body;
 
-            const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "Khong tim thay nguoi dung" });
+      }
 
-            res.status(200).json({ token });
-            // Generate a token with role information
-            // const token = jwt.sign({ userId: user._id, admin: user.admin }, secretKey);
+      if (user.password !== oldPassword) {
+        return res.status(401).json({ message: "Nhap sai mat khau cu" });
+      }
 
-            // res.status(200).json({ token, admin });
-        } catch (error) {
-            res.status(500).json({ message: "Login Failed" });
-        }
-    },
+      if (newPassword !== confirmPassword) {
+        return res.status(400).json({ message: "Mat khau nhap khong hop" });
+      }
 
-    updateAddress: async (req, res) => {
-        try {
-            const userId = req.params.userId;
-            const updateFields = req.body;
-    
-            // Check if latitude and longitude are provided before updating location
-            const locationUpdate = updateFields.latitude && updateFields.longitude
-                ? {
-                    location: {
-                        type: "Point",
-                        coordinates: [updateFields.longitude, updateFields.latitude],
-                    },
-                }
-                : {};
-    
-            // Tìm và cập nhật thông tin của người dùng
-            const user = await User.findByIdAndUpdate(
-                userId,
-                {
-                    $set: {
-                        ...updateFields,
-                        ...locationUpdate,
-                    },
-                },
-                { new: true } // Trả về người dùng đã được cập nhật
-            );
-    
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
-    
-            res.status(200).json(user);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Error updating user", error: error.message });
-        }
-    },
-    
+      user.password = newPassword;
+      await user.save();
 
-    // updateAddress: async (req, res) => {
-    //     try {
-    //         const userId = req.params.userId;
-    //         const {
-    //             name,
-    //             avatar,
-    //             mobileNo,
-    //             street,
-    //             city,
-    //             occupation,
-    //             gender,
-    //             dateOfBirth,
-    //             latitude,
-    //             longitude,
-    //         } = req.body;
-    
-    //         // Tìm và cập nhật thông tin của người dùng
-    //         const user = await User.findByIdAndUpdate(
-    //             userId,
-    //             {
-    //                 $set: {
-    //                     name,
-    //                     avatar,
-    //                     mobileNo,
-    //                     street,
-    //                     city,
-    //                     occupation,
-    //                     gender,
-    //                     dateOfBirth,
-    //                     location: {
-    //                         type: "Point",
-    //                         coordinates: [longitude, latitude],
-    //                     },
-    //                 },
-    //             },
-    //             { new: true } // Trả về người dùng đã được cập nhật
-    //         );
-    
-    //         if (!user) {
-    //             return res.status(404).json({ message: "User not found" });
-    //         }
-    
-    //         res.status(200).json(user);
-    //     } catch (error) {
-    //         console.error(error);
-    //         res.status(500).json({ message: "Error updating user" });
-    //     }
-    // },
+      res.status(200).json({ message: "Thay doi mat khau thanh cong" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Loi khi thay doi mat khau" });
+    }
+  },
 
-    getUserAddress: async (req, res) => {
-        try {
-            const userId = req.params.userId;
+  addToFavorites: async (req, res) => {
+    try {
+      const { userId, restaurantId } = req.body;
 
-            // Find the user by userId
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
+      const user = await User.findById(userId);
 
-            res.status(200).json(user);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Error retrieving user details" });
-        }
-    },
-    changePassword: async (req, res) => {
-        try {
-            const userId = req.params.userId;
-            const { oldPassword, newPassword, confirmPassword } = req.body;
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
+      // check if res exists in favorite list
+      if (!user.favoriteRestaurants.includes(restaurantId)) {
+        user.favoriteRestaurants.push(restaurantId);
+        await user.save();
+        res.status(200).json({ message: "Added to favorites successfully" });
+      } else {
+        res.status(400).json({ message: "Restaurant already in favorites" });
+      }
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
 
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ message: "Khong tim thay nguoi dung" });
-            }
+  removeFromFavorites: async (req, res) => {
+    try {
+      const { userId, restaurantId } = req.body;
 
-            if (user.password !== oldPassword) {
-                return res.status(401).json({ message: "Nhap sai mat khau cu" });
-            }
+      const user = await User.findById(userId);
 
-           
-            if (newPassword !== confirmPassword) {
-                return res.status(400).json({ message: "Mat khau nhap khong hop" });
-            }
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-  
-            user.password = newPassword;
-            await user.save();
+      // delete res from favorites list
+      user.favoriteRestaurants = user.favoriteRestaurants.filter(
+        (id) => id !== restaurantId
+      );
+      await user.save();
 
-            res.status(200).json({ message: "Thay doi mat khau thanh cong" });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Loi khi thay doi mat khau" });
-        }
-    },
+      res.status(200).json({ message: "Removed from favorites successfully" });
+    } catch (error) {
+      console.error("Error removing from favorites:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  getFavoriteRestaurants: async (req, res) => {
+    try {
+      const userId = req.params.userId;
+
+      const user = await User.findById(userId).populate('favoriteRestaurants');
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const favoriteRestaurants = user.favoriteRestaurants;
+
+      res.status(200).json({ message: 'Danh sách nhà hàng yêu thích', favoriteRestaurants });
+    } catch (error) {
+      console.error('Error retrieving favorite restaurants:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
 };
 
-
-
-
 // test update post man
-
 
 // {
 //     "name": "Updated User",
@@ -263,4 +279,3 @@ module.exports = {
 //     "latitude": 12.971598,
 //     "longitude": 77.594562
 //   }
-  

@@ -8,6 +8,7 @@ const FeatureController = require("../controllers/featureController");
 const CategoryController = require("../controllers/categoryController");
 const GeospatialController = require("../controllers/geospatialController");
 
+
 // routes.js admin
 const AdminController = require("../controllers/adminController");
 
@@ -41,6 +42,12 @@ router.get("/categories", CategoryController.getAllCategories);
 
 // Map 
 router.get("/nearby-restaurants/:userId", GeospatialController.getNearbyRestaurants);
+
+// Favorite 
+router.post('/addToFavorites', UserController.addToFavorites);
+router.post('/removeFromFavorites', UserController.removeFromFavorites);
+router.get('/:userId/favoriteRestaurants', UserController.getFavoriteRestaurants);
+
 
 
 // admin routes
