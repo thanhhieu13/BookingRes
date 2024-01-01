@@ -48,6 +48,7 @@ router.get("/admin", AdminController.getAllUsers);
 router.delete("/admin/:userId", AdminController.deleteUser);
 router.put("/users/:userId", AdminController.editUser);
 
-router.delete("admin/restaurants/:restaurantId", AdminController.deleteRestaurant);
+router.delete("/admin/restaurants/:restaurantId", AdminController.deleteRestaurant);
+router.put('/admin/restaurants/:restaurantId', AdminController.updateRestaurant);
 
 module.exports = router;
