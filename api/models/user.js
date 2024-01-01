@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
-
+  favoriteRestaurants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' }],
   // chia role
   admin: {
     type: Boolean,
