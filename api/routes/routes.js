@@ -31,6 +31,7 @@ router.get("/restaurants/search/:keyword", RestaurantController.searchRestaurant
 router.post("/api/orders", OrderController.placeOrder);
 router.get("/api/orders/:userId", OrderController.getOrdersByUser);
 router.get('/api/orders', OrderController.getAllOrders);
+router.put('/api/orders/:orderId', OrderController.updateOrder);
 
 // Feature Routes
 router.get("/api/featured", FeatureController.getFeatured);
