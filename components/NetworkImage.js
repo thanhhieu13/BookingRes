@@ -13,13 +13,13 @@ const NetworkImage = ({source, width, height, radius}) => {
 export default NetworkImage
 
 const styles = StyleSheet.create({
-    image: (width, height, radius)=> ({
+    image: (width, height, radius,border)=> ({
         width: width,
         height: height,
         borderRadius: radius,
         resizeMode: "cover",
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
+        borderBottomLeftRadius: border,
+        borderBottomRightRadius: border,
         position : "relative",
     })
 })
