@@ -1,0 +1,202 @@
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+} from "react-native";
+import React from "react";
+import { useRoute } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Foundation } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+
+const DetailOrders = () => {
+  const route = useRoute();
+  const { order, users, restaurants } = route.params;
+
+  const formatDate = (dateString) => {
+    const options = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    };
+
+    return new Date(dateString).toLocaleDateString("vi-VN", options);
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      {/* THONG TIN DON HANG  */}
+
+      <View style={{ margin: 15 }}>
+        <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
+
+        <View className="border p-2 flex-row justify-between rounded-xl">
+          {restaurants[order.restaurant] && (
+            <Image
+              source={{
+                uri: restaurants[order.restaurant].image,
+              }}
+              style={{
+                width: 85,
+                height: 85,
+                borderRadius: 5,
+                objectFit: "cover",
+              }}
+            />
+          )}
+          <View className="w-2/3">
+            <Text className="text-lg text-gray-950">
+              {restaurants[order.restaurant]?.name}
+            </Text>
+            <Text className="text-gray-500">
+              {restaurants[order.restaurant]?.address}
+            </Text>
+          </View>
+        </View>
+        <Text className="py-4 text-lg font-medium">Thông tin đơn hàng</Text>
+        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+          <View className="flex-row justify-between  items-center  w-4/12">
+            <FontAwesome5 name="user" size={24} color="black" />
+            <Text className="ml-0">Số người lớn </Text>
+          </View>
+          <Text className="w-8/12 ml-4">{order.adults}</Text>
+        </View>
+        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+          <View className="flex-row justify-between  items-center  w-4/12">
+            <MaterialIcons name="child-care" size={24} color="black" />
+
+            <Text className="mr-4">Số trẻ em : </Text>
+          </View>
+          <Text className="w-8/12 ml-4">{order.children}</Text>
+        </View>
+        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+          <View className="flex-row justify-between  items-center  w-4/12">
+            <AntDesign name="calendar" size={24} color="black" />
+
+            <Text className="mr-4">Ngày đến : </Text>
+          </View>
+          <Text className="w-8/12 ml-4">{formatDate(order.date)}</Text>
+        </View>
+        <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
+          <View className="flex-row justify-between  items-center  w-4/12">
+            <AntDesign name="clockcircleo" size={24} color="black" />
+
+            <Text className="mr-4">Giờ đến : </Text>
+          </View>
+          <Text className="w-8/12 ml-4">{order.selectedHour}</Text>
+        </View>
+      </View>
+      <View
+        style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+      ></View>
+      {/* Tinh trang don hang  */}
+      <View
+        style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+      ></View>
+      <View style={{ margin: 15, height: 80 }}>
+        <Text className="py-4 text-lg font-medium">Tình trạng đơn hàng</Text>
+        <View className="flex-row justify-between">
+          <Text className="text-lg">Order Status: {order.status}</Text>
+          <TouchableOpacity>
+            <Entypo name="pencil" size={24} color="green" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View
+        style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+      ></View>
+
+      {/* THONG TIN KHACH HANG  */}
+      <View style={{ margin: 15 }}>
+        <Text className="font-medium text-lg py-2">Thông tin khách hàng</Text>
+        <View className="flex-row p-5  items-center">
+          <View className="flex-row items-center w-2/4 justify-start">
+            <FontAwesome5 name="user-circle" size={24} color="black" />
+            <Text className="ml-4">Tên liên lạc</Text>
+          </View>
+          <Text className="w-2/4">{users[order.user]?.name}</Text>
+        </View>
+        <View className="flex-row p-5  items-center">
+          <View className="flex-row items-center w-2/4 justify-start">
+            <Feather name="phone" size={24} color="black" />
+
+            <Text className="ml-4">Số điện thoại</Text>
+          </View>
+          <Text className="w-2/4">{users[order.user]?.mobileNo}</Text>
+        </View>
+        <View className="flex-row p-5  items-center">
+          <View className="flex-row items-center w-2/4 justify-start">
+            <FontAwesome name="envelope" size={24} color="black" />
+            <Text className="ml-4">Email</Text>
+          </View>
+          <Text className="w-2/4">{users[order.user]?.email}</Text>
+        </View>
+      </View>
+      <View
+        style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+      ></View>
+
+      {/* GHI CHU  */}
+      <View style={{ margin: 15, height: 80 }}>
+        <View className="flex-row p-5  items-center">
+          <View className="flex-row w-2/5 h-14 justify-around items-center ">
+            <Foundation name="clipboard-notes" size={24} color="black" />
+            <Text className="mr-14">Ghi chú</Text>
+          </View>
+          <View className="w-3/5 h-14">
+            <TextInput
+              placeholder={order.note}
+              className="ml-2 p-2 flex-1 rounded-xl border border-slate-200"
+              keyboardType="default"
+            />
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default DetailOrders;
+
+const styles = StyleSheet.create({
+  container: {
+    // margin: 15,
+    // backgroundColor: "#FFFFFF",
+    // height: 1000,
+    flex: 1,
+
+    backgroundColor: "#fff",
+  },
+  applyButton: {
+    backgroundColor: "red",
+    width: "90%",
+    marginTop: 20,
+    padding: 17,
+    borderRadius: 5,
+  },
+  applyButtonText: {
+    textAlign: "center",
+    color: "#fff",
+    fontSize: 17,
+    fontWeight: "bold",
+  },
+  popupContainer: {
+    backgroundColor: "white",
+    borderTopColor: "#ccc",
+    borderTopWidth: 1,
+    width: "100%",
+    height: 120,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
