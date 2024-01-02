@@ -77,6 +77,7 @@ export default function RestaurantDetail({ route }) {
           source={item.image}
           height={SIZES.height / 5.5}
           width={SIZES.width}
+          border={30}
         />
         <View style={styles.popupContainer}>
           <Text className="text-center font-bold text-lg">{item.name}</Text>
