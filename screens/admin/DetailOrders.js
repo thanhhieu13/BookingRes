@@ -3,12 +3,14 @@ import {
   Text,
   StyleSheet,
   Image,
-  Button,
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Modal,
 } from "react-native";
-import React from "react";
+import { CheckBox, Icon } from "react-native-elements";
+import { Button } from "@rneui/themed";
+import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -17,6 +19,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { API_URL } from "@env";
 
 const DetailOrders = () => {
   const route = useRoute();
@@ -31,6 +34,42 @@ const DetailOrders = () => {
 
     return new Date(dateString).toLocaleDateString("vi-VN", options);
   };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState(order.status);
+  const [localOrderStatus, setLocalOrderStatus] = useState(order.status);
+
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const updateStatus = () => {
+    fetch(`${API_URL}/api/orders/${order._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: selectedStatus }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Order updated successfully', data);
+        closeModal();
+
+        setLocalOrderStatus(selectedStatus);
+      
+      })
+      .catch(error => {
+        console.error('Error updating order:', error);
+
+      });
+  };
+  const statusOptions = ["Chờ xác nhận", "Đã tiếp nhận", "Hoàn thành", "Đã hủy"];
+
 
   return (
     <ScrollView style={styles.container}>
@@ -105,8 +144,8 @@ const DetailOrders = () => {
       <View style={{ margin: 15, height: 80 }}>
         <Text className="py-4 text-lg font-medium">Tình trạng đơn hàng</Text>
         <View className="flex-row justify-between">
-          <Text className="text-lg">Order Status: {order.status}</Text>
-          <TouchableOpacity>
+          <Text className="text-lg">Order Status: {localOrderStatus}</Text>
+          <TouchableOpacity onPress={openModal}>
             <Entypo name="pencil" size={24} color="green" />
           </TouchableOpacity>
         </View>
@@ -162,6 +201,47 @@ const DetailOrders = () => {
           </View>
         </View>
       </View>
+      <Modal visible={isModalVisible} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text className="text-xl font-bold p-4 text-center border-b-2 border-b-zinc-300">Edit Order Status</Text>
+            {statusOptions.map((option, index) => (
+              <CheckBox
+                key={index}
+                title={option}
+                textStyle={{ fontSize: 20, fontWeight: "600", color: "black" }}
+                containerStyle={{ backgroundColor: "#fff", borderColor: "#fff" }}
+                checkedIcon={
+                  <Icon
+                    name="check-box"
+                    type="material"
+                    color="#34DBA1"
+                    size={30}
+                    containerStyle={{ marginRight: 10 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Icon
+                    name="check-box-outline-blank"
+                    type="material"
+                    color="gray"
+                    size={30}
+                    containerStyle={{ marginRight: 10 }}
+                  />
+                }
+                checked={selectedStatus === option}
+                onPress={() => setSelectedStatus(option)}
+              />
+            ))}
+            <TouchableOpacity onPress={updateStatus} style={{ backgroundColor: '#22BFED', padding: 10, borderRadius: 5, alignItems: 'center', marginTop: 10 }}>
+              <Text style={{ color: '#ffffff', fontSize:17 }}>Update</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={closeModal} style={{ marginTop: 10 , backgroundColor:"#DB4C40", padding :10 , borderRadius:5 , alignItems:"center" }}>
+              <Text style={{ color: '#ffffff', fontSize:17 }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -198,5 +278,17 @@ const styles = StyleSheet.create({
     height: 120,
     justifyContent: "center",
     alignItems: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
   },
 });
