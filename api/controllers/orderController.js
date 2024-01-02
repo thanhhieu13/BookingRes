@@ -60,6 +60,7 @@ module.exports = {
             res.status(500).json({ message: 'Internal server error' });
         }
     },
+
     getAllOrders: async (req, res) => {
         try {
             const orders = await Order.find();
@@ -67,6 +68,30 @@ module.exports = {
         } catch (error) {
             console.error('Loi khi lay orders:', error);
             res.status(500).json({ message: 'loi mang' });
+        }
+    },
+
+    updateOrder: async (req, res) => {
+        try {
+          const { orderId } = req.params;
+          const updatedFields = req.body;
+    
+          const order = await Order.findById(orderId);
+    
+          if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+          }
+    
+          Object.keys(updatedFields).forEach((field) => {
+            order[field] = updatedFields[field];
+          });
+    
+          await order.save();
+    
+          res.status(200).json({ message: 'cập nhật thành công', order });
+        } catch (error) {
+          console.error('lỗi:', error);
+          res.status(500).json({ message: 'lỗi mạng' });
         }
     },
 };
