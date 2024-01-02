@@ -12,68 +12,71 @@ const Orders = () => {
   const [users, setUsers] = useState({});
   const [searchPhrase, setSearchPhrase] = useState("");
 
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/orders`);
+      const data = await response.json();
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/orders`);
-        const data = await response.json();
+      if (response.ok) {
+        setOrders(data.orders);
 
-        if (response.ok) {
-          setOrders(data.orders);
+        const restaurantIds = Array.from(
+          new Set(data.orders.map((order) => order.restaurant))
+        );
 
-          const restaurantIds = Array.from(
-            new Set(data.orders.map((order) => order.restaurant))
+        const restaurantPromises = restaurantIds.map(async (restaurantId) => {
+          const restaurantResponse = await fetch(
+            `${API_URL}/restaurants/${restaurantId}`
           );
+          const restaurantData = await restaurantResponse.json();
 
-          const restaurantPromises = restaurantIds.map(async (restaurantId) => {
-            const restaurantResponse = await fetch(
-              `${API_URL}/restaurants/${restaurantId}`
+          if (restaurantResponse.ok) {
+            setRestaurants((prevRestaurants) => ({
+              ...prevRestaurants,
+              [restaurantId]: restaurantData.restaurant,
+            }));
+          } else {
+            console.error(
+              "khong lay duoc id nha hang",
+              restaurantData.message
             );
-            const restaurantData = await restaurantResponse.json();
+          }
+        });
 
-            if (restaurantResponse.ok) {
-              setRestaurants((prevRestaurants) => ({
-                ...prevRestaurants,
-                [restaurantId]: restaurantData.restaurant,
-              }));
-            } else {
-              console.error(
-                "khong lay duoc id nha hang",
-                restaurantData.message
-              );
-            }
-          });
+        const userPromises = data.orders.map(async (order) => {
+          const userResponse = await fetch(
+            `${API_URL}/address/${order.user}`
+          );
+          const userData = await userResponse.json();
 
-          const userPromises = data.orders.map(async (order) => {
-            const userResponse = await fetch(
-              `${API_URL}/address/${order.user}`
-            );
-            const userData = await userResponse.json();
+          if (userResponse.ok) {
+            setUsers((prevUsers) => ({
+              ...prevUsers,
+              [order.user]: userData, // Store user data using user ID as key
+            }));
+          } else {
+            console.error("Error fetching user:", userData.message);
+          }
+        });
 
-            if (userResponse.ok) {
-              setUsers((prevUsers) => ({
-                ...prevUsers,
-                [order.user]: userData, // Store user data using user ID as key
-              }));
-            } else {
-              console.error("Error fetching user:", userData.message);
-            }
-          });
+        await Promise.all(userPromises);
 
-          await Promise.all(userPromises);
-
-          await Promise.all(restaurantPromises);
-        } else {
-          console.error("Error fetching orders:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching orders:", error);
+        await Promise.all(restaurantPromises);
+      } else {
+        console.error("Error fetching orders:", data.message);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
 
-    fetchOrders();
-  }, []);
+   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchOrders();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
 
 

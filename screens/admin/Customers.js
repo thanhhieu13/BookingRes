@@ -59,7 +59,7 @@ const Customers = () => {
       <View style={{ padding: 10 }}>
         {users.map((user) => (
           <View
-            key={user.id}
+            key={user._id}
             className="flex-row justify-between items-center mt-5"
           >
             <View className="flex-row items-center">
