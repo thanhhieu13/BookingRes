@@ -193,7 +193,7 @@ const LoginPage = ({ navigation }) => {
                     }}
                   >
                     <MaterialCommunityIcons
-                      name={obsecureText ? "eye-outline" : "eye-off-outline"}
+                      name={obsecureText ? "eye-off-outline" : "eye-outline"}
                       size={18}
                     />
                   </TouchableOpacity>
