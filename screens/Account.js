@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useContext, useState } from "react";
-import { View, Text, Pressable, StyleSheet, Alert, TouchableOpacity, ScrollView, Image } from "react-native";
+import { View, Text, Pressable, StyleSheet, Alert, TouchableOpacity, ScrollView, Image, Linking, Platform  } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { UserType } from "../UserContext";
@@ -44,6 +44,7 @@ const AccountScreen = () => {
         setAddress({ ...address, avatar: imageUri });
         await updateAddressData({ ...address, avatar: imageUri });
       }
+      
     } catch (error) {
       console.error("Error picking image:", error);
     }
@@ -172,7 +173,7 @@ const AccountScreen = () => {
             >
               <ProfileTile title={"Id khách hàng"} icon={"user"} font={3} />
               <ProfileTile title={"Tình trạng"} icon={"bar-chart"} font={3} />
-              <ProfileTile title={"Thay đổi mật khẩu"} icon={"lock"} />
+              <ProfileTile title={"Thay đổi mật khẩu"} icon={"lock"} onPress={()=>{navigation.navigate("ChangePassword")}} />
               <ProfileTile
                 title={"Lịch sử giao dịch"}
                 icon={"sticker-text-outline"}

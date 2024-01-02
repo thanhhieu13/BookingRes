@@ -1,4 +1,5 @@
-import { View, TextInput, TouchableOpacity, Text } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, TextInput, TouchableOpacity, Text, Alert } from "react-native";
 import React from "react";
 import HomeScreen from "../screens/Home";
 import Statistical from "../screens/admin/Statistical";
@@ -13,19 +14,52 @@ import AccountScreen from "../screens/Account";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeAdmin from "../screens/admin/HomeAdmin";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import Customers from "../screens/admin/Customers";
 import { useNavigation } from "@react-navigation/native";
 import Orders from "../screens/admin/Orders";
 import DetailOrders from "../screens/admin/DetailOrders";
+
 const Drawer = createDrawerNavigator();
+
+const CustomDrawerContent = (props) => {
+  const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("authToken");
+      navigation.replace("Login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      Alert.alert("Logout Error", "An error occurred while logging out.");
+    }
+  };
+
+  return (
+    <DrawerContentScrollView {...props}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        {/* Your app's logo or header */}
+      </View>
+      <DrawerItemList {...props} />
+      <TouchableOpacity onPress={handleLogout} style={{ padding: 10, borderTopWidth: 1, borderTopColor: "#ccc" }}>
+        <View style={{ flexDirection: "row", alignItems: "center", marginLeft:10 , marginTop : 10}}>
+          <AntDesign name="logout" size={24} color="black" />
+          <Text style={{ marginLeft: 10 }}>Logout</Text>
+        </View>
+      </TouchableOpacity>
+    </DrawerContentScrollView>
+  );
+};
+
 
 const AdminTabNavigator = () => {
   const navigation = useNavigation();
 
   return (
 
-      <Drawer.Navigator screenOptions={{ headerShown: true }}>
+      <Drawer.Navigator screenOptions={{ headerShown: true }}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      >
         <Drawer.Screen
           name="Dashboard"
           component={HomeAdmin}

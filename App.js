@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React, { useState, useCallback, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import StackNavigator from "./navigation/StackNavigator";
@@ -29,11 +29,11 @@ export default function App() {
   }
   return (
     <>
-     <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <UserProvider>
           <StackNavigator />
         </UserProvider>
-        </GestureHandlerRootView>
+      </GestureHandlerRootView>
     </>
   );
 }
