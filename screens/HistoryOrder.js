@@ -229,7 +229,7 @@ const HistoryOrder = () => {
               </View>
             </View>
             <View className="flex-row justify-between mt-2">
-              <Text className="text-base">Đã hủy</Text>
+              <Text className="text-base">{order.status}</Text>
               <Text
                 style={{
                   backgroundColor: "red",

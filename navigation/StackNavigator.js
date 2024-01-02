@@ -37,6 +37,7 @@ import Success from "../screens/Success";
 import Privacy from "../screens/Privacy";
 import HistoryOrder from "../screens/HistoryOrder";
 import BottomSheetTest from "../screens/BottomSheetTest";
+import ChangePassword from "../screens/ChangePassword";
 
 
 
@@ -145,6 +146,19 @@ const StackNavigator = () => {
           component={OrderScreen}
           options={{
             title: "Thông tin giao dịch",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ChangePassword"
+          component={ChangePassword}
+          options={{
+            title: "Thay đổi mật khẩu",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
