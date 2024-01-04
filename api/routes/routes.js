@@ -42,7 +42,7 @@ router.post("/categories", CategoryController.createCategory);
 router.get("/categories", CategoryController.getAllCategories);
 
 // Map 
-router.get("/nearby-restaurants/:userId", GeospatialController.getNearbyRestaurants);
+router.get("/nearby-restaurants", GeospatialController.getNearbyRestaurants);
 
 // Favorite 
 router.post('/addToFavorites', UserController.addToFavorites);
