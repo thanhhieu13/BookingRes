@@ -13,10 +13,10 @@ const App = () => {
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState('');
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-
+console.log(selectedRestaurant);
   const handleOrderNow = () => {
     if (selectedRestaurant) {
-      navigation.navigate('Restaurant', { restaurantData: selectedRestaurant });
+      navigation.navigate('Restaurant', { ...selectedRestaurant });
     }
   };
 
@@ -63,7 +63,8 @@ const App = () => {
 
       if (userLocation) {
         const response = await axios.get(
-          `${API_URL}/nearby-restaurants`, // Use API_URL variable from environment
+          // `${API_URL}/nearby-restaurants`, 
+          `http://localhost:8000/nearby-restaurants`,// Use API_URL variable from environment
           {
             params: {
               latitude: userLocation.latitude,
