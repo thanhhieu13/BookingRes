@@ -22,7 +22,7 @@ module.exports = {
                             type: 'Point',
                             coordinates: userLocation,
                         },
-                        $maxDistance: 10000, // Đơn vị tính là mét, bạn có thể điều chỉnh theo nhu cầu
+                        $maxDistance: 2000, // Đơn vị tính là mét, bạn có thể điều chỉnh theo nhu cầu
                     },
                 },
             }).exec();
