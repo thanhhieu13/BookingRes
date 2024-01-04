@@ -17,6 +17,7 @@ const COLORS = {
 
   // offwhite: "#F3F4F8",
   offwhite: "#FFFFFF",
+  error: "red",
   white: "#FFFFFF",
   black: "#000000",
   red: "#e81e4d",
