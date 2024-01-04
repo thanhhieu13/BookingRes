@@ -49,6 +49,7 @@ router.get("/intersect-restaurants", GeospatialController.getIntersectbyRestaura
 
 
 
+router.get('/restaurants-in-city', GeospatialController.getRestaurantsInCity);
 
 // Favorite 
 router.post('/addToFavorites', UserController.addToFavorites);
