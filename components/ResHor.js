@@ -5,8 +5,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { API_URL } from "@env";
 import RestaurantUI from "./ResHorUI";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const ResHor = ({ route }) => {
+  const navigation = useNavigation();
+
   const [restaurantData, setRestaurantData] = useState(null);
 
   console.log(API_URL)
@@ -28,6 +31,20 @@ const ResHor = ({ route }) => {
             // Lưu dữ liệu nhà hàng vào state
             setRestaurantData(data);
             console.log("Restaurant Data:", data);
+            console.log(data.length)
+
+            navigation.setOptions({
+              headerTitle: () => (
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{ fontWeight: "bold", fontSize: 18, color: "white" }}
+                >
+                  {`Kết quả: ${data.length}`}
+                </Text>
+              ),
+            });
+
           } else {
             console.error("Invalid or empty data returned from the server");
           }
@@ -40,7 +57,8 @@ const ResHor = ({ route }) => {
     };
   
     fetchData();
-  }, [route.params]);
+   
+  }, [route.params, navigation]);
   
   // console.log(restaurantData);
   

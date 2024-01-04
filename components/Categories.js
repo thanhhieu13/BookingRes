@@ -47,7 +47,7 @@ console.log(categories)
               <TouchableOpacity
                 onPress={() => {
                   setActiveCategory(category._id);
-                  console.log("Selected Category ID:", category._id); // Thêm console log ở đây
+                  console.log("Selected Category ID:", category._id); 
                   navigation.navigate('Result', { selectedCategory: category._id });
                 }}
                 className={"p-1 rounded-full shadow bg-gray-400" + btnClass}

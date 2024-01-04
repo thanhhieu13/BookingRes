@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useLayoutEffect, useState, useEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect, useContext } from "react";
 import Categories from "../components/Categories";
 import FeaturedRow from "../components/featureRow";
 import * as Icon from "react-native-feather";
@@ -20,8 +20,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { NoticeBar } from "@nutui/nutui-react-native";
 import { API_URL } from "@env";
+import { UserType } from "../UserContext";
 
 export default function HomeScreen({ navigation, route }) {
+  const { user } = useContext(UserType);
   const text =
     "Chào mừng bạn đến với ứng dụng đặt bàn nhà hàng Eat Eat. Ở đây có mọi thứ mà bạn mong muốn";
   // const [selectedCity, setSelectedCity] = useState(
@@ -111,7 +113,9 @@ export default function HomeScreen({ navigation, route }) {
         }}
       >
         {/* categories */}
+        {/* <Text className="text-xl pl-4 mt-2">Xin chào <Text className="text-3xl font-bold">{user?.name}</Text></Text> */}
         <Text className="font-bold text-xl pl-4 mt-2">Danh mục</Text>
+        {/* <Text onPress={()=>{navigation.navigate('OrderSuccess')}}>helo</Text> */}
         <Categories />
 
         <Swiper

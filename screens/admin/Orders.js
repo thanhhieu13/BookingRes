@@ -100,7 +100,7 @@ const Orders = () => {
       orderStatus.includes(searchTerm) || restaurantName.includes(searchTerm) || customerName.includes(searchTerm)
     );
   });
-  console.log(users)
+  console.log("Cac don hang", orders)
 
   const navigation = useNavigation();
 const route = useRoute();
