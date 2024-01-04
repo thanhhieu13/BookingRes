@@ -1,8 +1,15 @@
+const fs = require('fs');
+const path = require('path');
 const User = require("../models/user");
 const Restaurant = require("../models/restaurant");
 
 Restaurant.collection.createIndex({ location: '2dsphere' });
+
+const cityPolygonsPath = path.resolve(__dirname, 'cityPolygons.json');
+const cityPolygons = JSON.parse(fs.readFileSync(cityPolygonsPath, 'utf8'));
+
 module.exports = {
+  
     getNearbyRestaurants: async (req, res) => {
         try {
             const { latitude, longitude } = req.query;
@@ -31,7 +38,6 @@ module.exports = {
         }
     },
 
-
     getIntersectbyRestaurants: async (req, res) => {
         try {
             const routeCoordinates = [
@@ -57,5 +63,50 @@ module.exports = {
             console.error(error);
             res.status(500).json({ error: 'Internal server error' });
         }
-    }
+    },
+
+    getRestaurantsInCity: async (req, res) => {
+      try {
+        const { cityName } = req.query;
+        if (!cityName) {
+          return res.status(400).json({ error: 'City name is required for the search.' });
+        }
+    
+        const cityPolygon = cityPolygons[cityName];
+    
+        if (!cityPolygon) {
+          return res.status(400).json({ error: 'Invalid city name.' });
+        }
+    
+        // Use MongoDB's $geoWithin to find restaurants within the specified city
+        const restaurantsInCity = await Restaurant.find({
+          location: {
+            $geoWithin: {
+              $geometry: cityPolygon,
+            },
+          },
+        });
+    
+        // Extract relevant information for each restaurant
+        const simplifiedRestaurants = restaurantsInCity.map(restaurant => ({
+          location: restaurant.location,
+          _id: restaurant._id,
+          name: restaurant.name,
+          description: restaurant.description,
+          image: restaurant.image,
+          address: restaurant.address,
+          rating: restaurant.rating,
+          type: restaurant.type,
+          menu: restaurant.menu,
+          openingHours: restaurant.openingHours,
+          bookingHours: restaurant.bookingHours,
+        }));
+    
+        res.json(simplifiedRestaurants);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    },
+    
 };
