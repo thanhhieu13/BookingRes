@@ -17,6 +17,7 @@ import * as Icon from "react-native-feather";
 import AccountScreen from "../screens/Account";
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MapCenter from "../screens/MapCenter";
 
 const Tab = createBottomTabNavigator();
 
@@ -58,6 +59,21 @@ const BottomTabNavigator = () => {
                 component={MapDemo}
                 options={{
                     tabBarLabel: "MapDemo",
+                    tabBarLabelStyle: { color: "#008E97" },
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) =>
+                        focused ? (
+                            <Entypo name="home" size={24} color="#008E97" />
+                        ) : (
+                            <AntDesign name="home" size={24} color="black" />
+                        ),
+                }}
+            />
+             <Tab.Screen
+                name="MapCenter"
+                component={MapCenter}
+                options={{
+                    tabBarLabel: "MapCenter",
                     tabBarLabelStyle: { color: "#008E97" },
                     headerShown: false,
                     tabBarIcon: ({ focused }) =>
