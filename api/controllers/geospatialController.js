@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const Fuse = require('fuse.js');
 const User = require("../models/user");
 const Restaurant = require("../models/restaurant");
 
@@ -69,14 +70,38 @@ module.exports = {
       try {
         const { cityName } = req.query;
         if (!cityName) {
-          return res.status(400).json({ error: 'City name is required for the search.' });
+          return res.status(400).json({ error: 'Need name of city or district to required for the search.' });
+        }
+
+        const normalizedCityName = cityName.toLowerCase().replace(/\s+/g, '');
+
+        const fuseOptions = {
+          shouldSort: true,
+          threshold: 0.4,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['cityName'],
+        };
+    
+        const fuse = new Fuse(Object.keys(cityPolygons), fuseOptions);
+        const matchingCities = fuse.search(normalizedCityName);
+    
+        if (matchingCities.length === 0) {
+          return res.status(400).json({ error: 'Invalid name.' });
         }
     
-        const cityPolygon = cityPolygons[cityName];
+        // Chọn thành phố đầu tiên từ kết quả tìm kiếm
+        const selectedCity = matchingCities[0].item;
     
-        if (!cityPolygon) {
-          return res.status(400).json({ error: 'Invalid city name.' });
-        }
+        const cityPolygon = cityPolygons[selectedCity];
+    
+        // const cityPolygon = cityPolygons[cityName];
+    
+        // if (!cityPolygon) {
+        //   return res.status(400).json({ error: 'Invalid name.' });
+        // }
     
         const restaurantsInCity = await Restaurant.find({
           location: {
@@ -106,5 +131,31 @@ module.exports = {
         res.status(500).json({ error: 'Internal server error' });
       }
     },
+    
+    getRestaurantsInCircle: async (req, res) => {
+      try {
+          const { latitude, longitude, radius } = req.query;
+
+          if (!latitude || !longitude || !radius) {
+              return res.status(400).json({ error: 'Latitude, longitude, and radius are required for the search.' });
+          }
+
+          const center = [parseFloat(longitude), parseFloat(latitude)];
+          const maxDistance = parseFloat(radius) / 6371; 
+
+          const restaurantsInCircle = await Restaurant.find({
+              location: {
+                  $geoWithin: {
+                      $centerSphere: [center, maxDistance],
+                  },
+              },
+          });
+
+          res.json({ restaurantsInCircle });
+      } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Internal server error' });
+      }
+  },
     
 };
