@@ -22,7 +22,6 @@ import { NoticeBar } from "@nutui/nutui-react-native";
 import { API_URL } from "@env";
 import { UserType } from "../UserContext";
 
-
 export default function HomeScreen({ navigation, route }) {
   const { user } = useContext(UserType);
   const text =
@@ -35,11 +34,9 @@ export default function HomeScreen({ navigation, route }) {
   );
   const [featuredData, setFeaturedData] = useState([]);
 
-
-
   // const { searchKeyword } = route.params;
 
-// console.log(API_URL)
+  // console.log(API_URL)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,7 +101,6 @@ export default function HomeScreen({ navigation, route }) {
             <Icon.Search height="25" width="25" stroke="gray" />
             <Text style={{ marginLeft: 5, flex: 1 }}>Tìm nhà hàng</Text>
           </TouchableOpacity>
-
         </View>
       </TouchableOpacity>
 
@@ -123,7 +119,7 @@ export default function HomeScreen({ navigation, route }) {
         <Categories />
 
         <Swiper
-          style={{ marginTop: 35 }}
+          style={{ marginTop: 35,  }}
           width="100%"
           height={150}
           paginationColor="#426543"
@@ -182,7 +178,7 @@ export default function HomeScreen({ navigation, route }) {
             return (
               <FeaturedRow
                 key={index}
-                title={item.name} 
+                title={item.name}
                 restaurants={item.restaurants}
                 description={item.description}
               />
