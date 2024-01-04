@@ -86,9 +86,12 @@ const Customers = () => {
               >
                 Edit
               </Button>
-              <Button size="lg" color="#DB4C3F" radius={"md"}>
+              {/* <Button size="lg" color="#DB4C3F" radius={"md"}>
                 Delete
-              </Button>
+              </Button> */}
+              <Text onPress={handleDeleteUser} style={{padding :10, backgroundColor :"#DB4C3F", borderRadius: 10}}>
+                Delete
+              </Text>
             </View>
           </View>
         ))}
