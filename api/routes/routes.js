@@ -50,7 +50,6 @@ router.get("/intersect-restaurants", GeospatialController.getIntersectbyRestaura
 
 
 
-
 // Favorite 
 router.post('/addToFavorites', UserController.addToFavorites);
 router.post('/removeFromFavorites', UserController.removeFromFavorites);

@@ -20,7 +20,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { API_URL } from "@env";
-import { UserType } from '../UserContext';
+import { UserType } from "../UserContext";
 
 const OrderScreen = ({ navigation }) => {
   const { params } = useRoute();
@@ -32,9 +32,10 @@ const OrderScreen = ({ navigation }) => {
     val2: 0,
   });
 
-  console.log(restaurant.bookingHours)
+  console.log(restaurant.bookingHours);
 
   const [selectedTime, setSelectedTime] = useState("");
+  const [orderNote, setOrderNote] = useState("");
 
   const handleTimeChange = (newTime) => {
     setSelectedTime(newTime);
@@ -44,33 +45,27 @@ const OrderScreen = ({ navigation }) => {
   const currentHours = currentTime.getHours();
   const currentMinutes = currentTime.getMinutes();
   const currentTotalMinutes = currentHours * 60 + currentMinutes;
-  
 
   const bookingHours = restaurant.bookingHours;
-  
 
   let closestTime = null;
   let closestTimeDiff = Infinity;
-  
-  bookingHours.forEach(bookingTime => {
 
-    const [hour, minute] = bookingTime.split(':');
+  bookingHours.forEach((bookingTime) => {
+    const [hour, minute] = bookingTime.split(":");
     const bookingTotalMinutes = parseInt(hour) * 60 + parseInt(minute);
-  
 
     if (bookingTotalMinutes > currentTotalMinutes) {
-  
       const timeDiff = bookingTotalMinutes - currentTotalMinutes;
- 
+
       if (timeDiff < closestTimeDiff) {
         closestTimeDiff = timeDiff;
         closestTime = bookingTime;
       }
     }
   });
-  
+
   console.log("Giờ gần nhất là:", closestTime);
-  
 
   const { user } = useContext(UserType);
 
@@ -83,7 +78,23 @@ const OrderScreen = ({ navigation }) => {
   const [nearestTime, setNearestTime] = useState("");
 
   console.log("User:", user);
-console.log("Restaurant:", restaurant);
+  console.log("Restaurant:", restaurant);
+
+  const handleAdultsChange = (value) => {
+    console.log("Adults value changed:", value);
+    setInputState((prevState) => ({
+      ...prevState,
+      val1: value,
+    }));
+  };
+  
+  const handleChildrenChange = (value) => {
+    console.log("Children value changed:", value);
+    setInputState1((prevState) => ({
+      ...prevState,
+      val2: value,
+    }));
+  };
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -100,7 +111,6 @@ console.log("Restaurant:", restaurant);
 
   const submitOrder = async () => {
     try {
-
       if (!selectedDate) {
         console.error("Selected date is null");
         return;
@@ -110,16 +120,15 @@ console.log("Restaurant:", restaurant);
         console.error("User or restaurant not found");
         return;
       }
-  
 
       const orderData = {
-        userId: user._id, 
+        userId: user._id,
         restaurantId: restaurant._id,
         adults: inputState.val1,
         children: inputState1.val2,
-        date: selectedDate.toISOString(), 
+        date: selectedDate.toISOString(),
         selectedHour: selectedTime || closestTime,
-        note: "Your order note here", 
+        note: orderNote,
       };
 
       const response = await fetch(`${API_URL}/api/orders`, {
@@ -129,7 +138,7 @@ console.log("Restaurant:", restaurant);
         },
         body: JSON.stringify(orderData),
       });
-  
+
       if (response.ok) {
         // Order submitted successfully
         const responseData = await response.json();
@@ -146,10 +155,6 @@ console.log("Restaurant:", restaurant);
       console.error("Error submitting order:", error);
     }
   };
-  
-  
-  
-
 
   return (
     <>
@@ -157,8 +162,8 @@ console.log("Restaurant:", restaurant);
         {/* THONG TIN DON HANG  */}
         <View style={{ margin: 15 }}>
           <Text className="font-medium text-lg py-4">Đặt chỗ đến</Text>
-          <Text>{user?.name}</Text>
-         
+          {/* <Text>{user?.name}</Text> */}
+
           <View className="border p-2 flex-row justify-between rounded-xl">
             <Image
               source={{ uri: restaurant.image }}
@@ -178,14 +183,24 @@ console.log("Restaurant:", restaurant);
             <FontAwesome5 name="user" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
               <Text className="ml-0">Số người lớn :</Text>
-              <InputNumber modelValue={inputState.val1} min="0" />
+              {/* <InputNumber modelValue={inputState.val1} min="0" /> */}
+              <InputNumber
+                modelValue={inputState.val1}
+                min="0"
+                onChangeFuc={handleAdultsChange}
+              />
             </View>
           </View>
           <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
             <MaterialIcons name="child-care" size={24} color="black" />
             <View className="flex-row justify-around  items-center  w-9/12">
               <Text className="mr-4">Số trẻ em :</Text>
-              <InputNumber modelValue={inputState1.val2} min="0" />
+              {/* <InputNumber modelValue={inputState1.val2} min="0" /> */}
+              <InputNumber
+                modelValue={inputState1.val2}
+                min="0"
+                onChangeFuc={handleChildrenChange}
+              />
             </View>
           </View>
           <View className="flex-row border-b p-4 border-b-zinc-300 items-center">
@@ -218,11 +233,19 @@ console.log("Restaurant:", restaurant);
             <AntDesign name="clockcircleo" size={24} color="black" />
             <View className="flex-row justify-around  items-center w-9/12">
               <Text className="mr-14">Giờ đến :</Text>
-              <TouchableOpacity className="flex-row items-center"
-              onPress={() => {
-                // Truyền dữ liệu của nhà hàng (restaurant) qua trang Order
-                navigation.navigate("BookingHours", {restaurant, selectedDate, bookingHours, closestTime, onTimeChange: handleTimeChange,});
-              }}>
+              <TouchableOpacity
+                className="flex-row items-center"
+                onPress={() => {
+                  // Truyền dữ liệu của nhà hàng (restaurant) qua trang Order
+                  navigation.navigate("BookingHours", {
+                    restaurant,
+                    selectedDate,
+                    bookingHours,
+                    closestTime,
+                    onTimeChange: handleTimeChange,
+                  });
+                }}
+              >
                 <Text className="relative">{selectedTime || closestTime}</Text>
                 <MaterialIcons
                   style={{ position: "absolute", right: -100 }}
@@ -279,6 +302,7 @@ console.log("Restaurant:", restaurant);
                 placeholder="nhập ghi chú"
                 className="ml-2 p-2 flex-1 rounded-xl border border-slate-200"
                 keyboardType="default"
+                onChangeText={(text) => setOrderNote(text)}
               />
             </View>
           </View>
@@ -292,12 +316,7 @@ console.log("Restaurant:", restaurant);
         />
       </ScrollView>
       <View style={styles.popupContainer}>
-        <TouchableOpacity
-          style={styles.applyButton}
-
-          onPress={submitOrder} 
-         
-        >
+        <TouchableOpacity style={styles.applyButton} onPress={submitOrder}>
           <Text style={styles.applyButtonText}>Tiếp tục</Text>
         </TouchableOpacity>
       </View>
