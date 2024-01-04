@@ -22,6 +22,7 @@ import { NoticeBar } from "@nutui/nutui-react-native";
 import { API_URL } from "@env";
 import { UserType } from "../UserContext";
 
+
 export default function HomeScreen({ navigation, route }) {
   const { user } = useContext(UserType);
   const text =
@@ -34,7 +35,9 @@ export default function HomeScreen({ navigation, route }) {
   );
   const [featuredData, setFeaturedData] = useState([]);
 
-  
+
+
+  // const { searchKeyword } = route.params;
 
 // console.log(API_URL)
 
@@ -115,6 +118,7 @@ export default function HomeScreen({ navigation, route }) {
         {/* categories */}
         {/* <Text className="text-xl pl-4 mt-2">Xin chào <Text className="text-3xl font-bold">{user?.name}</Text></Text> */}
         <Text className="font-bold text-xl pl-4 mt-2">Danh mục</Text>
+        {/* <Text>Search Keyword: {searchKeyword}</Text> */}
         {/* <Text onPress={()=>{navigation.navigate('OrderSuccess')}}>helo</Text> */}
         <Categories />
 

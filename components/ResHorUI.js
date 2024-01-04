@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -16,7 +16,7 @@ const RestaurantUI = ({ restaurantData}) => {
   
 
   return (
-    <View>
+    <ScrollView>
       {restaurantData.map((restaurant) => (
         <TouchableOpacity
           key={restaurant._id} // Assuming each restaurant has a unique ID
@@ -66,7 +66,7 @@ const RestaurantUI = ({ restaurantData}) => {
           </View>
         </TouchableOpacity>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

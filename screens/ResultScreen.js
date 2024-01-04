@@ -7,7 +7,7 @@ const ResultScreen = ({navigation,route}) => {
 
   return (
     <View>
-       <ResHor route={route} />
+       <ResHor route={route}  />
     </View>
   );
 };

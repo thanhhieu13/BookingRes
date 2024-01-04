@@ -1,37 +1,28 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "@env";
 import RestaurantUI from "./ResHorUI";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { Text } from "react-native";
 
 const ResHor = ({ route }) => {
   const navigation = useNavigation();
-
   const [restaurantData, setRestaurantData] = useState(null);
-
-  console.log(API_URL)
-  
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Lấy giá trị selectedCategory từ params của route
-        const { selectedCategory } = route.params || {};
-  
+        const { selectedCategory, searchKeyword: routeSearchKeyword } = route.params || {};
+        const usedSearchKeyword = routeSearchKeyword || searchKeyword;
+
         if (selectedCategory) {
           const response = await fetch(
             `${API_URL}/restaurants/categories/${selectedCategory}`
           );
           const data = await response.json();
-  
+
           if (Array.isArray(data) && data.length > 0) {
-            // Lưu dữ liệu nhà hàng vào state
             setRestaurantData(data);
-            console.log("Restaurant Data:", data);
-            console.log(data.length)
 
             navigation.setOptions({
               headerTitle: () => (
@@ -44,30 +35,45 @@ const ResHor = ({ route }) => {
                 </Text>
               ),
             });
+          } else {
+            console.error("Invalid or empty data returned from the server");
+          }
+        } else if (usedSearchKeyword) {
+          const response = await fetch(
+            `${API_URL}/restaurants-in-city?cityName=${usedSearchKeyword}`
+          );
 
+          const data = await response.json();
+
+          if (Array.isArray(data) && data.length > 0) {
+            setRestaurantData(data);
+
+            navigation.setOptions({
+              headerTitle: () => (
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{ fontWeight: "bold", fontSize: 18, color: "white" }}
+                >
+                  {`${data.length} nhà hàng cho tìm kiếm ${usedSearchKeyword}`}
+                </Text>
+              ),
+            });
           } else {
             console.error("Invalid or empty data returned from the server");
           }
         } else {
-          console.error("selectedCategory is undefined or null");
+          console.error("Both selectedCategory and searchResults are undefined");
         }
       } catch (error) {
         console.error("Error fetching restaurant data:", error);
       }
     };
-  
+
     fetchData();
-   
-  }, [route.params, navigation]);
-  
-  // console.log(restaurantData);
-  
-
-
-  // const defaultImage = "https://pastaxi-manager.onepas.vn/Photo/ShowPhotoBannerVsSlide?Id=5AC03585-1C3B-4F28-B708-01337E3904E9&2023-12-18%2016:12:30"
+  }, [route.params, route.params?.selectedCategory, searchKeyword, navigation]);
 
   return <RestaurantUI restaurantData={restaurantData} />;
-
 };
 
 export default ResHor;

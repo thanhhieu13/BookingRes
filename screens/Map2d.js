@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Image, SafeAreaView, TextInput, Button, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Image, SafeAreaView, TextInput, Button, Text, TouchableOpacity, FlatList, StyleSheet, Keyboard } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import MapView, { Marker } from 'react-native-maps';
@@ -9,9 +9,12 @@ import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
 import { useNavigation } from '@react-navigation/native';
 
 const App = () => {
+  const navigation = useNavigation();
+  
   const [userLocation, setUserLocation] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState('');
+
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -52,7 +55,7 @@ const App = () => {
 
       if (userLocation) {
         const response = await axios.get(
-          'http://localhost:8000/nearby-restaurants',
+          `${API_URL}/nearby-restaurants`,
           {
             params: {
               latitude: userLocation.latitude,
@@ -126,8 +129,24 @@ const App = () => {
           </Text>
         )}
       />
+
     </SafeAreaView>
   );
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    padding: 10,
+    width: 300,
+  },
+});
