@@ -43,13 +43,17 @@ router.get("/categories", CategoryController.getAllCategories);
 
 // Map 
 router.get("/nearby-restaurants", GeospatialController.getNearbyRestaurants);
+router.get("/intersect-restaurants", GeospatialController.getIntersectbyRestaurants);
+
+
+
+
+
 
 // Favorite 
 router.post('/addToFavorites', UserController.addToFavorites);
 router.post('/removeFromFavorites', UserController.removeFromFavorites);
 router.get('/:userId/favoriteRestaurants', UserController.getFavoriteRestaurants);
-
-
 
 // admin routes
 router.get("/admin", AdminController.getAllUsers);

@@ -7,6 +7,7 @@ import React from "react";
 import HomeScreen from "../screens/Home";
 import Map from "../screens/Map";
 import Map2d from "../screens/Map2d";
+import MapDemo from "../screens/MapDemo";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -42,6 +43,21 @@ const BottomTabNavigator = () => {
                 component={Map2d}
                 options={{
                     tabBarLabel: "Map2d",
+                    tabBarLabelStyle: { color: "#008E97" },
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) =>
+                        focused ? (
+                            <Entypo name="home" size={24} color="#008E97" />
+                        ) : (
+                            <AntDesign name="home" size={24} color="black" />
+                        ),
+                }}
+            />
+             <Tab.Screen
+                name="MapDemo"
+                component={MapDemo}
+                options={{
+                    tabBarLabel: "MapDemo",
                     tabBarLabelStyle: { color: "#008E97" },
                     headerShown: false,
                     tabBarIcon: ({ focused }) =>
