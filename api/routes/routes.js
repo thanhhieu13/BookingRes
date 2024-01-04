@@ -44,12 +44,7 @@ router.get("/categories", CategoryController.getAllCategories);
 // Map 
 router.get("/nearby-restaurants", GeospatialController.getNearbyRestaurants);
 router.get("/intersect-restaurants", GeospatialController.getIntersectbyRestaurants);
-
-
-
-
-
-router.get('/restaurants-in-city', GeospatialController.getRestaurantsInCity);
+router.get('/restaurants-in-city', GeospatialController.getRestaurantsByPolygon);
 
 // Favorite 
 router.post('/addToFavorites', UserController.addToFavorites);
