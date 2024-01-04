@@ -65,7 +65,7 @@ module.exports = {
         }
     },
 
-    getRestaurantsInCity: async (req, res) => {
+    getRestaurantsByPolygon: async (req, res) => {
       try {
         const { cityName } = req.query;
         if (!cityName) {
@@ -78,7 +78,6 @@ module.exports = {
           return res.status(400).json({ error: 'Invalid city name.' });
         }
     
-        // Use MongoDB's $geoWithin to find restaurants within the specified city
         const restaurantsInCity = await Restaurant.find({
           location: {
             $geoWithin: {
@@ -87,7 +86,6 @@ module.exports = {
           },
         });
     
-        // Extract relevant information for each restaurant
         const simplifiedRestaurants = restaurantsInCity.map(restaurant => ({
           location: restaurant.location,
           _id: restaurant._id,
