@@ -136,31 +136,7 @@ module.exports = {
     }
   },
 
-  //   getRestaurantsInCircle: async (req, res) => {
-  //     try {
-  //         const { latitude, longitude, radius } = req.query;
-
-  //         if (!latitude || !longitude || !radius) {
-  //             return res.status(400).json({ error: 'Latitude, longitude, and radius are required for the search.' });
-  //         }
-
-  //         const center = [parseFloat(longitude), parseFloat(latitude)];
-  //         const maxDistance = parseFloat(radius) / 6371;
-
-  //         const restaurantsInCircle = await Restaurant.find({
-  //             location: {
-  //                 $geoWithin: {
-  //                     $centerSphere: [center, maxDistance],
-  //                 },
-  //             },
-  //         });
-
-  //         res.json({ restaurantsInCircle });
-  //     } catch (error) {
-  //         console.error(error);
-  //         res.status(500).json({ error: 'Internal server error' });
-  //     }
-  // },
+ 
   getRestaurantsInCircle: async (req, res) => {
     try {
       const { latitude, longitude, radius } = req.query;
