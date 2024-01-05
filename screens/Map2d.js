@@ -56,6 +56,7 @@ const App = () => {
       if (userLocation) {
         const response = await axios.get(
           `${API_URL}/nearby-restaurants`,
+          // `http://localhost:8000/nearby-restaurants`,
           {
             params: {
               latitude: userLocation.latitude,

@@ -9,7 +9,6 @@ import {
   Modal,
 } from "react-native";
 import { CheckBox, Icon } from "react-native-elements";
-import { Button } from "@rneui/themed";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";

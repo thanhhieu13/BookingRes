@@ -17,7 +17,7 @@ module.exports = {
                 return res.status(400).json({ error: 'Latitude and longitude are required for the search.' });
             }
             const userCoordinates = [parseFloat(longitude), parseFloat(latitude)];
-
+            console.time('getNearbyRestaurants'); 
             // Use MongoDB's $nearSphere to find restaurants near the user's location
             const nearbyRestaurants = await Restaurant.find({
                 location: {
@@ -26,11 +26,11 @@ module.exports = {
                             type: 'Point',
                             coordinates: userCoordinates,
                         },
-                        $maxDistance: 2300, // 5km
+                        $maxDistance: 2000, // 5km
                     },
                 },
             });
-
+            console.timeEnd('getNearbyRestaurants');
             res.json({ nearbyRestaurants });
         } catch (error) {
             console.error(error);

@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Avatar } from "@rneui/themed";
-import { Button } from "@rneui/themed";
+// import { Avatar } from "@rneui/themed";
+// import { Button } from "@rneui/themed";
 import axios from "axios";
 import { API_URL } from "@env";
 
@@ -63,11 +63,11 @@ const Customers = () => {
             className="flex-row justify-between items-center mt-5"
           >
             <View className="flex-row items-center">
-              <Avatar
+              {/* <Avatar
                 size={60}
                 rounded
                 source={{ uri: user.avatar || AVATAR_DEFAULT }}
-              />
+              /> */}
               <View className="ml-3">
                 <Text>{user.name}</Text>
                 <Text className="text-[#ABABAB] mt-2 font-bold">
@@ -76,7 +76,7 @@ const Customers = () => {
               </View>
             </View>
             <View className="flex-row">
-              <Button
+              {/* <Button
                 buttonStyle={{
                   marginRight: 15,
                 }}
@@ -85,7 +85,7 @@ const Customers = () => {
                 color="#20C0ED"
               >
                 Edit
-              </Button>
+              </Button> */}
               {/* <Button size="lg" color="#DB4C3F" radius={"md"}>
                 Delete
               </Button> */}

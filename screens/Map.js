@@ -15,11 +15,12 @@ export default function Map() {
   const [userLocation, setUserLocation] = useState(null);
   const [searchAddress, setSearchAddress] = useState('');
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  console.log(API_URL)
+  console.log(selectedRestaurant)
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/restaurants`);
+        // const response = await axios.get(`http://localhost:8000/restaurants`);
         setRestaurants(response.data);
       } catch (error) {
         console.error('Error fetching restaurants:', error);
