@@ -79,6 +79,13 @@ const MapCenter = () => {
           latitude: location.lat,
           longitude: location.lng,
         });
+        
+        mapRef.current?.animateToRegion({
+          latitude: location.lat,
+          longitude: location.lng,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        });
       } else {
         console.log('No results found for the provided address');
       }
