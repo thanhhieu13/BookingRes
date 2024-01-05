@@ -91,6 +91,8 @@ export default function Map() {
     // Đặt lại giá trị của selectedRestaurant thành null hoặc thực hiện các hành động khác cần thiết để ẩn thông tin nhà hàng
     setSelectedRestaurant(null);
   };
+
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
