@@ -362,7 +362,7 @@ const SearchScreen = ({ route }) => {
 
                     <View className=" mt-2">
                       <TouchableOpacity
-                        onPress={() => navigation.navigate("City")}
+                       
                       >
                         <Text className="w-1/3 text-center p-1 border-[#A2A2A2] border rounded-sm">
                           Đặt chỗ
@@ -432,7 +432,7 @@ const SearchScreen = ({ route }) => {
 
                     <View className=" mt-2">
                       <TouchableOpacity
-                        onPress={() => navigation.navigate("City")}
+                        
                       >
                         <Text className="w-1/3 text-center p-1 border-[#A2A2A2] border rounded-sm">
                           Đặt chỗ

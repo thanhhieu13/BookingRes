@@ -14,7 +14,10 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Image
+  Image,
+  FlatList,
+  Animated,
+  Easing,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -28,10 +31,12 @@ import {
   LocationAccuracy,
 } from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
-
+import { Ionicons } from "@expo/vector-icons";
+import axios from 'axios';
 import MapView, { Circle, Marker } from "react-native-maps";
 import Geocoding from "react-native-geocoding";
 import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
+import ListRes from "../components/ListRes";
 
 const MapCenter = () => {
   const navigation = useNavigation();
@@ -42,14 +47,60 @@ const MapCenter = () => {
   const [selectedLatitude, setSelectedLatitude] = useState(null);
   const [selectedLongitude, setSelectedLongitude] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
+  const [searchAddress, setSearchAddress] = useState('');
+  
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
+  };
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          searchAddress
+        )}&key=${GOOGLE_MAPS_API_KEY}`
+      );
+      console.log('Geocoding API Response:', response.data);
+
+      if (response.data.results.length > 0) {
+        const location = response.data.results[0].geometry.location;
+        setMarkerCoordinate({
+          latitude: location.lat,
+          longitude: location.lng,
+        });
+      } else {
+        console.log('No results found for the provided address');
+      }
+    } catch (error) {
+      console.error('Error searching address:', error);
+    }
+  };
 
   const mapRef = useRef(null);
   // ref
   const bottomSheetRef = useRef(null);
 
+  const [refresh, setRefresh] = useState(0);
+
+  const onShowMap = () => {
+    bottomSheetRef.current?.collapse();
+    setRefresh(refresh + 1);
+  };
+
   // variables
   //   const snapPoints = useMemo(() => ["55%", "20%"], []);
-  const snapPoints = useMemo(() => ["30%", "80%"], []);
+  const snapPoints = useMemo(() => ["10%", "50%"], []);
 
   // callbacks
   const handleSheetChanges = useCallback((index) => {
@@ -81,18 +132,22 @@ const MapCenter = () => {
   };
 
   const fetchDataFromServer = async (latitude, longitude) => {
-    // Perform your API request here with the new coordinates
-    const radius = 4; // Assuming a fixed radius for this example
-
+    const radius = 2; // Adjust the radius as needed
     try {
       const response = await fetch(
         `${API_URL}/restaurants-in-circle?latitude=${latitude}&longitude=${longitude}&radius=${radius}`
       );
       const data = await response.json();
-      // Handle the fetched data as needed
-      // console.log(data);
-      setNearbyRestaurants(data);
-      console.log(nearbyRestaurants);
+      const restaurantsWithDistance = data.map((restaurant) => {
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          restaurant.location.coordinates[1],
+          restaurant.location.coordinates[0]
+        ).toFixed(2);
+        return { ...restaurant, distance };
+      });
+      setNearbyRestaurants(restaurantsWithDistance);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -151,7 +206,14 @@ const MapCenter = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Expo location demo</Text>
+     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+        <TextInput
+          style={{ flex: 1, marginRight: 10, borderBottomWidth: 1 }}
+          placeholder="Nhập địa chỉ"
+          onChangeText={(text) => setSearchAddress(text)}
+        />
+        <Button title="Tìm kiếm" onPress={handleSearch} />
+      </View>
       {location && location.coords && (
         <MapView
           ref={mapRef}
@@ -176,21 +238,30 @@ const MapCenter = () => {
                   latitude: markerCoordinate.latitude,
                   longitude: markerCoordinate.longitude,
                 }}
-                radius={200} // Assuming your radius is in meters, adjust accordingly
+                radius={2000}
                 strokeWidth={1}
-                strokeColor="rgba(255, 0, 0, 0.5)" // Light red color with 50% opacity
-                fillColor="rgba(255, 0, 0, 0.2)" // Light red color with 20% opacity
+                strokeColor="rgba(255, 0, 0, 0.5)"
+                fillColor="rgba(255, 0, 0, 0.2)"
               />
-              <Marker
-                coordinate={markerCoordinate}
-                // onPress={() => {
-                //   if (location.coords) {
-                //     setSelectedLatitude(markerCoordinate.latitude);
-                //     setSelectedLongitude(markerCoordinate.longitude);
-                //     setModalVisible(true);
-                //   }
-                // }}
-              />
+              <Marker coordinate={markerCoordinate} />
+
+              {nearbyRestaurants.map((restaurant) => (
+                <Marker
+                  key={restaurant._id}
+                  coordinate={{
+                    latitude: restaurant.location.coordinates[1],
+                    longitude: restaurant.location.coordinates[0],
+                  }}
+                  title={restaurant.name}
+                  onPress={() => setSelectedRestaurant(restaurant)}
+                >
+                  <Image
+                    source={require("../assets/img/restaurant.png")}
+                    style={{ width: 40, height: 40 }}
+                    resizeMode="cover"
+                  />
+                </Marker>
+              ))}
             </>
           )}
         </MapView>
@@ -222,95 +293,18 @@ const MapCenter = () => {
         snapPoints={snapPoints}
         enablePanDownToClose={false}
         onChange={handleSheetChanges}
+        style={styles.sheetContainer}
       >
         <View style={styles.contentContainer}>
-          <Text>Awesome 🎉</Text>
-          <ScrollView>
-            {nearbyRestaurants.map((restaurant, index) => (
-              // <RestaurantCard item={restaurant} key={index} />
-              <TouchableOpacity
-                key={restaurant?._id}
-                onPress={() =>
-                  navigation.navigate("Restaurant", { ...restaurant })
-                }
-              >
-                <View className="m-2 p-2 mt-4 flex-row justify-between rounded-xl">
-                  <View className=" w-3/12 items-center">
-                    <Image
-                      source={{
-                        uri: restaurant.image || "default_image_url",
-                      }}
-                      style={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: 5,
-                      }}
-                    />
-                    <View className="items-center w-2/3 mt-1">
-                      <View className="flex-row items-center">
-                        <AntDesign name="star" size={24} color="#DDBC37" />
-                        <Text className="ml-2">
-                          {restaurant.rating} |{" "}
-                          <Text
-                            style={{ color: "#FF7F27", fontWeight: "bold" }}
-                          >
-                            $$
-                          </Text>
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center">
-                        <Entypo name="map" size={24} color="#3D9DC3" />
-                        <Text className="ml-2 w-full">
-                          {restaurant.distance}km
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-
-                  <View className="w-9/12 ml-8">
-                    <Text className="text-lg text-gray-950 font-bold">
-                      {restaurant.name}
-                    </Text>
-                    <View className="flex-row">
-                      <Text
-                        style={{ width: 200 }}
-                        className="text-gray-500 ml-1"
-                      >
-                        {restaurant.address}
-                      </Text>
-                    </View>
-
-                    <View className=" mt-2">
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate("City")}
-                      >
-                        <Text className="w-1/3 text-center p-1 border-[#A2A2A2] border rounded-sm">
-                          Đặt chỗ
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-          <Button
-            title="Current Location"
-            onPress={() => {
-              if (location.coords) {
-                setMarkerCoordinate({
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                });
-                mapRef.current?.animateToRegion({
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                  latitudeDelta: 0.005,
-                  longitudeDelta: 0.005,
-                });
-              }
-            }}
+          <ListRes
+            nearbyRestaurants={nearbyRestaurants}
+            navigation={navigation}
+            refresh={refresh}
           />
+
+          {/* <View style={styles.absoluteView}>
+           
+          </View> */}
         </View>
       </BottomSheet>
     </View>
@@ -325,12 +319,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    position: "relative",
   },
   contentContainer: {
     flex: 1,
-    alignItems: "center",
+    // alignItems: "center",
   },
   map: {
+    // position: "relative",
     flex: 1,
     width: "100%",
   },
@@ -351,5 +347,33 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 16,
     marginBottom: 10,
+  },
+  absoluteView: {
+    position: "absolute",
+    // bottom: 30,
+    top: 50,
+    width: "100%",
+    // alignItems: "center",
+  },
+  btn: {
+    position: "absolute",
+    backgroundColor: "#1A1A1A",
+    padding: 14,
+    height: 50,
+    borderRadius: 30,
+    flexDirection: "row",
+    // marginHorizontal: "auto",
+    // alignItems: "center",
+  },
+  sheetContainer: {
+    backgroundColor: "#fff",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
   },
 });
