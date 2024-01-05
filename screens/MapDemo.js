@@ -64,7 +64,8 @@ console.log(selectedRestaurant);
       if (userLocation) {
         const response = await axios.get(
           // `${API_URL}/nearby-restaurants`, 
-          `http://localhost:8000/nearby-restaurants`,// Use API_URL variable from environment
+          // `http://localhost:8000/nearby-restaurants`,// Use API_URL variable from environment
+          `http://localhost:8000/intersect-restaurants`,
           {
             params: {
               latitude: userLocation.latitude,
@@ -115,7 +116,10 @@ console.log(selectedRestaurant);
   useEffect(() => {
     fetchDataAndCalculateDistances();
   }, [fetchDataAndCalculateDistances]);
-
+  const handleReturnToUserLocation = () => {
+    // Set userLocation to null to trigger a re-fetch of user location
+    setUserLocation(null);
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
@@ -125,6 +129,13 @@ console.log(selectedRestaurant);
           onChangeText={(text) => setSearchAddress(text)}
         />
         <Button title="Tìm kiếm" onPress={handleSearch} />
+      </View>
+      <View style={{ position: 'absolute', bottom: 20, right: 10, zIndex: 1 }}>
+        <TouchableOpacity onPress={handleReturnToUserLocation}>
+          <View style={{ backgroundColor: themeColors.primaryColor, borderRadius: 5, padding: 10 }}>
+            <Text style={{ color: 'blue', fontWeight: 'bold' }}>Về vị trí của bạn</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <MapView
         style={{ flex: 1 }}
@@ -138,15 +149,16 @@ console.log(selectedRestaurant);
       >
         <Polyline
           coordinates={[
-            { latitude: 10.797710, longitude: 106.689680 },
+            { latitude: 10.798662, longitude: 106.687398 },
+            { latitude: 10.798610, longitude: 106.687427 },
             { latitude: 10.7976848, longitude: 106.6866966 },
             { latitude: 10.798382, longitude: 106.687995 },
-            { latitude: 10.7985185, longitude: 106.6847898 },
+            { latitude: 10.7976, longitude: 106.68942 },
           ]}
           strokeWidth={2}
           strokeColor="red"
         />
-         {userLocation && (
+         {/* {userLocation && (
           <Circle
             center={{
               latitude: userLocation.latitude,
@@ -157,7 +169,7 @@ console.log(selectedRestaurant);
             strokeColor="rgba(255, 0, 0, 0.5)" // Red color with 50% opacity
             fillColor="rgba(255, 0, 0, 0.2)" // Red color with 20% opacity
           />
-        )}
+        )} */}
         <Marker
           coordinate={userLocation}
           title="Vị trí của bạn"

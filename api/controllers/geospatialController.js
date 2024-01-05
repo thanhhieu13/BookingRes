@@ -41,12 +41,13 @@ module.exports = {
 
   getIntersectbyRestaurants: async (req, res) => {
     try {
-      const routeCoordinates = [
-        [106.68968, 10.79771],
-        [106.6866966, 10.7976848],
-        [106.687995, 10.798382],
-        [106.6847898, 10.7985185],
-      ];
+        const routeCoordinates = [
+            [106.687398, 10.798662],
+            [106.687427, 10.798610],
+            [106.6866966, 10.7976848],
+            [106.687995, 10.798382],
+            [106.68942, 10.7985185],
+          ];
       // Truy vấn nhà hàng giao nhau với đoạn đường bằng $geoIntersects
       const nearbyRestaurants = await Restaurant.find({
         location: {
