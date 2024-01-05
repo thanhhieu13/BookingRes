@@ -56,7 +56,7 @@ const RestaurantUI = ({ restaurantData}) => {
             </View>
             <Text className="text-gray-500 mt-2">{restaurant.type}</Text>
             <View className=" mt-2">
-              <TouchableOpacity onPress={() => navigation.navigate("City")}>
+              <TouchableOpacity>
                 <Text className="w-1/3 text-center p-1 border-[#A2A2A2] border rounded-sm">
                   Đặt chỗ
                 </Text>
