@@ -219,7 +219,16 @@ const StackNavigator = () => {
         <Stack.Screen
           name="EditAccount"
           component={EditAccount}
-          options={{ headerShown: false }}
+          options={{
+            title: "Thông tin người dùng",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerShown: true,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
