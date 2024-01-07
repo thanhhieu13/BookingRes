@@ -1,6 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useContext, useState } from "react";
-import { View, Text, Pressable, StyleSheet, Alert, TouchableOpacity, ScrollView, Image, Linking, Platform  } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { UserType } from "../UserContext";
@@ -13,19 +21,20 @@ import ProfileTile from "../components/ProfileTile";
 import { API_URL } from "@env";
 
 const AccountScreen = () => {
-  // const [user, setUser] = useState(null);
   const navigation = useNavigation();
-  // const { userId, setUserId } = useContext(UserType);
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
 
-
   const handleAvatarPress = async () => {
     try {
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (!permissionResult.granted) {
-        Alert.alert("Permission Denied", "Please allow access to the media library.");
+        Alert.alert(
+          "Permission Denied",
+          "Please allow access to the media library."
+        );
         return;
       }
 
@@ -44,7 +53,6 @@ const AccountScreen = () => {
         setAddress({ ...address, avatar: imageUri });
         await updateAddressData({ ...address, avatar: imageUri });
       }
-      
     } catch (error) {
       console.error("Error picking image:", error);
     }
@@ -95,13 +103,9 @@ const AccountScreen = () => {
   const fetchAddressData = async (userId) => {
     try {
       const response = await axios.get(`${API_URL}/address/${userId}`);
-      // const response = await axios.get("http://192.168.1.2:8000/address/${userId}");
       const addressData = response.data;
-      // setAddress(addressData);
       updateUser(addressData);
-
-      // console.log(response.data, "done");
-      console.log(addressData, "user fetch")
+      console.log(addressData, "user fetch");
     } catch (error) {
       console.log(`${API_URL} /address/${userId}`);
       console.log("Error fetching address data", error);
@@ -111,7 +115,9 @@ const AccountScreen = () => {
   return (
     <View>
       <ScrollView>
-        <View style={{ backgroundColor: COLORS.offwhite, height: SIZES.height }}>
+        <View
+          style={{ backgroundColor: COLORS.offwhite, height: SIZES.height }}
+        >
           <View
             style={{
               backgroundColor: COLORS.offwhite,
@@ -144,12 +150,8 @@ const AccountScreen = () => {
                   )}
                 </TouchableOpacity>
                 <View style={{ marginLeft: 10, marginTop: 30 }}>
-                  <Text style={styles.text}>
-                    {user?.name}
-                  </Text>
-                  <Text style={styles.email}>
-                    {user?.email}
-                  </Text>
+                  <Text style={styles.text}>{user?.name}</Text>
+                  <Text style={styles.email}>{user?.mobileNo}</Text>
                 </View>
               </View>
 
@@ -162,7 +164,6 @@ const AccountScreen = () => {
                 />
               </TouchableOpacity>
             </View>
-
             <View
               style={{
                 height: 210,
@@ -173,12 +174,20 @@ const AccountScreen = () => {
             >
               <ProfileTile title={"Id khách hàng"} icon={"user"} font={3} />
               <ProfileTile title={"Tình trạng"} icon={"bar-chart"} font={3} />
-              <ProfileTile title={"Thay đổi mật khẩu"} icon={"lock"} onPress={()=>{navigation.navigate("ChangePassword")}} />
+              <ProfileTile
+                title={"Thay đổi mật khẩu"}
+                icon={"lock"}
+                onPress={() => {
+                  navigation.navigate("ChangePassword");
+                }}
+              />
               <ProfileTile
                 title={"Lịch sử giao dịch"}
                 icon={"sticker-text-outline"}
                 font={4}
-                onPress={()=>{navigation.navigate("HistoryOrder")}}
+                onPress={() => {
+                  navigation.navigate("HistoryOrder");
+                }}
               />
             </View>
             <View
@@ -205,12 +214,16 @@ const AccountScreen = () => {
                 borderRadius: 12,
               }}
             >
-              <ProfileTile title={"Yêu thích"} icon={"heart"} font={2} 
-              onPress={()=>{navigation.navigate("BottomSheet");
-              }}/>
+              <ProfileTile
+                title={"Yêu thích"}
+                icon={"heart"}
+                font={2}
+                onPress={() => {
+                  navigation.navigate("BottomSheet");
+                }}
+              />
               <ProfileTile title={"Hoạt động gần đây"} icon={"clockcircleo"} />
             </View>
-
             <View
               style={{
                 flexDirection: "row",
@@ -228,7 +241,6 @@ const AccountScreen = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-
             <View
               style={{
                 height: 100,
@@ -239,13 +251,25 @@ const AccountScreen = () => {
             >
               <ProfileTile title={"Chat"} icon={"chatbox-outline"} font={1} />
               <ProfileTile title={"Mời bạn bè"} icon={"adduser"} />
-              <ProfileTile title={"Setting"} icon={"settings-outline"} font={1} onPress={()=>{navigation.navigate("Privacy")}} />
+              <ProfileTile
+                title={"Setting"}
+                icon={"settings-outline"}
+                font={1}
+                onPress={() => {
+                  navigation.navigate("Privacy");
+                }}
+              />
             </View>
-            <View className="items-center mt-20" >
-              <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <View className="items-center mt-20">
+              <TouchableOpacity
+                onPress={handleLogout}
+                style={styles.logoutButton}
+              >
                 <Text style={styles.logoutButtonText}>Đăng xuất</Text>
               </TouchableOpacity>
-              <Text style={{ color: "#6C6C6C", marginTop: 20 }}>Copyright 2023 by NHK & NTH</Text>
+              <Text style={{ color: "#6C6C6C", marginTop: 20 }}>
+                Copyright 2023 by NHK & NTH
+              </Text>
             </View>
           </View>
         </View>

@@ -5,11 +5,11 @@ import {
   Ionicons,
   SimpleLineIcons,
   Feather,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants/theme";
 
-const ProfileTile = ({ onPress, title, icon, font }) => {
+const ProfileTile = ({ onPress, title, icon, font, temp }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.outter}>
@@ -20,21 +20,23 @@ const ProfileTile = ({ onPress, title, icon, font }) => {
             <SimpleLineIcons name={icon} size={20} color={COLORS.gray} />
           ) : font === 3 ? (
             <Feather name={icon} size={20} color={COLORS.gray} />
-          ) 
-          : font === 4 ? (
+          ) : font === 4 ? (
             <MaterialCommunityIcons name={icon} size={20} color={COLORS.gray} />
-          ): (
+          ) : (
             <AntDesign name={icon} size={22} color={COLORS.gray} />
           )}
           <Text style={styles.text}>{title}</Text>
         </View>
 
-        <AntDesign
-          name="right"
-          size={18}
-          color={COLORS.gray2}
-          style={{ bottom: -3, marginRight: 10 }}
-        />
+        <View className="flex-row">
+          <Text style={styles.text1}>{temp}</Text>
+          <AntDesign
+            name="right"
+            size={18}
+            color={COLORS.gray2}
+            style={{ bottom: -3, marginRight: 10 }}
+          />
+        </View>
       </View>
       <View style={styles.divider} />
     </TouchableOpacity>
@@ -69,6 +71,13 @@ const styles = StyleSheet.create({
     fontFamily: "regular",
     fontSize: 17,
     // color: COLORS.gray,
-    color : "black",
+    color: "black",
+  },
+  text1: {
+    marginLeft: 10,
+    fontFamily: "regular",
+    fontSize: 17,
+    color: COLORS.gray,
+    // color: "black",
   },
 });

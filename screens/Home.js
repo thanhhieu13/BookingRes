@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
-  TextInput,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
@@ -12,51 +11,75 @@ import React, { useLayoutEffect, useState, useEffect, useContext } from "react";
 import Categories from "../components/Categories";
 import FeaturedRow from "../components/featureRow";
 import * as Icon from "react-native-feather";
-import { themeColors } from "../theme";
-// import { featured } from "../constants";
 import { Swiper, SwiperItem } from "@nutui/nutui-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
-import { NoticeBar } from "@nutui/nutui-react-native";
 import { API_URL } from "@env";
 import { UserType } from "../UserContext";
+import jwt_decode from "jwt-decode";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+
 
 export default function HomeScreen({ navigation, route }) {
-  const { user } = useContext(UserType);
-  const text =
-    "Chào mừng bạn đến với ứng dụng đặt bàn nhà hàng Eat Eat. Ở đây có mọi thứ mà bạn mong muốn";
-  // const [selectedCity, setSelectedCity] = useState(
-  //   route.params?.selectedCity || "TPHCM"
-  // );
+  const { userId, setUserId, user, updateUser } = useContext(UserType);
+  const [address, setAddress] = useState([]);
+
   const [selectedCity, setSelectedCity] = useState(
     route.params?.selectedCity || "TPHCM"
   );
   const [featuredData, setFeaturedData] = useState([]);
 
-  // const { searchKeyword } = route.params;
-
-  // console.log(API_URL)
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/featured`);
+      // const response = await fetch("http://192.168.1.7:8000/api/featured");
+      const data = await response.json();
+      setFeaturedData(data);
+    } catch (error) {
+      console.error("Error fetching featured data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/featured`);
-        // const response = await fetch("http://192.168.1.7:8000/api/featured");
-        const data = await response.json();
-        setFeaturedData(data);
-      } catch (error) {
-        console.error("Error fetching featured data:", error);
-      }
-    };
+   
 
     fetchData();
+    fetchAddress();
+
   }, []);
+
+  const fetchAddress = async () => {
+    try {
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+      await fetchAddressData(userId);
+    } catch (error) {
+      console.log("Error fetching address", error);
+    }
+  };
+
+
+  const fetchAddressData = async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/address/${userId}`);
+      const addressData = response.data;
+      updateUser(addressData);
+      console.log(addressData, "user fetch");
+    } catch (error) {
+      console.log(`${API_URL} /address/${userId}`);
+      console.log("Error fetching address data", error);
+    }
+  };
+
 
   return (
     <SafeAreaView className="bg-white">
       <StatusBar barStyle="dark-content" />
-      {/* <NoticeBar text={text} /> */}
+      <Text>Xin chào {user?.name}</Text>
       <View className="justify-between p-4 flex-row items-center max-w-full h-14">
         <TouchableOpacity
           onPress={() =>
@@ -119,7 +142,7 @@ export default function HomeScreen({ navigation, route }) {
         <Categories />
 
         <Swiper
-          style={{ marginTop: 35,  }}
+          style={{ marginTop: 35 }}
           width="100%"
           height={150}
           paginationColor="#426543"

@@ -14,11 +14,12 @@ import jwt_decode from "jwt-decode";
 import { UserType } from "../UserContext";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-// import RNPickerSelect from "react-native-picker-select";
-// import DateTimePickerModal from "react-native-modal-datetime-picker";
-import * as Icon from 'react-native-feather';
-import { themeColors } from '../theme';
+import * as Icon from "react-native-feather";
+import { themeColors } from "../theme";
 import { API_URL } from "@env";
+import ProfileTile from "../components/ProfileTile";
+import NetworkImage from "../components/NetworkImage";
+import { Ionicons } from "@expo/vector-icons";
 
 const AddressScreen = () => {
   const navigation = useNavigation();
@@ -32,6 +33,7 @@ const AddressScreen = () => {
   const [occupation, setOccupation] = useState("");
   const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
+  const { user } = useContext(UserType);
 
   const pickerItems = [
     { label: "Nam", value: "Nam" },
@@ -79,10 +81,10 @@ const AddressScreen = () => {
       setGender(userData.gender);
       setDateOfBirth(userData.dateOfBirth);
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error("Error fetching user data:", error);
     }
   };
-  
+
   const handleUpdateAddress = () => {
     const updatedAddress = {
       name,
@@ -109,178 +111,117 @@ const AddressScreen = () => {
         console.log("error", error);
       });
   };
+  const formatDate = (dateString) => {
+    const options = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    };
+
+    return new Date(dateString).toLocaleDateString("vi-VN", options);
+  };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.personalInfoText}>Thông tin cá nhân</Text>
-      <View style={styles.header} />
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Icon.ArrowLeft strokeWidth={3} stroke={themeColors.bgColor(1)} />
-      </TouchableOpacity>
-      <View style={styles.content}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Họ và tên</Text>
-          <TextInput
-            value={name}
-            onChangeText={(text) => setName(text)}
-            style={styles.input}
-            placeholder="Nhập tên của bạn"
-            placeholderTextColor="gray"
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Số điện thoại</Text>
-          <TextInput
-            value={mobileNo}
-            onChangeText={(text) => setMobileNo(text)}
-            style={styles.input}
-            placeholder="Nhập số điện thoại"
-            placeholderTextColor="gray"
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Địa chỉ nhà</Text>
-          <TextInput
-            value={street}
-            onChangeText={(text) => setStreet(text)}
-            style={styles.input}
-            placeholder="Nhập địa chỉ"
-            placeholderTextColor="gray"
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Thành phố</Text>
-          <TextInput
-            value={city}
-            onChangeText={(text) => setCity(text)}
-            style={styles.input}
-            placeholder="vd: TP.HCM"
-            placeholderTextColor="gray"
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Nghề nghiệp</Text>
-          <TextInput
-            value={occupation}
-            onChangeText={(text) => setOccupation(text)}
-            style={styles.input}
-            placeholder="vd: IT, Tiktoker,..."
-            placeholderTextColor="gray"
-          />
-        </View>
-
-        {/* <View style={styles.inputContainer}>
-          <Text style={styles.label}>Gender</Text>
-          <RNPickerSelect
-            onValueChange={(itemValue) => setGender(itemValue)}
-            items={pickerItems}
-            style={{
-              inputAndroid: styles.input,
-              iconContainer: {
-                top: 10,
-                right: 12,
-              },
-            }}
-            useNativeAndroidPickerStyle={false}
-            placeholder={{ label: 'Chọn giới tính', value: null }}
-            value={gender}
-            textInputProps={{ underlineColorAndroid: 'rgba(0,0,0,0)' }}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Ngày sinh</Text>
-          <Pressable
-            onPress={showDatePicker}
-            style={styles.datePickerButton}
-          >
-            <Text>{dateOfBirth || "Chọn ngày sinh của bạn"}</Text>
-          </Pressable>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirmDate}
-            onCancel={hideDatePicker}
-          />
-        </View> */}
-
-        <Pressable
-          onPress={handleUpdateAddress}
-          style={styles.addButton}
-        >
-          <Text style={styles.buttonText}>Cập nhập</Text>
-        </Pressable>
+    <View style={styles.container}>
+      <View style={styles.profile}>
+        <TouchableOpacity>
+          {user?.avatar ? (
+            <>
+              <NetworkImage
+                source={user?.avatar}
+                width={70}
+                height={70}
+                radius={99}
+              />
+              <View
+                style={{
+                  position: "absolute",
+                  backgroundColor: "#ccc",
+                  borderRadius: 50,
+                  bottom: -3,
+                  right: 0,
+                }}
+              >
+                <Ionicons name="camera-outline" size={20} color="black" />
+              </View>
+            </>
+          ) : (
+            <Image
+              source={require("../assets/img/default-profile.png")}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 99,
+              }}
+            />
+          )}
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+      <View className="mt-2">
+        <ProfileTile
+          title={"Tên người dùng"}
+          temp={user.name}
+          icon={"edit-3"}
+          font={3}
+        />
+        <ProfileTile title={"Tình trạng"} icon={"bar-chart"} font={3} />
+      </View>
+      <View
+        style={{ backgroundColor: "#EAEAEA", height: 10, width: "100%" }}
+      ></View>
+      <View>
+        <View className="mt-3"></View>
+        <ProfileTile
+          title={"Số điện thoại"}
+          temp={user?.mobileNo}
+          icon={"phone"}
+          font={3}
+        />
+        <View className="mt-3"></View>
+
+        <ProfileTile
+          title={"Nghề nghiệp"}
+          temp={user?.occupation}
+          icon={"shopping-bag"}
+          font={3}
+        />
+        <View className="mt-3"></View>
+
+        <ProfileTile
+          title={"Email"}
+          temp={user?.email}
+          icon={"email-edit-outline"}
+          font={4}
+        />
+        <View className="mt-3"></View>
+
+        <ProfileTile
+          title={"Giới tính"}
+          temp={user?.gender}
+          icon={"gender-male-female"}
+          font={4}
+        />
+        <View className="mt-3"></View>
+
+        <ProfileTile
+          title={"Ngày sinh"}
+          temp={formatDate(user.dateOfBirth)}
+          icon={"cake-variant-outline"}
+          font={4}
+        />
+        <View className="mt-3"></View>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 20,
   },
-  header: {
-    height: 20,
-  },
-  content: {
-    padding: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  input: {
-    padding: 10,
-    borderColor: "#D0D0D0",
-    borderWidth: 1,
-    marginTop: 5,
-    borderRadius: 5,
-  },
-  addButton: {
-    backgroundColor: "#f97316",
-    padding: 15,
-    borderRadius: 8,
-    justifyContent: "center",
+  profile: {
     alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  personalInfoText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 11,
-    textShadowColor: '#ffa500',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 2,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 5,
-    left: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    padding: 10,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 });
 

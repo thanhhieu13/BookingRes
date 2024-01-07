@@ -3,9 +3,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React, { useState, useCallback, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import StackNavigator from "./navigation/StackNavigator";
-// import { UserContext } from "./UserContext";
 import { useFonts } from "expo-font";
 import { UserProvider } from "./UserContext";
+
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,11 +20,11 @@ export default function App() {
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
+
     }
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    // Return a loading indicator or splash screen while fonts are loading or app is initializing
     return;
   }
   return (
@@ -37,3 +37,5 @@ export default function App() {
     </>
   );
 }
+
+
