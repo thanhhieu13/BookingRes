@@ -21,7 +21,6 @@ import jwt_decode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-
 export default function HomeScreen({ navigation, route }) {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
@@ -43,11 +42,8 @@ export default function HomeScreen({ navigation, route }) {
   };
 
   useEffect(() => {
-   
-
     fetchData();
     fetchAddress();
-
   }, []);
 
   const fetchAddress = async () => {
@@ -62,7 +58,6 @@ export default function HomeScreen({ navigation, route }) {
     }
   };
 
-
   const fetchAddressData = async (userId) => {
     try {
       const response = await axios.get(`${API_URL}/address/${userId}`);
@@ -75,11 +70,10 @@ export default function HomeScreen({ navigation, route }) {
     }
   };
 
-
   return (
     <SafeAreaView className="bg-white">
       <StatusBar barStyle="dark-content" />
-      <Text>Xin chào {user?.name}</Text>
+      {/* <Text>Xin chào {user?.name}</Text> */}
       <View className="justify-between p-4 flex-row items-center max-w-full h-14">
         <TouchableOpacity
           onPress={() =>
@@ -123,6 +117,14 @@ export default function HomeScreen({ navigation, route }) {
           >
             <Icon.Search height="25" width="25" stroke="gray" />
             <Text style={{ marginLeft: 5, flex: 1 }}>Tìm nhà hàng</Text>
+            <TouchableOpacity onPress={()=> {navigation.navigate('Filter')}}>
+              <Icon.Sliders
+                height={20}
+                width={20}
+                strokeWidth="2.5"
+                stroke="black"
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>

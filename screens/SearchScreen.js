@@ -217,33 +217,7 @@ const SearchScreen = ({ route }) => {
   console.log("Nearby Results:", nearbyRestaurants);
 
   return (
-    <View style={{ padding: 10, }}>
-      <Text>{user?._id}</Text>
-      {/* <View style={{ alignItems: "center", marginTop: 20 }}>
-        <TouchableOpacity
-          style={{
-            width: "90%",
-            height: 40,
-            borderRadius: 20,
-            flexDirection: "row",
-            alignItems: "center",
-            borderWidth: 1,
-            borderColor: "red",
-          }}
-        >
-          <Ionicons
-            name="location-sharp"
-            size={24}
-            color="gray"
-            style={{ padding: 10 }}
-          />
-          <Text style={{ fontSize: 16 }}>Khu vực tìm kiếm: </Text>
-          <Text style={{ marginLeft: 10, fontSize: 20, fontWeight: "bold" }}>
-            {location}
-          </Text>
-        </TouchableOpacity>
-      </View> */}
-      {/* Input for keyword search */}
+    <ScrollView style={{ padding: 10, }}>
       <View
         style={{
           borderWidth: 2,
@@ -280,7 +254,7 @@ const SearchScreen = ({ route }) => {
       </Text>
 
       {/* <ScrollView> */}
-      <View className="mt-4 flex-row">
+      <View className="mt-4 flex-row flex-wrap">
         {searchResults.map((restaurant) => (
           <TouchableOpacity
             key={restaurant._id}
@@ -288,15 +262,15 @@ const SearchScreen = ({ route }) => {
               flexDirection: "row",
               justifyContent: "space-around",
               alignItems: "center",
-              paddingVertical: 10,
+
               borderBottomWidth: 1,
               borderBottomColor: "gray",
-              width: "80%",
+              width: "44%",
               margin: 10,
             }}
           >
             <FontAwesome5 name="search" size={17} color="gray" />
-            <Text className="w-5/6 max-h-20 border-b border-b-gray-200 p-2">
+            <Text className="w-3/4 max-h-20 border-b border-b-gray-200 p-2">
               {restaurant.name}
             </Text>
           </TouchableOpacity>
@@ -446,7 +420,7 @@ const SearchScreen = ({ route }) => {
           </ScrollView>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
