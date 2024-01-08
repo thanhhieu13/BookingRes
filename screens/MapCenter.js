@@ -245,7 +245,7 @@ const MapCenter = () => {
                   latitude: markerCoordinate.latitude,
                   longitude: markerCoordinate.longitude,
                 }}
-                radius={2000}
+                radius={200}
                 strokeWidth={1}
                 strokeColor="rgba(255, 0, 0, 0.5)"
                 fillColor="rgba(255, 0, 0, 0.2)"

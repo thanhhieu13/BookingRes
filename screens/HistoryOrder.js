@@ -159,6 +159,7 @@ const HistoryOrder = () => {
 
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Status 
         onPress={() => handleSnapPress(1)} 
@@ -178,6 +179,7 @@ const HistoryOrder = () => {
               borderColor: "#DEDEDE",
               borderRadius: 5,
               marginTop: 5,
+
             }}
           >
             <View
@@ -298,6 +300,7 @@ const HistoryOrder = () => {
         <PopUp buttonText="Xác nhận" onPress={handleClosePress} />
       </BottomSheet>
     </View>
+    </ScrollView>
   );
 };
 

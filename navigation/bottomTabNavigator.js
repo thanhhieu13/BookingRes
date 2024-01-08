@@ -29,13 +29,13 @@ const BottomTabNavigator = () => {
           headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Entypo name="home" size={24} color="#008E97" />
+              <Entypo name="home" size={24} color="#D71537" />
             ) : (
-              <AntDesign name="home" size={24} color="black" />
+              <AntDesign name="home" size={24} color="#7E7E80" />
             ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Map2d"
         component={Map2d}
         options={{
@@ -64,22 +64,8 @@ const BottomTabNavigator = () => {
               <AntDesign name="home" size={24} color="black" />
             ),
         }}
-      />
-      <Tab.Screen
-        name="MapCenter"
-        component={MapCenter}
-        options={{
-          tabBarLabel: "MapCenter",
-          tabBarLabelStyle: { color: "#008E97" },
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Entypo name="home" size={24} color="#008E97" />
-            ) : (
-              <AntDesign name="home" size={24} color="black" />
-            ),
-        }}
-      />
+      /> */}
+     
       <Tab.Screen
         name="Search"
         component={SearchScreen}
@@ -89,9 +75,9 @@ const BottomTabNavigator = () => {
           title: "Tìm kiếm",
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <FontAwesome name="search" size={24} color="#008E97" />
+              <FontAwesome name="search" size={24} color="#D71537" />
             ) : (
-              <FontAwesome name="search" size={24} color="black" />
+              <FontAwesome name="search" size={24} color="#7E7E80" />
             ),
           headerTitleAlign: "center",
           headerTitle: () => (
@@ -140,7 +126,22 @@ const BottomTabNavigator = () => {
           ),
         })}
       />
-      <Tab.Screen
+       <Tab.Screen
+        name="MapCenter"
+        component={MapCenter}
+        options={{
+          tabBarLabel: "MapCenter",
+          tabBarLabelStyle: { color: "#008E97" },
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Entypo name="map" size={24} color="#D71537" />
+            ) : (
+              <Entypo name="map" size={24} color="#7E7E80" />
+            ),
+        }}
+      />
+      {/* <Tab.Screen
         name="Map"
         component={Map}
         options={{
@@ -154,7 +155,7 @@ const BottomTabNavigator = () => {
               <Entypo name="map" size={24} color="black" />
             ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Account"
         component={AccountScreen}
@@ -172,10 +173,10 @@ const BottomTabNavigator = () => {
               <MaterialCommunityIcons
                 name="account"
                 size={24}
-                color="#008E97"
+                color="#D71537"
               />
             ) : (
-              <MaterialCommunityIcons name="account" size={24} color="black" />
+              <MaterialCommunityIcons name="account" size={24} color="#7E7E80" />
             ),
         }}
       />

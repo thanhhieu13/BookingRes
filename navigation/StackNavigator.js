@@ -29,6 +29,7 @@ import OrderScreen from "../screens/OrderScreen";
 import AccountScreen from "../screens/Account";
 import { FontAwesome } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import ResultScreen from "../screens/ResultScreen";
 import BottomTabNavigator from './bottomTabNavigator';
 import AdminTabNavigator from './adminTabNavigator';
@@ -38,6 +39,7 @@ import Privacy from "../screens/Privacy";
 import HistoryOrder from "../screens/HistoryOrder";
 import BottomSheetTest from "../screens/BottomSheetTest";
 import ChangePassword from "../screens/ChangePassword";
+import FilterScreen from "../screens/FilterScreen";
 
 
 
@@ -193,6 +195,31 @@ const StackNavigator = () => {
               fontWeight: "bold",
             },
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Filter"
+          component={FilterScreen}
+          options={{
+            title: "Lọc",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerShown: true,
+            // headerLeft: () => (
+            //   <AntDesign
+            //     name="close"
+            //     size={27}
+            //     color="white"
+            //     style={{ marginLeft: 5 }}
+            //     onPress={() => {
+            //       navigation.goBack();
+            //     }}
+            //   />
+            // ),
           }}
         />
         <Stack.Screen
