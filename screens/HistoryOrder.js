@@ -32,6 +32,8 @@ const HistoryOrder = () => {
   const [orders, setOrders] = useState([]);
   const [restaurants, setRestaurants] = useState({});
 
+  // console.log(API_URL)
+
   const { user } = useContext(UserType);
   const [filteredOrders, setFilteredOrders] = useState([]);
 
@@ -159,7 +161,6 @@ const HistoryOrder = () => {
 
 
   return (
-    <ScrollView>
     <View style={styles.container}>
       <Status 
         onPress={() => handleSnapPress(1)} 
@@ -168,7 +169,7 @@ const HistoryOrder = () => {
         selectedStatus={selectedStatus}
       />
 
-      <View className="mt-2">
+      <ScrollView className="mt-2">
       {filteredOrders.map((order) => (
           <View
             key={order._id}
@@ -179,7 +180,6 @@ const HistoryOrder = () => {
               borderColor: "#DEDEDE",
               borderRadius: 5,
               marginTop: 5,
-
             }}
           >
             <View
@@ -247,7 +247,7 @@ const HistoryOrder = () => {
             </View>
           </View>
         ))}
-      </View>
+      </ScrollView>
 
       <BottomSheet
         index={-1}
@@ -300,7 +300,6 @@ const HistoryOrder = () => {
         <PopUp buttonText="Xác nhận" onPress={handleClosePress} />
       </BottomSheet>
     </View>
-    </ScrollView>
   );
 };
 

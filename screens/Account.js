@@ -25,6 +25,8 @@ const AccountScreen = () => {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
 
+  console.log(API_URL)
+
   const handleAvatarPress = async () => {
     try {
       const permissionResult =
