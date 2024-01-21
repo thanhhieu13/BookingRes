@@ -21,7 +21,7 @@ const BookingHours = () => {
   const route = useRoute();
   const { restaurant, selectedDate, bookingHours, closestTime,onTimeChange } = route.params;
 
-
+  
   // Function to check if a time is in the past
   const isPastTime = (bookingTime) => {
     const [hour, minute] = bookingTime.split(':');
@@ -29,7 +29,7 @@ const BookingHours = () => {
     const currentTotalMinutes = new Date().getHours() * 60 + new Date().getMinutes();
     return bookingTotalMinutes <= currentTotalMinutes;
   };
-
+  
   const [selectedTime, setSelectedTime] = useState(closestTime);
 
   const handleApply = () => {
@@ -38,6 +38,7 @@ const BookingHours = () => {
     // Navigate back to the Order screen
     navigation.goBack();
   };
+  
 
   // Now you can use the restaurant data in your component
 
