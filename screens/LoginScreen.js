@@ -34,6 +34,7 @@ const LoginPage = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
   const [obsecureText, setObsecureText] = useState(true);
   // const { login, setLogin } = useContext(LoginContext);
+  console.log("true")
   console.log(API_URL)
 
 

@@ -23,6 +23,7 @@ import BackBtn from "../components/BackBtn";
 import Button from "../components/Button";
 import { API_URL } from "@env";
 const RegisterScreen = () => {
+  console.log("first")
   console.log(API_URL);
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);

@@ -9,6 +9,8 @@ const ResHor = ({ route }) => {
   const [restaurantData, setRestaurantData] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
 
+  // console.log(API_URL)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
