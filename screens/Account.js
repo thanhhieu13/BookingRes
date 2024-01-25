@@ -252,7 +252,11 @@ const AccountScreen = () => {
               }}
             >
               <ProfileTile title={"Chat"} icon={"chatbox-outline"} font={1} />
-              <ProfileTile title={"Mời bạn bè"} icon={"adduser"} />
+              <ProfileTile title={"Mời bạn bè"} icon={"adduser"} 
+               onPress={() => {
+                navigation.navigate("Favourite");
+              }}
+              />
               <ProfileTile
                 title={"Setting"}
                 icon={"settings-outline"}

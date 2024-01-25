@@ -40,6 +40,7 @@ import HistoryOrder from "../screens/HistoryOrder";
 import BottomSheetTest from "../screens/BottomSheetTest";
 import ChangePassword from "../screens/ChangePassword";
 import FilterScreen from "../screens/FilterScreen";
+import FavouriteScreen from "../screens/FavouriteScreen";
 
 
 
@@ -70,6 +71,19 @@ const StackNavigator = () => {
           component={HistoryOrder}
           options={{
             title: "Lịch sử giao dịch",
+            headerTitleAlign: "center",
+            headerStyle: { backgroundColor: "red" },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Favourite"
+          component={FavouriteScreen}
+          options={{
+            title: "Yêu thích",
             headerTitleAlign: "center",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
