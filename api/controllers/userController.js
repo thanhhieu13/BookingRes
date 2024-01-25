@@ -225,19 +225,14 @@ module.exports = {
   removeFromFavorites: async (req, res) => {
     try {
       const { userId, restaurantId } = req.body;
-
-      const user = await User.findById(userId);
-
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { favoriteRestaurants: restaurantId } },
+        { new: true }
+      );
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-
-      // delete res from favorites list
-      user.favoriteRestaurants = user.favoriteRestaurants.filter(
-        (id) => id !== restaurantId
-      );
-      await user.save();
-
       res.status(200).json({ message: "Removed from favorites successfully" });
     } catch (error) {
       console.error("Error removing from favorites:", error);
@@ -257,7 +252,7 @@ module.exports = {
 
       const favoriteRestaurants = user.favoriteRestaurants;
 
-      res.status(200).json({ message: 'Danh sách nhà hàng yêu thích', favoriteRestaurants });
+      res.status(200).json(favoriteRestaurants);
     } catch (error) {
       console.error('Error retrieving favorite restaurants:', error);
       res.status(500).json({ message: 'Internal server error' });

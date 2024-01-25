@@ -6,10 +6,10 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as Icon from "react-native-feather";
 import { themeColors } from "../theme";
@@ -25,21 +25,26 @@ import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
-} from 'react-native-reanimated';
-import Colors from '../constants/Colors';
-import { defaultStyles } from '../constants/Styles';
-
-const { width } = Dimensions.get('window');
+} from "react-native-reanimated";
+import Colors from "../constants/Colors";
+import { defaultStyles } from "../constants/Styles";
+import { UserType } from "../UserContext";
+const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 150;
-
+import axios from "axios";
+import { API_URL } from "@env";
 
 export default function RestaurantDetail({ route }) {
-  const { name  } = route.params;
+  const { name } = route.params;
   const { params } = useRoute();
   const navigation = useNavigation();
   let item = params;
   const scrollRef = useAnimatedRef();
-
+  const { user } = useContext(UserType);
+  const [isFavorite, setIsFavorite] = useState(user.favoriteRestaurants.includes(restaurantId));
+  const restaurantId = item._id;
+  const userId = user._id;
+  console.log(restaurantId);
 
   useEffect(() => {
     navigation.setOptions({
@@ -55,24 +60,71 @@ export default function RestaurantDetail({ route }) {
       headerRight: () => (
         <View style={styles.bar}>
           <TouchableOpacity style={styles.roundButton}>
-            <Ionicons name="share-outline" size={22} color={'#000'} />
+            <Ionicons name="share-outline" size={22} color={"#000"} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.roundButton}>
-            <Ionicons name="heart-outline" size={22} color={'#000'} />
+          <TouchableOpacity
+            onPress={handleFavoritePress}
+            style={styles.roundButton}
+          >
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={24}
+              color={isFavorite ? "red" : "black"}
+            />
           </TouchableOpacity>
         </View>
       ),
     });
   }, []);
+  console.log("first");
+
+  useEffect(() => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+  }, [user.favoriteRestaurants, restaurantId]);
 
 
+  const handleFavoritePress = async () => {
+    try {
+      console.log("userId:", userId);
+      console.log("restaurantId:", restaurantId);
   
-
+      if (isFavorite) {
+        // Remove from favorites
+        const response = await axios.post(`${API_URL}/removeFromFavorites`, {
+          userId,
+          restaurantId,
+        });
+        if (response.status === 200) {
+          setIsFavorite(false);
+        } else {
+          console.warn("Error removing from favorites");
+        }
+      } else {
+        // Add to favorites
+        const response = await axios.post(`${API_URL}/addToFavorites`, {
+          userId,
+          restaurantId,
+        });
+  
+        if (response.status === 200) {
+          setIsFavorite(true);
+        } else {
+          console.warn("Error adding to favorites");
+        }
+      }
+    } catch (error) {
+      console.error("Error handling favorite:", error);
+      
+    }
+  };
+  
+  
+  
   
 
   return (
     <View style={{}}>
-      <View style={{backgroundColor:"#ffffff"}}>
+      <View style={{ backgroundColor: "#ffffff" }}>
         <NetworkImage
           source={item.image}
           height={SIZES.height / 5.5}
@@ -110,7 +162,12 @@ export default function RestaurantDetail({ route }) {
         </View>
       </View>
       <View
-        style={{ backgroundColor:"#ffffff" ,marginTop: 80, marginHorizontal: 8, marginBottom: 10 }}
+        style={{
+          backgroundColor: "#ffffff",
+          marginTop: 80,
+          marginHorizontal: 8,
+          marginBottom: 10,
+        }}
       ></View>
 
       <View style={{ height: 500 }}>
@@ -140,7 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:"#ffffff"
+    backgroundColor: "#ffffff",
   },
   truncateText: {
     maxWidth: 150,
@@ -150,15 +207,15 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 50,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
     color: Colors.primary,
   },
   bar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 10,
   },
   applyButton: {
