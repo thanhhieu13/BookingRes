@@ -15,7 +15,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { UserType } from "../UserContext";
 import { API_URL } from "@env";
 import axios from "axios";
-
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
 const FavouriteScreen = () => {
   const { user } = useContext(UserType);
@@ -35,12 +35,41 @@ const FavouriteScreen = () => {
       });
   }, [user._id]);
 
+  const rightSwipeActions = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: "#ff8303",
+          justifyContent: "center",
+          alignItems: "flex-end",
+        }}
+      >
+        <Text
+          style={{
+            color: "#1b1a17",
+            paddingHorizontal: 10,
+            fontWeight: "600",
+            paddingHorizontal: 30,
+            paddingVertical: 20,
+          }}
+        >
+          Delete
+        </Text>
+      </View>
+    );
+  };
 
+  const swipeFromRightOpen = () => {
+    alert("Swipe from right");
+  };
 
   return (
     <ScrollView>
       {favoriteRestaurants.map((restaurant) => (
-       
+        <Swipeable
+          renderRightActions={rightSwipeActions}
+          onSwipeableOpen={swipeFromRightOpen}
+        >
           <TouchableOpacity
             key={restaurant._id}
             onPress={() => navigation.navigate("Restaurant", { ...restaurant })}
@@ -91,7 +120,7 @@ const FavouriteScreen = () => {
               </View>
             </View>
           </TouchableOpacity>
-        
+        </Swipeable>
       ))}
     </ScrollView>
   );
