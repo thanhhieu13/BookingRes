@@ -47,7 +47,9 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
-  favoriteRestaurants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' }],
+  favoriteRestaurants: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Restaurant" },
+  ],
   // chia role
   admin: {
     type: Boolean,
@@ -56,15 +58,15 @@ const userSchema = new mongoose.Schema({
   location: {
     type: {
       type: String,
-      default: 'Point'
+      default: "Point",
     },
     coordinates: {
       type: [Number],
-      index: '2dsphere'
-    }
+      index: "2dsphere",
+    },
   },
 });
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User
+module.exports = User;

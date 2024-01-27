@@ -9,7 +9,7 @@ export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
-  // console.log(API_URL);
+  console.log(API_URL)
 
   useEffect(() => {
     // Function to fetch categories

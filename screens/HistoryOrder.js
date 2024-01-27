@@ -31,14 +31,12 @@ import PopUp from "../components/PopUp";
 const HistoryOrder = () => {
   const [orders, setOrders] = useState([]);
   const [restaurants, setRestaurants] = useState({});
-
-  // console.log(API_URL)
-
   const { user } = useContext(UserType);
   const [filteredOrders, setFilteredOrders] = useState([]);
 
   const userId = user._id;
   // console.log(userId);
+  
 
   useEffect(() => {
     const fetchUserOrders = async () => {
