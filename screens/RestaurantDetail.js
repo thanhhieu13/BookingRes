@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Alert
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
@@ -41,7 +42,7 @@ export default function RestaurantDetail({ route }) {
   let item = params;
   const scrollRef = useAnimatedRef();
   const { user } = useContext(UserType);
-  const [isFavorite, setIsFavorite] = useState(user.favoriteRestaurants.includes(restaurantId));
+  const [isFavorite, setIsFavorite] = useState(false);
   const restaurantId = item._id;
   const userId = user._id;
   console.log(restaurantId);
@@ -79,7 +80,8 @@ export default function RestaurantDetail({ route }) {
   console.log("first");
 
   useEffect(() => {
-    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+    // Update isFavorite state when user.favoriteRestaurants or restaurantId changes
+    setIsFavorite(user.favoriteRestaurants.includes(restaurantId));
   }, [user.favoriteRestaurants, restaurantId]);
 
 
@@ -87,39 +89,31 @@ export default function RestaurantDetail({ route }) {
     try {
       console.log("userId:", userId);
       console.log("restaurantId:", restaurantId);
-  
-      if (isFavorite) {
-        // Remove from favorites
-        const response = await axios.post(`${API_URL}/removeFromFavorites`, {
-          userId,
-          restaurantId,
-        });
-        if (response.status === 200) {
-          setIsFavorite(false);
+
+      // Add to favorites
+      const response = await axios.post(`${API_URL}/addToFavorites`, {
+        userId,
+        restaurantId,
+      });
+
+      console.log("Add to favorites response:", response);
+
+      if (response.status === 200) {
+        // Check if the restaurant is already in favorites
+        if (response.data.message === "Restaurant already in favorites") {
+          // Display an alert
+          Alert.alert("Thông báo", "Nhà hàng đã có trong danh sách yêu thích");
         } else {
-          console.warn("Error removing from favorites");
+          setIsFavorite(true);
         }
       } else {
-        // Add to favorites
-        const response = await axios.post(`${API_URL}/addToFavorites`, {
-          userId,
-          restaurantId,
-        });
-  
-        if (response.status === 200) {
-          setIsFavorite(true);
-        } else {
-          console.warn("Error adding to favorites");
-        }
+        console.warn("Error adding to favorites");
       }
     } catch (error) {
       console.error("Error handling favorite:", error);
-      
     }
   };
-  
-  
-  
+
   
 
   return (

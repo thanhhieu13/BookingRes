@@ -210,7 +210,6 @@ const MapCenter = () => {
       setSelectedAddress(address);
     }
   };
-  // console.log(API_URL)
 
   return (
     <View style={styles.container}>

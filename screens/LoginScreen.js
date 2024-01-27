@@ -29,13 +29,14 @@ const validationSchema = Yup.object().shape({
     .required("Yêu cầu"),
 });
 
+console.log(API_URL)
+
 const LoginPage = ({ navigation }) => {
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);
   const [obsecureText, setObsecureText] = useState(true);
   // const { login, setLogin } = useContext(LoginContext);
-  console.log("true")
-  console.log(API_URL)
+  
 
 
   const inValidForm = () => {

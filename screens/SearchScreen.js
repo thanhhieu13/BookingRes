@@ -28,8 +28,6 @@ const SearchScreen = ({ route }) => {
   const [nearbyResults, setNearbyResults] = useState([]);
   const [location, setLocation] = useState("TPHCM");
   const [isSubmitPressed, setIsSubmitPressed] = useState(false);
-  // console.log(API_URL)
-
   const [userLocation, setUserLocation] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState("");

@@ -74,7 +74,7 @@ export default function HomeScreen({ navigation, route }) {
 	fetchData();
 	fetchAddress();
   }, []);
-  // console.log(API_URL)
+//   console.log(API_URL)
 
   return (
 	<SafeAreaView className="bg-white">
