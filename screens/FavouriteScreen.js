@@ -35,7 +35,29 @@ const FavouriteScreen = () => {
       });
   }, [user._id]);
 
-  const rightSwipeActions = () => {
+  const rightSwipeActions = (restaurantId) => {
+    const removeFromFavorites = async () => {
+      try {
+        const response = await axios.post(`${API_URL}/removeFromFavorites`, {
+          userId: user._id,
+          restaurantId: restaurantId,
+        });
+
+        if (response.status === 200) {
+          // Remove the restaurant from the local state
+          setFavoriteRestaurants((prevFavorites) =>
+            prevFavorites.filter((r) => r._id !== restaurantId)
+          );
+
+          // You can add additional UI feedback here if needed
+        } else {
+          console.error("Failed to remove from favorites");
+        }
+      } catch (error) {
+        console.error("Error removing from favorites:", error);
+      }
+    };
+
     return (
       <View
         style={{
@@ -44,17 +66,19 @@ const FavouriteScreen = () => {
           alignItems: "flex-end",
         }}
       >
-        <Text
-          style={{
-            color: "#1b1a17",
-            paddingHorizontal: 10,
-            fontWeight: "600",
-            paddingHorizontal: 30,
-            paddingVertical: 20,
-          }}
-        >
-          Delete
-        </Text>
+        <TouchableOpacity onPress={removeFromFavorites}>
+          <Text
+            style={{
+              color: "#1b1a17",
+              paddingHorizontal: 10,
+              fontWeight: "600",
+              paddingHorizontal: 30,
+              paddingVertical: 20,
+            }}
+          >
+            Delete
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -67,8 +91,9 @@ const FavouriteScreen = () => {
     <ScrollView>
       {favoriteRestaurants.map((restaurant) => (
         <Swipeable
-          renderRightActions={rightSwipeActions}
-          onSwipeableOpen={swipeFromRightOpen}
+          key={restaurant._id}
+          renderRightActions={() => rightSwipeActions(restaurant._id)}
+          // onSwipeableOpen={swipeFromRightOpen}
         >
           <TouchableOpacity
             key={restaurant._id}
