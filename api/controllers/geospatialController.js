@@ -9,6 +9,7 @@ Restaurant.collection.createIndex({ location: "2dsphere" });
 const cityPolygonsPath = path.resolve(__dirname, "cityPolygons.json");
 const cityPolygons = JSON.parse(fs.readFileSync(cityPolygonsPath, "utf8"));
 
+
 module.exports = {
   
     getNearbyRestaurants: async (req, res) => {
@@ -79,11 +80,12 @@ module.exports = {
       }
 
       const normalizedCityName = cityName.toLowerCase().replace(/\s+/g, "");
+      
 
       const fuseOptions = {
         shouldSort: true,
         threshold: 0.4,
-        location: 0,
+        location: 0,   
         distance: 100,
         maxPatternLength: 32,
         minMatchCharLength: 1,

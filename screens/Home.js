@@ -45,6 +45,7 @@ export default function HomeScreen({ navigation, route }) {
 	  console.error("Error fetching featured data:", error);
 	}
   };
+  console.log(API_URL, "he;;")
 
   const fetchAddress = async () => {
 	try {
@@ -74,14 +75,14 @@ export default function HomeScreen({ navigation, route }) {
 	fetchData();
 	fetchAddress();
   }, []);
-//   console.log(API_URL)
+  
 
   return (
 	<SafeAreaView className="bg-white">
 	  <StatusBar barStyle="dark-content" />
 
 	  {/* header  */}
-	  <View className="justify-between p-4 flex-row items-center max-w-full h-14">
+	  <View className="justify-between p-4 flex-row items-center max-w-full h-14 ju">
 		<TouchableOpacity
 		  onPress={() =>
 			navigation.navigate("City", { selectedCity, setSelectedCity })

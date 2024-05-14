@@ -221,7 +221,7 @@ const AccountScreen = () => {
                 icon={"heart"}
                 font={2}
                 onPress={() => {
-                  navigation.navigate("BottomSheet");
+                  navigation.navigate("Favourite");
                 }}
               />
               <ProfileTile title={"Hoạt động gần đây"} icon={"clockcircleo"} />

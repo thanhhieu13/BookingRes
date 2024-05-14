@@ -29,8 +29,7 @@ const validationSchema = Yup.object().shape({
     .required("Yêu cầu"),
 });
 
-console.log(API_URL)
-
+// console.log(API_URL, "hello")
 const LoginPage = ({ navigation }) => {
   const animation = useRef(null);
   const [loader, setLoader] = useState(false);

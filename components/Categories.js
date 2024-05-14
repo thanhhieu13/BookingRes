@@ -9,7 +9,7 @@ export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
-  console.log(API_URL)
+
 
   useEffect(() => {
     // Function to fetch categories
@@ -29,6 +29,7 @@ export default function Categories() {
     fetchCategories();
   }, []); // Empty dependency array to ensure the effect runs only once when the component mounts
 console.log(categories)
+console.log(API_URL, "hello")
   return (
     <View className="mt-4">
       <ScrollView
@@ -48,7 +49,10 @@ console.log(categories)
                 onPress={() => {
                   setActiveCategory(category._id);
                   console.log("Selected Category ID:", category._id); 
-                  navigation.navigate('Result', { selectedCategory: category._id });
+                  navigation.navigate('Result', {
+                    selectedCategory: category._id,
+                    selectedCategoryName: category.name
+                  });
                 }}
                 className={"p-1 rounded-full shadow bg-gray-400" + btnClass}
               >

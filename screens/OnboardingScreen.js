@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFE8D1",
+    // backgroundColor: "#FFE8D1",
+    backgroundColor: "#FFFFFF",
     position: "relative",
   },
   lottieContainer: {
@@ -203,6 +204,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "#fbc4ab",
     // backgroundColor: "#f8ad9d",
     backgroundColor: "#f4978e",
+    // backgroundColor: "#4D869C",
     padding: 20,
     width: "90%",
     borderRadius: 10,

@@ -160,6 +160,24 @@ const BottomSheetTest = () => {
             ut consequuntur eius quis quibusdam soluta sit? Nostrum dolorem
             omnis nam necessitatibus.
           </Text>
+          <Text style={styles.description}>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga
+            reiciendis doloremque totam eos, amet facilis voluptate magni fugit,
+            ut consequuntur eius quis quibusdam soluta sit? Nostrum dolorem
+            omnis nam necessitatibus.
+          </Text>
+          <Text style={styles.description}>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga
+            reiciendis doloremque totam eos, amet facilis voluptate magni fugit,
+            ut consequuntur eius quis quibusdam soluta sit? Nostrum dolorem
+            omnis nam necessitatibus.
+          </Text>
+          <Text style={styles.description}>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga
+            reiciendis doloremque totam eos, amet facilis voluptate magni fugit,
+            ut consequuntur eius quis quibusdam soluta sit? Nostrum dolorem
+            omnis nam necessitatibus.
+          </Text>
         </View>
       </Animated.ScrollView>
 
