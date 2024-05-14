@@ -32,7 +32,7 @@ import {
 } from "expo-location";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-import axios from 'axios';
+import axios from "axios";
 import MapView, { Circle, Marker } from "react-native-maps";
 import Geocoding from "react-native-geocoding";
 import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
@@ -47,8 +47,8 @@ const MapCenter = () => {
   const [selectedLatitude, setSelectedLatitude] = useState(null);
   const [selectedLongitude, setSelectedLongitude] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
-  const [searchAddress, setSearchAddress] = useState('');
-  
+  const [searchAddress, setSearchAddress] = useState("");
+
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -71,7 +71,7 @@ const MapCenter = () => {
           searchAddress
         )}&key=${GOOGLE_MAPS_API_KEY}`
       );
-      console.log('Geocoding API Response:', response.data);
+      console.log("Geocoding API Response:", response.data);
 
       if (response.data.results.length > 0) {
         const location = response.data.results[0].geometry.location;
@@ -79,7 +79,7 @@ const MapCenter = () => {
           latitude: location.lat,
           longitude: location.lng,
         });
-        
+
         mapRef.current?.animateToRegion({
           latitude: location.lat,
           longitude: location.lng,
@@ -87,10 +87,10 @@ const MapCenter = () => {
           longitudeDelta: 0.005,
         });
       } else {
-        console.log('No results found for the provided address');
+        console.log("No results found for the provided address");
       }
     } catch (error) {
-      console.error('Error searching address:', error);
+      console.error("Error searching address:", error);
     }
   };
 
@@ -107,7 +107,7 @@ const MapCenter = () => {
 
   // variables
   //   const snapPoints = useMemo(() => ["55%", "20%"], []);
-  const snapPoints = useMemo(() => ["10%", "50%"], []);
+  const snapPoints = useMemo(() => ["20%", "50%"], []);
 
   // callbacks
   const handleSheetChanges = useCallback((index) => {
@@ -139,7 +139,7 @@ const MapCenter = () => {
   };
 
   const fetchDataFromServer = async (latitude, longitude) => {
-    const radius = 1; // bán kính 
+    const radius = 1; // bán kính
     try {
       const response = await fetch(
         `${API_URL}/restaurants-in-circle?latitude=${latitude}&longitude=${longitude}&radius=${radius}`
@@ -210,18 +210,27 @@ const MapCenter = () => {
       setSelectedAddress(address);
     }
   };
-  console.log(API_URL,"a")
-
+  console.log(API_URL, "map");
 
   return (
     <View style={styles.container}>
-     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20, borderRadius:20, }}>
+      <View
+      style={styles.searchBox}
+        // style={{
+        //   flexDirection: "row",
+        //   justifyContent: "space-between",
+        //   padding: 20,
+        //   borderRadius: 20,
+        //   backgroundColor:"red"
+        // }}
+      >
         <TextInput
-          style={{ flex: 1, marginRight: 10, borderBottomWidth: 1 }}
+          style={{ flex: 1, marginRight: 10,  }}
           placeholder="Nhập địa chỉ"
           onChangeText={(text) => setSearchAddress(text)}
         />
-        <Button title="Tìm kiếm" onPress={handleSearch} />
+        <Ionicons name="location-sharp" size={24} color="red" />
+        {/* <Button title="Tìm kiếm" onPress={handleSearch} /> */}
       </View>
       {location && location.coords && (
         <MapView
@@ -303,8 +312,9 @@ const MapCenter = () => {
         enablePanDownToClose={false}
         onChange={handleSheetChanges}
         style={styles.sheetContainer}
+        handleIndicatorStyle={styles.sheetHandleIndicator}
       >
-        <View style={styles.contentContainer}>
+        <View style={styles.contentContainer} className="rounded-tl-lg rounded-tr-lg">
           <ListRes
             nearbyRestaurants={nearbyRestaurants}
             navigation={navigation}
@@ -333,6 +343,23 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     // alignItems: "center",
+  },
+  searchBox: {
+    position: "absolute",
+    top: 20,
+    left: 10,
+    right: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 4,
+    zIndex: 1,
   },
   map: {
     // position: "relative",
@@ -384,5 +411,11 @@ const styles = StyleSheet.create({
       width: 1,
       height: 1,
     },
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  sheetHandleIndicator: {
+    backgroundColor: "#000",
+    width: 40,
   },
 });
