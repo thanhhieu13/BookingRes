@@ -8,13 +8,14 @@ const ResHor = ({ route }) => {
   const navigation = useNavigation();
   const [restaurantData, setRestaurantData] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
-
-  console.log(API_URL)
+  
+  // console.log(API_URL)
+  console.log(API_URL,"j")
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { selectedCategory, searchKeyword: routeSearchKeyword } = route.params || {};
+        const { selectedCategory,selectedCategoryName, searchKeyword: routeSearchKeyword } = route.params || {};
         const usedSearchKeyword = routeSearchKeyword || searchKeyword;
 
         if (selectedCategory) {
@@ -22,6 +23,8 @@ const ResHor = ({ route }) => {
             `${API_URL}/restaurants/categories/${selectedCategory}`
           );
           const data = await response.json();
+          console.log(data)
+          console.log(selectedCategory, "category")
 
           if (Array.isArray(data) && data.length > 0) {
             setRestaurantData(data);
@@ -33,7 +36,7 @@ const ResHor = ({ route }) => {
                   ellipsizeMode="tail"
                   style={{ fontWeight: "bold", fontSize: 18, color: "white" }}
                 >
-                  {`Kết quả: ${data.length}`}
+                  {`Kết quả: ${selectedCategoryName} (${data.length})`}
                 </Text>
               ),
             });

@@ -81,6 +81,7 @@ const StackNavigator = () => {
         />
         <Stack.Screen
           name="Favourite"
+          // component={BottomSheetTest}
           component={FavouriteScreen}
           options={{
             title: "Yêu thích",
@@ -148,12 +149,13 @@ const StackNavigator = () => {
           name="Result"
           component={ResultScreen}
           options={{
-            title: "Kết quả: Nướng(338)",
+            title: "",
             headerStyle: { backgroundColor: "red" },
             headerTintColor: "#fff",
             headerTitleAlign: "center",
             headerTitleStyle: {
-              fontWeight: "bold",
+              
+              fontWeight: "bold"
             },
           }}
         />

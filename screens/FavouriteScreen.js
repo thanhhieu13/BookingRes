@@ -22,7 +22,8 @@ const FavouriteScreen = () => {
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
   const navigation = useNavigation();
 
-  console.log(API_URL);
+  // console.log(API_URL);
+  console.log(API_URL)
 
   useEffect(() => {
     axios
@@ -69,7 +70,7 @@ const FavouriteScreen = () => {
         <TouchableOpacity onPress={removeFromFavorites}>
           <Text
             style={{
-              color: "#1b1a17",
+              color: "white",
               paddingHorizontal: 10,
               fontWeight: "600",
               paddingHorizontal: 30,

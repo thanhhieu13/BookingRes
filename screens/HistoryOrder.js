@@ -36,6 +36,7 @@ const HistoryOrder = () => {
 
   const userId = user._id;
   // console.log(userId);
+  console.log(API_URL)
   
 
   useEffect(() => {

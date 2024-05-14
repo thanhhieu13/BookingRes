@@ -139,7 +139,7 @@ const MapCenter = () => {
   };
 
   const fetchDataFromServer = async (latitude, longitude) => {
-    const radius = 2; // Adjust the radius as needed
+    const radius = 1; // bán kính 
     try {
       const response = await fetch(
         `${API_URL}/restaurants-in-circle?latitude=${latitude}&longitude=${longitude}&radius=${radius}`
@@ -210,10 +210,12 @@ const MapCenter = () => {
       setSelectedAddress(address);
     }
   };
+  console.log(API_URL, "h")
+
 
   return (
     <View style={styles.container}>
-     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20, borderRadius:20, }}>
         <TextInput
           style={{ flex: 1, marginRight: 10, borderBottomWidth: 1 }}
           placeholder="Nhập địa chỉ"
@@ -245,7 +247,7 @@ const MapCenter = () => {
                   latitude: markerCoordinate.latitude,
                   longitude: markerCoordinate.longitude,
                 }}
-                radius={200}
+                radius={1000}
                 strokeWidth={1}
                 strokeColor="rgba(255, 0, 0, 0.5)"
                 fillColor="rgba(255, 0, 0, 0.2)"

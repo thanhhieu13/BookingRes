@@ -32,6 +32,8 @@ const SearchScreen = ({ route }) => {
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState("");
 
+  
+
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -213,6 +215,8 @@ const SearchScreen = ({ route }) => {
   const { user } = useContext(UserType);
 
   console.log("Nearby Results:", nearbyRestaurants);
+
+  console.log(API_URL, "h")
 
   return (
     <ScrollView style={{ padding: 10, }}>
