@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import axios from 'axios'; // Import axios
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import axios from "axios"; // Import axios
 import { useNavigation } from "@react-navigation/native";
 import { API_URL } from "@env";
 
@@ -8,8 +8,6 @@ export default function Categories() {
   const navigation = useNavigation();
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
-
-
 
   useEffect(() => {
     // Function to fetch categories
@@ -21,15 +19,15 @@ export default function Categories() {
         const fetchedCategories = response.data;
         setCategories(fetchedCategories);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       }
     };
 
     // Call the function to fetch categories when the component mounts
     fetchCategories();
   }, []); // Empty dependency array to ensure the effect runs only once when the component mounts
-console.log(categories)
-console.log(API_URL, "hello")
+  console.log(categories);
+  console.log(API_URL, "aa");
   return (
     <View className="mt-4">
       <ScrollView
@@ -41,22 +39,39 @@ console.log(API_URL, "hello")
       >
         {categories?.map((category, index) => {
           let isActive = category.id == activeCategory;
-          let btnClass = isActive ? ' bg-gray-600' : ' bg-gray-200';
-          let textClass = isActive ? ' font-semibold text-gray-800 mt-2' : ' text-gray-500';
+          let btnClass = isActive ? "bg-[#FFFFFF]" : "bg-[#FFFFFF]";
+          let textClass = isActive
+            ? "font-normal text-[#1A1A1A] mt-4 text-base"
+            : "text-[#1A1A1A]";
           return (
-            <View key={index} className="flex justify-center items-center mr-6">
+            <View key={index} className="flex justify-center items-center mr-6 mt-2">
               <TouchableOpacity
+                style={{
+                  padding : 13,
+                  borderRadius: 100,
+                  shadowColor: "#000000",
+                  shadowOffset: {
+                    width: 3,
+                    height: 3,
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 8,
+                }}
                 onPress={() => {
                   setActiveCategory(category._id);
-                  console.log("Selected Category ID:", category._id); 
-                  navigation.navigate('Result', {
+                  console.log("Selected Category ID:", category._id);
+                  navigation.navigate("Result", {
                     selectedCategory: category._id,
-                    selectedCategoryName: category.name
+                    selectedCategoryName: category.name,
                   });
                 }}
-                className={"p-1 rounded-full shadow bg-gray-400" + btnClass}
+                className={"" + btnClass}
               >
-                <Image style={{ width: 45, height: 45 }} source={{ uri: category.image }} />
+                <Image
+                  style={{ width: 45, height: 45 }}
+                  source={{ uri: category.image }}
+                />
               </TouchableOpacity>
               <Text className={"text-sm " + textClass}>{category.name}</Text>
             </View>

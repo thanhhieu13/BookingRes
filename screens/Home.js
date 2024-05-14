@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation, route }) {
 	  console.error("Error fetching featured data:", error);
 	}
   };
-  console.log(API_URL, "he;;")
+  console.log(API_URL,"a")
 
   const fetchAddress = async () => {
 	try {

@@ -10,7 +10,7 @@ const ResHor = ({ route }) => {
   const [searchKeyword, setSearchKeyword] = useState("");
   
   // console.log(API_URL)
-  console.log(API_URL,"j")
+  console.log(API_URL,"a")
   
   useEffect(() => {
     const fetchData = async () => {
