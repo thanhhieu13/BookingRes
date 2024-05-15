@@ -16,7 +16,7 @@ import {
   ScrollView,
   Image,
   FlatList,
-  // Animated,
+  Animated,
   Easing,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -37,11 +37,12 @@ import MapView, { Circle, Marker } from "react-native-maps";
 import Geocoding from "react-native-geocoding";
 import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
 import ListRes from "../components/ListRes";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
+// import Animated, {
+//   useSharedValue,
+//   useAnimatedStyle,
+//   withTiming,
+// } from "react-native-reanimated";
+import { keyframes, stagger } from "popmotion";
 
 const MapCenter = () => {
   const navigation = useNavigation();
@@ -55,6 +56,8 @@ const MapCenter = () => {
   const [searchAddress, setSearchAddress] = useState("");
   const [showRedView, setShowRedView] = useState(false);
  
+  const scaleAnimationRef = useRef(new Animated.Value(0)).current
+  const opacityAnimationRef = useRef(new Animated.Value(1)).current
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -106,6 +109,8 @@ const MapCenter = () => {
   const bottomSheetRef = useRef(null);
 
   const [refresh, setRefresh] = useState(0);
+  
+
 
   const onShowMap = () => {
     bottomSheetRef.current?.collapse();
@@ -114,12 +119,13 @@ const MapCenter = () => {
 
   // variables
   //   const snapPoints = useMemo(() => ["55%", "20%"], []);
-  const snapPoints = useMemo(() => ["20%", "100%"], []);
+  const snapPoints = useMemo(() => ["20%","40%","60%","85%","100%"], []);
 
   // callbacks
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
-    setShowRedView(index === 1);
+    setShowRedView(index === snapPoints.length - 1);
+    
   }, []);
 
   async function requestLocationPermissions() {
@@ -197,6 +203,28 @@ const MapCenter = () => {
     }
   }, []);
 
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(scaleAnimationRef, {
+        toValue: 1,
+        duration: 2000,
+        useNativeDriver: true,
+        easing: Easing.linear
+      })
+    ).start()
+  }, [scaleAnimationRef])
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(opacityAnimationRef, {
+        toValue: 0,
+        duration: 2000,
+        useNativeDriver: true,
+        easing: Easing.linear
+      })
+    ).start()
+  }, [opacityAnimationRef])
+
   Geocoding.init(GOOGLE_MAPS_API_KEY);
   const getAddressFromCoords = async (latitude, longitude) => {
     try {
@@ -222,10 +250,11 @@ const MapCenter = () => {
       setSelectedAddress(address);
     }
   };
-  console.log(API_URL, "maap");
+  console.log(API_URL, "map");
 
   return (
     <View style={styles.container}>
+      
       <View style={styles.searchBox}>
         {/* <TextInput
           style={{ marginRight:0 }}
@@ -256,7 +285,7 @@ const MapCenter = () => {
         >
           {markerCoordinate && (
             <>
-              <Circle
+              {/* <Circle
                 center={{
                   latitude: markerCoordinate.latitude,
                   longitude: markerCoordinate.longitude,
@@ -265,11 +294,24 @@ const MapCenter = () => {
                 strokeWidth={1}
                 strokeColor="rgba(255, 0, 0, 0.5)"
                 fillColor="rgba(255, 0, 0, 0.2)"
-              />
+              /> */}
               <Marker
                 coordinate={markerCoordinate}
 
-              />
+              >
+                 <Animated.View style={styles.markerWrap}>
+                <Animated.View
+                  style={[
+                    styles.ring,
+                    { opacity: opacityAnimationRef },
+                    { transform: [{ scale: scaleAnimationRef }] }
+                  ]}
+                />
+                <View style={styles.marker} />
+        {/* <Ionicons  name="location-sharp" size={24} color="red" /> */}
+
+              </Animated.View>
+              </Marker>
 
               {nearbyRestaurants.map((restaurant) => (
                 <Marker
@@ -445,4 +487,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     width: 40,
   },
+  markerWrap: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  marker: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'red',
+    position: 'absolute'
+  },
+  ring: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(222, 27, 62, 0.3)',
+    borderWidth: 1,
+    borderColor: 'rgba(222, 27, 62, 0.86)',
+    opacity: 1
+  }
 });
