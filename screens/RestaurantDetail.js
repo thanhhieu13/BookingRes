@@ -169,6 +169,7 @@ export default function RestaurantDetail({ route }) {
       </View>
       <View
         style={{
+          top : -50,
           height: 100,
           backgroundColor: "#ccc",
           justifyContent: "flex-end",
