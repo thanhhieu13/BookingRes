@@ -16,7 +16,7 @@ import {
   ScrollView,
   Image,
   FlatList,
-  Animated,
+  // Animated,
   Easing,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -37,6 +37,11 @@ import MapView, { Circle, Marker } from "react-native-maps";
 import Geocoding from "react-native-geocoding";
 import { API_URL, GOOGLE_MAPS_API_KEY } from "@env";
 import ListRes from "../components/ListRes";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
 const MapCenter = () => {
   const navigation = useNavigation();
@@ -48,6 +53,8 @@ const MapCenter = () => {
   const [selectedLongitude, setSelectedLongitude] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState("");
+
+ 
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -127,7 +134,7 @@ const MapCenter = () => {
     }
   }
 
-  const handleRegionChangeComplete = (region) => {
+  const handleRegionChangeComplete = async (region) => {
     if (region) {
       setMarkerCoordinate({
         latitude: region.latitude,
@@ -135,6 +142,10 @@ const MapCenter = () => {
       });
       // Fetch data from the server using the new coordinates
       fetchDataFromServer(region.latitude, region.longitude);
+
+      const address = await getAddressFromCoords(region.latitude, region.longitude);
+      setSearchAddress(address);
+      
     }
   };
 
@@ -210,23 +221,15 @@ const MapCenter = () => {
       setSelectedAddress(address);
     }
   };
-  console.log(API_URL, "map");
+  console.log(API_URL, "maap");
 
   return (
     <View style={styles.container}>
-      <View
-      style={styles.searchBox}
-        // style={{
-        //   flexDirection: "row",
-        //   justifyContent: "space-between",
-        //   padding: 20,
-        //   borderRadius: 20,
-        //   backgroundColor:"red"
-        // }}
-      >
+      <View style={styles.searchBox}>
         <TextInput
-          style={{ flex: 1, marginRight: 10,  }}
+          style={{ flex: 1, marginRight: 10 }}
           placeholder="Nhập địa chỉ"
+          value={searchAddress}
           onChangeText={(text) => setSearchAddress(text)}
         />
         <Ionicons name="location-sharp" size={24} color="red" />
@@ -261,7 +264,10 @@ const MapCenter = () => {
                 strokeColor="rgba(255, 0, 0, 0.5)"
                 fillColor="rgba(255, 0, 0, 0.2)"
               />
-              <Marker coordinate={markerCoordinate} />
+              <Marker
+                coordinate={markerCoordinate}
+
+              />
 
               {nearbyRestaurants.map((restaurant) => (
                 <Marker
@@ -271,7 +277,7 @@ const MapCenter = () => {
                     longitude: restaurant.location.coordinates[0],
                   }}
                   title={restaurant.name}
-                  onPress={() => setSelectedRestaurant(restaurant)}
+                  // onPress={() => setSelectedRestaurant(restaurant)}
                 >
                   <Image
                     source={require("../assets/img/restaurant.png")}
@@ -314,7 +320,10 @@ const MapCenter = () => {
         style={styles.sheetContainer}
         handleIndicatorStyle={styles.sheetHandleIndicator}
       >
-        <View style={styles.contentContainer} className="rounded-tl-lg rounded-tr-lg">
+        <View
+          style={styles.contentContainer}
+          className="rounded-tl-lg rounded-tr-lg"
+        >
           <ListRes
             nearbyRestaurants={nearbyRestaurants}
             navigation={navigation}
