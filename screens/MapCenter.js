@@ -53,7 +53,7 @@ const MapCenter = () => {
   const [selectedLongitude, setSelectedLongitude] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [searchAddress, setSearchAddress] = useState("");
-
+  const [showRedView, setShowRedView] = useState(false);
  
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -114,11 +114,12 @@ const MapCenter = () => {
 
   // variables
   //   const snapPoints = useMemo(() => ["55%", "20%"], []);
-  const snapPoints = useMemo(() => ["20%", "50%"], []);
+  const snapPoints = useMemo(() => ["20%", "100%"], []);
 
   // callbacks
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
+    setShowRedView(index === 1);
   }, []);
 
   async function requestLocationPermissions() {
@@ -335,6 +336,8 @@ const MapCenter = () => {
           </View> */}
         </View>
       </BottomSheet>
+      <View style={[styles.redView, showRedView && styles.showRedView]} />
+
     </View>
   );
 };
@@ -348,6 +351,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
+  },
+  redView: {
+    position: "absolute",
+    backgroundColor: "#EA1D0A",
+    width: "100%",
+    height: "10%",
+    top : 0,
+    zIndex: 0, // Đảm bảo view này nằm trên BottomSheet
+    opacity: 0, // Ban đầu ẩn đi
+  },
+  showRedView: {
+    opacity: 1, // Hiển thị khi showRedView là true
   },
   contentContainer: {
     flex: 1,
