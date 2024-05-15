@@ -48,6 +48,8 @@ const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
 
+  
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -59,6 +61,16 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={BottomTabNavigator}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -106,7 +118,7 @@ const StackNavigator = () => {
             // },
           }}
         />
-         <Stack.Screen
+         {/* <Stack.Screen
           name="Restaurant"
           component={RestaurantDetail}
           options={{ 
@@ -119,7 +131,7 @@ const StackNavigator = () => {
             },
             headerTransparent: true,
           }}
-        />
+        /> */}
         <Stack.Screen
           name="City"
           component={CityScreen}
@@ -145,7 +157,7 @@ const StackNavigator = () => {
             },
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Result"
           component={ResultScreen}
           options={{
@@ -158,7 +170,7 @@ const StackNavigator = () => {
               fontWeight: "bold"
             },
           }}
-        />
+        /> */}
         <Stack.Screen
           name="Order"
           component={OrderScreen}
@@ -238,16 +250,7 @@ const StackNavigator = () => {
             // ),
           }}
         />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Main"
-          component={BottomTabNavigator}
-          options={{ headerShown: false }}
-        />
+  
         <Stack.Screen
           name="Admin"
           component={AdminTabNavigator}

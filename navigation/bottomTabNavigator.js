@@ -5,6 +5,7 @@ import Map from "../screens/Map";
 import Map2d from "../screens/Map2d";
 import MapDemo from "../screens/MapDemo";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,15 +15,56 @@ import AccountScreen from "../screens/Account";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MapCenter from "../screens/MapCenter";
+import ResultScreen from "../screens/ResultScreen";
+import RestaurantDetail from "../screens/RestaurantDetail";
 
 const Tab = createBottomTabNavigator();
+
+const Stack = createNativeStackNavigator();
+
+const HomeStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Result"
+      component={ResultScreen}
+      options={{
+        title: "",
+        headerStyle: { backgroundColor: "red" },
+        headerTintColor: "#fff",
+        headerTitleAlign: "center",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    />
+    <Stack.Screen
+      name="Restaurant"
+      component={RestaurantDetail}
+      options={{
+        // title: "",
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerTintColor: "white",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        headerTransparent: true,
+      }}
+    />
+  </Stack.Navigator>
+);
 
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeStack}
         options={{
           tabBarLabel: "Home",
           tabBarLabelStyle: { color: "#008E97" },
@@ -35,37 +77,6 @@ const BottomTabNavigator = () => {
             ),
         }}
       />
-      {/* <Tab.Screen
-        name="Map2d"
-        component={Map2d}
-        options={{
-          tabBarLabel: "Map2d",
-          tabBarLabelStyle: { color: "#008E97" },
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Entypo name="home" size={24} color="#008E97" />
-            ) : (
-              <AntDesign name="home" size={24} color="black" />
-            ),
-        }}
-      />
-      <Tab.Screen
-        name="MapDemo"
-        component={MapDemo}
-        options={{
-          tabBarLabel: "MapDemo",
-          tabBarLabelStyle: { color: "#008E97" },
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Entypo name="home" size={24} color="#008E97" />
-            ) : (
-              <AntDesign name="home" size={24} color="black" />
-            ),
-        }}
-      /> */}
-     
       <Tab.Screen
         name="Search"
         component={SearchScreen}
@@ -126,7 +137,7 @@ const BottomTabNavigator = () => {
           ),
         })}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="MapCenter"
         component={MapCenter}
         options={{
@@ -141,21 +152,6 @@ const BottomTabNavigator = () => {
             ),
         }}
       />
-      {/* <Tab.Screen
-        name="Map"
-        component={Map}
-        options={{
-          tabBarLabel: "Map",
-          tabBarLabelStyle: { color: "#008E97" },
-          headerShown: false,
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Entypo name="map" size={24} color="#008E97" />
-            ) : (
-              <Entypo name="map" size={24} color="black" />
-            ),
-        }}
-      /> */}
       <Tab.Screen
         name="Account"
         component={AccountScreen}
@@ -176,7 +172,11 @@ const BottomTabNavigator = () => {
                 color="#D71537"
               />
             ) : (
-              <MaterialCommunityIcons name="account" size={24} color="#7E7E80" />
+              <MaterialCommunityIcons
+                name="account"
+                size={24}
+                color="#7E7E80"
+              />
             ),
         }}
       />
