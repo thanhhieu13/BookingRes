@@ -227,12 +227,13 @@ const MapCenter = () => {
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
-        <TextInput
-          style={{ flex: 1, marginRight: 10 }}
+        {/* <TextInput
+          style={{ marginRight:0 }}
           placeholder="Nhập địa chỉ"
           value={searchAddress}
           onChangeText={(text) => setSearchAddress(text)}
-        />
+        /> */}
+       <Text style={{ flex: 1 }} numberOfLines={1} ellipsizeMode='tail'>{searchAddress}</Text>
         <Ionicons name="location-sharp" size={24} color="red" />
         {/* <Button title="Tìm kiếm" onPress={handleSearch} /> */}
       </View>
@@ -373,9 +374,10 @@ const styles = StyleSheet.create({
     top: 20,
     left: 10,
     right: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
+    flexDirection: "row-reverse",
+    // justifyContent: "center",
+    alignItems: "center",
+    padding: 5,
     backgroundColor: "white",
     borderRadius: 20,
     shadowColor: "#000",
@@ -384,6 +386,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 4,
     zIndex: 1,
+    // maxWidth: "100%",
   },
   map: {
     // position: "relative",
