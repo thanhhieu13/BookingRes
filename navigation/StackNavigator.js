@@ -93,12 +93,12 @@ const StackNavigator = () => {
         />
         <Stack.Screen
           name="Favourite"
-          // component={BottomSheetTest}
-          component={FavouriteScreen}
+          component={BottomSheetTest}
+          // component={FavouriteScreen}
           options={{
             title: "Yêu thích",
             headerTitleAlign: "center",
-            headerStyle: { backgroundColor: "red" },
+            // headerStyle: { backgroundColor: "white" },
             headerTintColor: "#fff",
             headerTitleStyle: {
               fontWeight: "bold",
