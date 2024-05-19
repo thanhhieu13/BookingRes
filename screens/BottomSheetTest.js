@@ -94,6 +94,7 @@ const BottomSheetTest = () => {
   const scrollRef = useAnimatedRef();
 
   useLayoutEffect(() => {
+    
     navigation.setOptions({
       headerTitle: "",
       headerTransparent: true,
