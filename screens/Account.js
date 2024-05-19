@@ -25,7 +25,7 @@ const AccountScreen = () => {
   const { userId, setUserId, user, updateUser } = useContext(UserType);
   const [address, setAddress] = useState([]);
 
-  console.log(API_URL)
+  console.log(API_URL);
 
   const handleAvatarPress = async () => {
     try {
@@ -251,11 +251,20 @@ const AccountScreen = () => {
                 borderRadius: 12,
               }}
             >
-              <ProfileTile title={"Chat"} icon={"chatbox-outline"} font={1} />
-              <ProfileTile title={"Mời bạn bè"} icon={"adduser"} 
-               onPress={() => {
-                navigation.navigate("Favourite");
-              }}
+              <ProfileTile
+                title={"Chat"}
+                icon={"chatbox-outline"}
+                font={1}
+                onPress={() => {
+                  navigation.navigate("Chat");
+                }}
+              />
+              <ProfileTile
+                title={"Mời bạn bè"}
+                icon={"adduser"}
+                onPress={() => {
+                  navigation.navigate("Favourite");
+                }}
               />
               <ProfileTile
                 title={"Setting"}

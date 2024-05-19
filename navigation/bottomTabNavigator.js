@@ -17,6 +17,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MapCenter from "../screens/MapCenter";
 import ResultScreen from "../screens/ResultScreen";
 import RestaurantDetail from "../screens/RestaurantDetail";
+import ChatScreen from "../screens/ChatScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -54,6 +55,29 @@ const HomeStack = () => (
           fontWeight: "bold",
         },
         headerTransparent: true,
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const AccountStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Account"
+      component={AccountScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Chat"
+      component={ChatScreen}
+      options={{
+        title: "Trò chuyện",
+        headerStyle: { backgroundColor: "red" },
+        headerTintColor: "#fff",
+        headerTitleAlign: "center",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
       }}
     />
   </Stack.Navigator>
@@ -154,16 +178,16 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Account"
-        component={AccountScreen}
+        component={AccountStack}
         options={{
-          title: "Tài khoản",
+          title: "Trò chuyện",
           headerStyle: { backgroundColor: "red" },
           headerTintColor: "#fff",
           headerTitleAlign: "center",
 
-          tabBarLabel: "Tài khoản",
+          // tabBarLabel: "Tài khoảna",
           tabBarLabelStyle: { color: "#008E97" },
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
               <MaterialCommunityIcons
