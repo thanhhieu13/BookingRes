@@ -65,12 +65,34 @@ const AccountStack = () => (
     <Stack.Screen
       name="Account"
       component={AccountScreen}
-      options={{ headerShown: false }}
+      options={{
+        title: "Tài khoản",
+        headerStyle: { backgroundColor: "red" },
+        headerTintColor: "#fff",
+        headerTitleAlign: "center",
+        tabBarLabelStyle: { color: "#008E97" },
+        headerShown: true,
+        tabBarIcon: ({ focused }) =>
+          focused ? (
+            <MaterialCommunityIcons
+              name="account"
+              size={24}
+              color="#D71537"
+            />
+          ) : (
+            <MaterialCommunityIcons
+              name="account"
+              size={24}
+              color="#7E7E80"
+            />
+          ),
+      }}
     />
     <Stack.Screen
       name="Chat"
       component={ChatScreen}
       options={{
+        headerShown: true,
         title: "Trò chuyện",
         headerStyle: { backgroundColor: "red" },
         headerTintColor: "#fff",
@@ -180,12 +202,10 @@ const BottomTabNavigator = () => {
         name="Account"
         component={AccountStack}
         options={{
-          title: "Trò chuyện",
+          title: "Tài khoản",
           headerStyle: { backgroundColor: "red" },
           headerTintColor: "#fff",
           headerTitleAlign: "center",
-
-          // tabBarLabel: "Tài khoảna",
           tabBarLabelStyle: { color: "#008E97" },
           headerShown: false,
           tabBarIcon: ({ focused }) =>
