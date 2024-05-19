@@ -7,6 +7,7 @@ const OrderController = require("../controllers/orderController");
 const FeatureController = require("../controllers/featureController");
 const CategoryController = require("../controllers/categoryController");
 const GeospatialController = require("../controllers/geospatialController");
+const ChatController = require("../controllers/chatController");
 
 
 // routes.js admin
@@ -59,5 +60,9 @@ router.put("/users/:userId", AdminController.editUser);
 
 router.delete("/admin/restaurants/:restaurantId", AdminController.deleteRestaurant);
 router.put('/admin/restaurants/:restaurantId', AdminController.updateRestaurant);
+
+// chat routes 
+router.get('/api/chat', ChatController.getChatMessages);
+router.post('/api/chat', ChatController.postChatMessage)
 
 module.exports = router;
